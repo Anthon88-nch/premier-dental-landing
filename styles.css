@@ -156,3 +156,12 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
  .header-call .icon-arrow{width:16px;height:16px}
  .mobile-bar .button .icon-arrow{width:20px;height:20px}
 }
+
+/* Mobile headings: wrap at spaces, never split a word arbitrarily. */
+@media(max-width:600px){
+ h1,h2,h3,.steps-grid h3{word-break:normal;overflow-wrap:normal;hyphens:manual;text-wrap:balance;max-width:100%;min-width:0}
+ .solution-card h3{font-size:clamp(26px,7.7vw,30px);line-height:1.15}
+ .steps-grid h3{font-size:clamp(26px,7.5vw,28px);line-height:1.2}
+ .cost-row>div{min-width:0;flex:1}
+ .cost-row>span{flex:none}
+}
