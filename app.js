@@ -17,7 +17,7 @@ if(phoneOnly) {
   const call = document.createElement('a');
   call.className = 'button button-dark booking-accent';
   call.href = 'tel:+78552597700';
-  call.textContent = '+7 (8552) 59-77-00 ↗';
+  call.innerHTML = '+7 (8552) 59-77-00 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg>';
   intro.after(call);
 }
 
@@ -113,7 +113,7 @@ form.addEventListener('submit', async event => {
   } finally {
     submitting = false;
     submit.disabled = false;
-    submit.innerHTML = 'Оставить заявку <span class="arrow">↗</span>';
+    submit.innerHTML = 'Оставить заявку <span class="arrow"><svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span>';
   }
 });
 
