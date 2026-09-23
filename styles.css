@@ -120,3 +120,9 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 /* Cost clarification must remain readable on small screens. */
 .note{font-size:16px;line-height:1.65;color:#515b53}
 @media(max-width:600px){.note{font-size:16px;line-height:1.65;margin-top:24px}}
+/* Compact desktop sections: size these three blocks to their content. */
+@media(min-width:901px){
+ main>section.offer,main>section.clinic-section,main>section.contact-section{min-height:0;height:auto}
+ main>section.offer{padding-block:40px}
+ main>section.clinic-section,main>section.contact-section{padding-block:48px}
+}
