@@ -1,0 +1,8 @@
+node_modules/
+.env
+data/
+research/
+*.log
+
+# Generated static deployment and local credentials
+site/

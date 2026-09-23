@@ -1,0 +1,14 @@
+{
+  "name": "premier-dental-landing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "check": "node --check server.mjs && node --check admin-server.mjs && node --check app.js && node --check admin/admin.js",
+    "test": "node --test tests/*.test.mjs",
+    "admin:init": "node scripts/init-admin.mjs",
+    "build:pages": "node scripts/build-pages.mjs"
+  },
+  "engines": { "node": ">=22" }
+}
