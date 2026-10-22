@@ -64,5 +64,12 @@ export function homepageUx(html) {
     const priced=card.replace('<span class="home-card-action">',`<p class="ux-service-price">${servicePrices[slug]}</p><span class="home-card-action">`);
     return slug==='all-on-4'?priced.replace('class="home-service"','class="home-service ux-featured-service"'):priced;
   });
+
+  // 05: a compact consultation offer; unconfirmed rating stays a placeholder.
+  const star='<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.5Z"/></svg>';
+  const consultation=`<div class="ux-consultation-info"><p class="ux-consultation-line">Осмотр, план лечения и смета за один визит</p><p class="ux-hero-rating">${star}<span>{{TODO: 5,0 · ПроДокторов · N отзывов}}</span></p></div>`;
+  const hero=mainSections(html).sections[0].replace(/<div class="hero-bottom">[\s\S]*?<\/div>/,'')
+    .replace(/(<div class="hero-actions"><button\b[^>]*>[\s\S]*?<\/button>)/,'$1'+consultation);
+  html=replaceSection(html,'hero',hero);
   return html;
 }

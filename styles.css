@@ -338,6 +338,11 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 .home-page .home-service{background:#e9eae2;color:var(--ink)}
 .home-page .home-service.ux-featured-service{background:#2d3837;color:var(--bg)}
 .home-page .home-service .ux-service-price{font-size:26px;font-weight:550;opacity:1;line-height:1.35;margin-top:auto}
+.home-page .ux-consultation-info{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;max-width:60ch}
+.home-page .ux-consultation-line{font-size:15px;line-height:1.5;max-width:36ch}
+.home-page .ux-hero-rating{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:14px;font-size:13px;line-height:1.5;max-width:100%}
+.home-page .ux-hero-rating svg{width:18px;height:18px;flex:none;color:#8b5830}
+.home-page .ux-hero-rating span{overflow-wrap:anywhere}
 @media(max-width:767px){
  .home-page .ux-system-comparison,.home-page .ux-arch-prices{grid-template-columns:minmax(0,1fr);gap:16px}
  .home-page .ux-system-card,.home-page .ux-arch-card{padding:22px}
