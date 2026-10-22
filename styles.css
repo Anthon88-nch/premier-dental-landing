@@ -335,6 +335,9 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 .home-page .ux-installment{margin-top:24px;font-size:17px;overflow-wrap:anywhere}
 .home-page .home-footer-blog{font-size:16px;letter-spacing:0}
 .home-page .ux-section-action{margin-top:28px}
+.home-page .home-service{background:#e9eae2;color:var(--ink)}
+.home-page .home-service.ux-featured-service{background:#2d3837;color:var(--bg)}
+.home-page .home-service .ux-service-price{font-size:26px;font-weight:550;opacity:1;line-height:1.35;margin-top:auto}
 @media(max-width:767px){
  .home-page .ux-system-comparison,.home-page .ux-arch-prices{grid-template-columns:minmax(0,1fr);gap:16px}
  .home-page .ux-system-card,.home-page .ux-arch-card{padding:22px}

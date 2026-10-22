@@ -57,5 +57,12 @@ export function homepageUx(html) {
     const section=mainSections(html).sections.find(value=>sectionId(value)===id);
     html=replaceSection(html,id,section.replace(/<\/section>$/,`<div class="ux-section-action">${sectionButton(blocks[id],context,label)}</div></section>`));
   }
+
+  // 04: price orientation belongs to the existing service-card link.
+  const servicePrices={'odnomomentnaya-implantaciya':`от ${money(pricePlans.dentium[0].total)}`,'all-on-4':`от ${money(pricePlans['all-on-4'][0].total)}`,'all-on-6':`от ${money(pricePlans['all-on-6'][0].total)}`,ortoped:'{{TODO: цена от}}'};
+  html=html.replace(/<a class="home-service" href="services\/([^"]+)\/">[\s\S]*?<\/a>/g,(card,slug)=>{
+    const priced=card.replace('<span class="home-card-action">',`<p class="ux-service-price">${servicePrices[slug]}</p><span class="home-card-action">`);
+    return slug==='all-on-4'?priced.replace('class="home-service"','class="home-service ux-featured-service"'):priced;
+  });
   return html;
 }
