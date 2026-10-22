@@ -47,5 +47,15 @@ export function homepageUx(html) {
   const mainStart=html.indexOf('<main id="main">'),mainEnd=html.indexOf('</main>');
   html=html.slice(0,mainStart)+html.slice(mainStart,mainEnd).replaceAll('Профессиональная гигиена оплачивается отдельно.','')+html.slice(mainEnd);
   html=html.replace('<p class="ux-installment">','<p class="note ux-hygiene-note">Профессиональная гигиена оплачивается отдельно.</p><p class="ux-installment">');
+
+  // 03: retain the original booking contexts, without repeated trust blocks.
+  html=html.replace(/<div class="conversion-cta">[\s\S]*?<\/p><\/div><\/div>/g,'')
+    .replace(/<!-- \/?CRO:CTA -->/g,'');
+  const sectionButton=(source,context,label)=>source.match(new RegExp('<button\\b[^>]*data-book="'+context+'"[^>]*>[\\s\\S]*?</button>'))[0].replace('Записаться на консультацию',label);
+  html=html.replace(costButton,costButton.replace('Записаться на консультацию','Рассчитать стоимость для вашего случая'));
+  for(const [id,context,label] of [['steps','Этапы лечения','Начать с консультации'],['faq','Вопрос по лечению','Записаться на консультацию']]) {
+    const section=mainSections(html).sections.find(value=>sectionId(value)===id);
+    html=replaceSection(html,id,section.replace(/<\/section>$/,`<div class="ux-section-action">${sectionButton(blocks[id],context,label)}</div></section>`));
+  }
   return html;
 }

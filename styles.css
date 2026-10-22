@@ -334,9 +334,11 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 .home-page .ux-arch-card ul{padding-left:22px;margin-block:16px 24px;font-size:17px;line-height:1.7}
 .home-page .ux-installment{margin-top:24px;font-size:17px;overflow-wrap:anywhere}
 .home-page .home-footer-blog{font-size:16px;letter-spacing:0}
+.home-page .ux-section-action{margin-top:28px}
 @media(max-width:767px){
  .home-page .ux-system-comparison,.home-page .ux-arch-prices{grid-template-columns:minmax(0,1fr);gap:16px}
  .home-page .ux-system-card,.home-page .ux-arch-card{padding:22px}
  .home-page .ux-system-card dl>div{font-size:15px;gap:12px}
  .home-page .ux-implant-image img{height:120px}
+ .home-page .ux-section-action .button{width:100%}
 }
