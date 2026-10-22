@@ -3,6 +3,7 @@ import {publicPageFiles} from './public-pages.mjs';
 import {applySeo,crawlFiles} from './seo.mjs';
 import {seoConfig,clinic} from '../content/site.mjs';
 import {clientConfigScript} from './client-config.mjs';
+import {assertNoPlaceholders} from './release-guard.mjs';
 await import('./generate-site.mjs');
 const output=new URL('../site/',import.meta.url),root=new URL('../',import.meta.url);
 await mkdir(output,{recursive:true});
@@ -10,6 +11,8 @@ await mkdir(output,{recursive:true});
 const production=process.argv.includes('--production');
 const config=seoConfig(production?{...process.env,SITE_URL:process.env.SITE_URL || clinic.primaryUrl,SITE_INDEXABLE:'true'}:process.env);
 const htmlFiles = publicPageFiles;
+// A production release must not show {{TODO: …}} placeholders to patients: check before writing anything.
+if(production)assertNoPlaceholders(await Promise.all(htmlFiles.map(async file=>({file,html:await readFile(new URL(file,root),'utf8')}))));
 // Remove only obsolete generated HTML within known page directories, never user data.
 async function prunePages(dir,relative='') {
   for(const entry of await readdir(dir,{withFileTypes:true})) {
