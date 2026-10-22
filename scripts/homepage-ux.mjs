@@ -1,6 +1,6 @@
 import {pricePlans} from '../content/pricing.mjs';
+import {reputation} from '../content/reputation.mjs';
 import {escapeHtml as e} from './page-shell.mjs';
-import {doctors} from '../content/doctors.mjs';
 
 const money=value=>new Intl.NumberFormat('ru-RU').format(value)+' ₽';
 // Homepage composition is isolated from the unchanged inner-page shell.
@@ -91,9 +91,9 @@ export function homepageUx(html) {
     return slug==='all-on-4'?priced.replace('class="home-service"','class="home-service ux-featured-service"'):priced;
   });
 
-  // 05: a compact consultation offer; unconfirmed rating stays a placeholder.
+  // 05: a compact consultation offer and a source-linked, verified rating.
   const star='<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.5Z"/></svg>';
-  const consultation=`<div class="ux-consultation-info"><p class="ux-consultation-line">Осмотр, план лечения и смета за один визит</p><p class="ux-hero-rating">${star}<span>{{TODO: 5,0 · ПроДокторов · N отзывов}}</span></p></div>`;
+  const consultation=`<div class="ux-consultation-info"><p class="ux-consultation-line">Осмотр, план лечения и смета за один визит</p><a class="ux-hero-rating" href="${e(reputation.url)}" target="_blank" rel="noopener noreferrer" title="Данные на 22 октября 2026 года">${star}<span>${e(reputation.rating)} · ${e(reputation.source)} · ${reputation.reviewCount} отзыва</span></a></div>`;
   const hero=mainSections(html).sections[0].replace(/<div class="hero-bottom">[\s\S]*?<\/div>/,'')
     .replace(/(<div class="hero-actions"><button\b[^>]*>[\s\S]*?<\/button>)/,'$1'+consultation);
   html=replaceSection(html,'hero',hero);
@@ -112,7 +112,6 @@ export function homepageUx(html) {
 
   // 07: native horizontal tracks; desktop grids and action handlers are intact.
   html=carousel(html,'doctor-grid','home-doctor-carousel','Врачи клиники','article');
-  html=carousel(html,'review-grid','home-review-carousel','Отзывы пациентов','article');
   html=carousel(html,'laboratory-grid','home-laboratory-carousel','Фотографии зуботехнической лаборатории','figure');
   html=html.replace('</head>','<script src="home-ux.js" defer></script>\n</head>');
 
@@ -130,15 +129,7 @@ export function homepageUx(html) {
   const contacts=mainSections(html).sections.find(section=>sectionId(section)==='contacts');
   html=replaceSection(html,'contacts',contacts.replace(/<\/section>$/,'<div class="ux-contact-extras"><div class="ux-map-placeholder" role="img" aria-label="Место для Яндекс.Карты"><!-- TODO: виджет Яндекс.Карт --><span>{{TODO: виджет Яндекс.Карт}}</span></div><div class="ux-entrance-placeholder" role="img" aria-label="Место для фотографии входа"><span>{{TODO: фото входа в клинику}}</span></div></div></section>'));
 
-  // 09: clinic-supplied testimonials stay verbatim; names await confirmation.
-  const reviewDoctorSlugs=['saleddinov-sarkhan','sharifullin-ruslan',null];
-  let reviewIndex=0;
-  html=html.replace(/<article\b[^>]*class="review-card"[^>]*>[\s\S]*?<\/article>/g,card=>{
-    const doctorSlug=reviewDoctorSlugs[reviewIndex++];
-    const doctor=doctors.find(item=>item.slug===doctorSlug);
-    return card.replace(/<p class="review-author">[\s\S]*?<\/p>/,`<p class="review-author">{{TODO: Имя Ф.}}</p>${doctor?`<p class="ux-review-doctor">Врач: ${e(doctor.name)}</p>`:''}`);
-  });
-  html=html.replace(/(<div class="review-grid"[^>]*>)/,`<p class="ux-review-rating">${star}<span>{{TODO: рейтинг и число отзывов}}</span></p>$1`);
+  // The three imported screenshot reviews were removed at the clinic owner's request.
 
   // 10: homepage-only semantics; confirmed legal details remain unchanged.
   html=html.replace('<html lang="ru">','<html lang="ru" class="home-ux-page">');

@@ -10,7 +10,8 @@ const home=await readFile(new URL('index.html',root),'utf8');
 const sections=mainSections(home).sections;
 const id=section=>section.match(/^<section[^>]*\bid="([^"]+)"/)?.[1] || 'hero';
 
-test('homepage UX leaves all inner pages and supplied image descriptions unchanged',async()=>{
+test('homepage UX leaves unrelated inner pages and supplied image descriptions unchanged',async()=>{
+  assert.equal(Object.keys(baseline.innerPages).length,15);
   for(const [file,expected] of Object.entries(baseline.innerPages)) {
     const bytes=await readFile(new URL(file,root));
     // Checkout line endings vary on Windows; HTML content must stay identical.
@@ -42,17 +43,26 @@ test('homepage section order, preserved anchors and contextual booking actions r
 });
 
 test('homepage carousels are labelled regions and unknown clinic information stays explicit',()=>{
-  for(const [track,count] of [['home-doctor-carousel',3],['home-review-carousel',3],['home-laboratory-carousel',4]]) {
+  for(const [track,count] of [['home-doctor-carousel',3],['home-laboratory-carousel',4]]) {
     assert.match(home,new RegExp(`id="${track}" data-ux-carousel role="region" aria-label="[^"]+" tabindex="0"`));
     assert.match(home,new RegExp(`data-carousel-status="${track}"[^>]*>1 / ${count}<`));
   }
   assert.equal((home.match(/\{\{TODO: срок\}\}/g)||[]).length,4);
-  assert.equal((home.match(/\{\{TODO: Имя Ф\.\}\}/g)||[]).length,3);
-  const reviews=home.match(/<article\b[^>]*class="review-card"[^>]*>[\s\S]*?<\/article>/g);
-  assert.match(reviews[0],/Врач: Саледдинов Сархан Гамлетович/);
-  assert.match(reviews[1],/Врач: Шарифуллин Руслан Рушанович/);
-  assert.doesNotMatch(reviews[2],/ux-review-doctor/);
   assert.match(home,/\{\{TODO: дата лицензии\}\}/);
   assert.match(home,/ООО «ДЕНТА-РИА»/);
   assert.match(home,/<script src="home-ux\.js" defer>/);
+});
+
+test('imported screenshot reviews stay removed from both pages while MyReviews remains',async()=>{
+  for(const html of [home,await readFile(new URL('reviews/index.html',root),'utf8')]) {
+    assert.match(html,/id="myReviews__block-widget"/);
+    assert.doesNotMatch(html,/class="review-(?:card|full|original)\b/);
+    assert.doesNotMatch(html,/review-(?:implantation|treatment-plan|crowns)\.webp/);
+    assert.doesNotMatch(html,/\{\{TODO: (?:Имя Ф\.|рейтинг и число отзывов)\}\}/);
+    assert.doesNotMatch(html,/Ниже доступны отзывы пациентов/);
+    assert.match(html,/<a href="https:\/\/prodoctorov\.ru\/naberezhnye-chelny\/lpu\/28283-stomatologiya-na-pushkinskoy-denta-ria\/"[^>]*>Посмотреть на ПроДокторов<\/a>/);
+  }
+  assert.doesNotMatch(home,/home-review-carousel/);
+  assert.doesNotMatch(home,/\{\{TODO: 5,0/);
+  assert.match(home,/<a class="ux-hero-rating" href="https:\/\/prodoctorov\.ru\/naberezhnye-chelny\/lpu\/28283-stomatologiya-na-pushkinskoy-denta-ria\/"[^>]*>[\s\S]*?<span>5,0 · ПроДокторов · 344 отзыва<\/span><\/a>/);
 });

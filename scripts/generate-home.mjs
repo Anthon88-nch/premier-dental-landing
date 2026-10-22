@@ -1,7 +1,6 @@
 import {readFile,writeFile} from 'node:fs/promises';
 import {conversionCta,aftercareSection} from './conversion-markup.mjs';
 import {pricePlans} from '../content/pricing.mjs';
-import {reviews} from '../content/reviews.mjs';
 import {reviewsWidget} from './reviews-widget-markup.mjs';
 import {articles} from '../content/blog.mjs';
 import {homeAnswers} from '../content/answers.mjs';
@@ -48,8 +47,7 @@ html=html.replace('Из чего складывается стоимость','�
 html=html.replace(/<meta name="description" content="[^"]*">/,'<meta name="description" content="Имплантация и протезирование зубов в Набережных Челнах: одномоментная имплантация, All-on-4, All-on-6, Dentium, Astra Tech и стоматолог-ортопед. Премьер, Пушкина, 4.">');
 const menu = services.map(([slug,,name])=>`<a href="services/${slug}/">${name}</a>`).join('')+brands.map(([slug,name])=>`<a href="services/${slug}/">Импланты ${name}</a>`).join('');
 html=html.replace(/(<nav id="mobile-menu"[^>]*>)[\s\S]*?<\/nav>/,`$1<a href="services/">Все услуги</a>${menu}<a href="#contacts">Контакты</a></nav>`);
-const reviewSection = `<section class="section wrap home-reviews" id="reviews"><div class="section-heading"><p class="eyebrow">ОПЫТ ПАЦИЕНТОВ</p><h2>Отзывы <em>пациентов.</em></h2></div><div class="review-grid">${reviews.map(r=>`<article class="review-card"><p class="eyebrow">${r.topic}</p><blockquote>«${r.excerpt}»</blockquote><p class="review-author">${r.author}</p><p class="review-meta">${r.date}<br>ПроДокторов · оценка 5,0</p><a class="text-link" href="reviews/#${r.id}">Читать полный отзыв ${arrow}</a></article>`).join('')}</div><p class="note">Отзывы с ПроДокторов. Результаты лечения могут отличаться.</p><a class="text-link" href="reviews/">Смотреть ещё отзывы ${arrow}</a></section>`;
-const reviewsWithWidget = reviewSection.replace('<div class="review-grid">',reviewsWidget()+'<div class="review-grid">');
+const reviewsWithWidget = `<section class="section wrap home-reviews" id="reviews"><div class="section-heading"><p class="eyebrow">ОПЫТ ПАЦИЕНТОВ</p><h2>Отзывы <em>пациентов.</em></h2></div>${reviewsWidget()}<a class="text-link" href="reviews/">Смотреть ещё отзывы ${arrow}</a></section>`;
 if(/id="reviews"/.test(html))html=html.replace(/<section[^>]*id="reviews"[\s\S]*?<\/section>/,reviewsWithWidget);
 else html=html.replace('<section class="section faq-section',reviewsWithWidget+'\n<section class="section faq-section');
 html=html.replace('<a href="#contacts">Контакты</a></nav>','<a href="reviews/">Отзывы</a><a href="#contacts">Контакты</a></nav>');

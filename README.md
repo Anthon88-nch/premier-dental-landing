@@ -130,8 +130,8 @@ node scripts/build-pages.mjs
 
 Кнопки записи имеют терракотовый фон с белым текстом. Световой акцент на первом экране и мобильной нижней кнопке воспроизводится два раза и отключается при prefers-reduced-motion.
 
-## Homepage and reviews
-The homepage is updated by `scripts/generate-home.mjs` before the service-page generator runs. Price summaries use `content/pricing.mjs`. Review texts are in `content/reviews.mjs`; `/reviews/` contains full transcripts and the supplied screenshots. The supplied MyReviews tile widget is embedded on the homepage and reviews page using reviews-widget.js. Only the homepage and reviews page allow the widget domains in their CSP. Run `node scripts/build-pages.mjs` after content changes.
+## Главная и отзывы
+Главная обновляется `scripts/generate-home.mjs` перед генерацией внутренних страниц. Сводные цены берутся из `content/pricing.mjs`. На главной и `/reviews/` оставлен MyReviews с загрузчиком `reviews-widget.js`; три отзыва, ранее перенесённые из скриншотов, удалены из вывода по просьбе владельца. Только эти две страницы разрешают домены виджета в CSP. При недоступности виджета показывается ссылка на профиль клиники на ПроДокторов. Рейтинг первого экрана — проверенный снимок из `content/reputation.mjs`, его нужно периодически сверять с источником. После изменения контента выполнить `node scripts/build-pages.mjs`.
 
 ## Блог и SEO
 
