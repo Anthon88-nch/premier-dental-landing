@@ -1,5 +1,6 @@
 import {pricePlans} from '../content/pricing.mjs';
 import {escapeHtml as e} from './page-shell.mjs';
+import {doctors} from '../content/doctors.mjs';
 
 const money=value=>new Intl.NumberFormat('ru-RU').format(value)+' ₽';
 // Homepage composition is isolated from the unchanged inner-page shell.
@@ -128,5 +129,14 @@ export function homepageUx(html) {
   html=replaceSection(html,'clinic',`<section class="section wrap ux-clinic" id="clinic">${clinicIntro}${clinicGallery}<div class="ux-laboratory" id="laboratory" role="group" aria-labelledby="laboratory-title">${labHeading}${labTrack}${labCounter}${technician}${video}${labLink}</div></section>`);
   const contacts=mainSections(html).sections.find(section=>sectionId(section)==='contacts');
   html=replaceSection(html,'contacts',contacts.replace(/<\/section>$/,'<div class="ux-contact-extras"><div class="ux-map-placeholder" role="img" aria-label="Место для Яндекс.Карты"><!-- TODO: виджет Яндекс.Карт --><span>{{TODO: виджет Яндекс.Карт}}</span></div><div class="ux-entrance-placeholder" role="img" aria-label="Место для фотографии входа"><span>{{TODO: фото входа в клинику}}</span></div></div></section>'));
+
+  // 09: clinic-supplied testimonials stay verbatim; names await confirmation.
+  const reviewDoctorSlugs=['saleddinov-sarkhan','sharifullin-ruslan',null];
+  let reviewIndex=0;
+  html=html.replace(/<article\b[^>]*class="review-card"[^>]*>[\s\S]*?<\/article>/g,card=>{
+    const doctor=doctors.find(item=>item.slug===reviewDoctorSlugs[reviewIndex++]);
+    return card.replace(/<p class="review-author">[\s\S]*?<\/p>/,`<p class="review-author">{{TODO: Имя Ф.}}</p>${doctor?`<p class="ux-review-doctor">Врач: ${e(doctor.name)}</p>`:''}`);
+  });
+  html=html.replace(/(<div class="review-grid"[^>]*>)/,`<p class="ux-review-rating">${star}<span>{{TODO: рейтинг и число отзывов}}</span></p>$1`);
   return html;
 }
