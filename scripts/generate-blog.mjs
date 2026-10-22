@@ -6,7 +6,7 @@ import {clinic} from '../content/site.mjs';
 import {pageShell,escapeHtml as e,headingHtml} from './page-shell.mjs';
 import {conversionCta} from './conversion-markup.mjs';
 const root = new URL('../',import.meta.url);
-const home = await readFile(new URL('index.html',root),'utf8');
+const home = await readFile(new URL('templates/home-base.html',root),'utf8');
 const dateLabel = date => new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Moscow'}).format(new Date(date+'T12:00:00Z'));
 const crumbs = a => `<nav class="breadcrumbs wrap" aria-label="Хлебные крошки"><a href="${a?'../../':'../'}index.html">Главная</a><span aria-hidden="true">/</span>${a?`<a href="../">Блог</a><span aria-hidden="true">/</span><span aria-current="page">${e(a.heading)}</span>`:'<span aria-current="page">Блог</span>'}</nav>`;
 const articleSections = a => {

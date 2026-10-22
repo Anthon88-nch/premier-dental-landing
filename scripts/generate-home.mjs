@@ -12,8 +12,9 @@ import {doctors} from '../content/doctors.mjs';
 import {teamSection,laboratorySection} from './team-markup.mjs';
 import {desktopNavigation} from './navigation-markup.mjs';
 import {contactWidget} from './contact-widget-markup.mjs';
+import {homepageUx} from './homepage-ux.mjs';
 const file = new URL('../index.html',import.meta.url);
-let html = await readFile(file,'utf8');
+let html = await readFile(new URL('../templates/home-base.html',import.meta.url),'utf8');
 const arrow = '<svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>';
 const money = n => new Intl.NumberFormat('ru-RU').format(n)+' ₽';
 const services = [
@@ -95,5 +96,5 @@ html=html.replace(/<link rel="preload"[^>]*as="image"[^>]*>/,'<link rel="preload
 if(!html.includes('href="contact-widget.css"'))html=html.replace('</head>','<link rel="stylesheet" href="contact-widget.css">\n<script src="contact-widget.js" defer></script>\n</head>');
 html=html.replace(/<!-- CONTACT:WIDGET -->[\s\S]*?<!-- \/CONTACT:WIDGET -->\s*/g,'');
 html=html.replace('</body>','<!-- CONTACT:WIDGET -->'+contactWidget()+'<!-- /CONTACT:WIDGET -->\n</body>');
-await writeFile(file,html);
+await writeFile(file,homepageUx(html));
 console.log('Homepage updated: direct service links, implant images and brief prices.');

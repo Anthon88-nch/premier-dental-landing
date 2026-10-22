@@ -9,7 +9,7 @@ import {pricePlans, additionalPrices, orthopedicPrices} from '../content/pricing
 import {conversionCta,aftercareSection} from './conversion-markup.mjs';
 
 const root = new URL('../', import.meta.url);
-const home = await readFile(new URL('index.html', root), 'utf8');
+const home = await readFile(new URL('templates/home-base.html', root), 'utf8');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arrow = '<svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>';
 const booking = (page,prefix='../../',context=page?.label || 'Консультация по имплантации') => conversionCta(prefix,{context,implantology:page?.slug!=='ortoped'});
