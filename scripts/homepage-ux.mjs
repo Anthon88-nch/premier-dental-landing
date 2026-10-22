@@ -61,7 +61,7 @@ export function homepageUx(html) {
   // 02: one comparison and a visible treatment breakdown.
   const implantImages=[...blocks.systems.matchAll(/<img\b[^>]*>/g)].map(match=>match[0]);
   const systems=[['dentium','Dentium','Южная Корея','Металлокерамика или оксид циркония'],['astra-tech','Astra Tech','Швеция','Оксид циркония']];
-  const comparison=systems.map(([slug,name,country,material],i)=>`<article class="ux-system-card"><div class="ux-system-heading"><h3>${name}</h3>${i===0?'<span class="ux-choice-badge">Чаще выбирают</span>':''}</div><a class="ux-implant-image" href="services/${slug}/" aria-label="Подробнее об имплантах ${name}">${implantImages[i]}</a><dl><div><dt>Страна</dt><dd>${country}</dd></div><div><dt>Материал коронки</dt><dd>${material}</dd></div><div><dt>Гарантия клиники</dt><dd><a href="#aftercare">1 год — условия</a></dd></div><div><dt>Цена за один зуб</dt><dd class="ux-treatment-price">от ${money(pricePlans[slug][0].total)}</dd></div></dl><a class="text-link" href="services/${slug}/#prices">Что входит в стоимость <span aria-hidden="true">→</span></a></article>`).join('');
+  const comparison=systems.map(([slug,name,country,material],i)=>`<article class="ux-system-card"><div class="ux-system-heading"><h3>${name}</h3>${i===0?'<span class="ux-choice-badge">Чаще выбирают</span>':''}</div><a class="ux-implant-image" href="services/${slug}/" aria-label="Подробнее об имплантах ${name}">${implantImages[i]}</a><dl><div><dt>Страна</dt><dd>${country}</dd></div><div><dt>Материал коронки</dt><dd>${material}</dd></div><div><dt>Гарантия клиники</dt><dd><a href="#aftercare">1 год — условия</a></dd></div><div><dt>Цена за один зуб</dt><dd class="ux-treatment-price">от ${money(pricePlans[slug][0].total)}<small class="ux-price-caption">${i===0?'С металлокерамической коронкой':'С коронкой из оксида циркония'}</small></dd></div></dl><a class="text-link" href="services/${slug}/#prices">Что входит в стоимость <span aria-hidden="true">→</span></a></article>`).join('');
   const fullArch=['all-on-4','all-on-6'].map(slug=>{
     const plan=pricePlans[slug][0];
     return `<article class="ux-arch-card"><h3>${e(plan.name)}</h3><p class="ux-treatment-price">${money(plan.total)}</p><p class="eyebrow">ЧТО ВХОДИТ</p><ul>${plan.rows.map(([name])=>`<li>${e(name)}</li>`).join('')}</ul><a class="text-link" href="services/${slug}/#prices">Метод и подробный расчёт <span aria-hidden="true">→</span></a></article>`;
@@ -134,9 +134,20 @@ export function homepageUx(html) {
   const reviewDoctorSlugs=['saleddinov-sarkhan','sharifullin-ruslan',null];
   let reviewIndex=0;
   html=html.replace(/<article\b[^>]*class="review-card"[^>]*>[\s\S]*?<\/article>/g,card=>{
-    const doctor=doctors.find(item=>item.slug===reviewDoctorSlugs[reviewIndex++]);
+    const doctorSlug=reviewDoctorSlugs[reviewIndex++];
+    const doctor=doctors.find(item=>item.slug===doctorSlug);
     return card.replace(/<p class="review-author">[\s\S]*?<\/p>/,`<p class="review-author">{{TODO: Имя Ф.}}</p>${doctor?`<p class="ux-review-doctor">Врач: ${e(doctor.name)}</p>`:''}`);
   });
   html=html.replace(/(<div class="review-grid"[^>]*>)/,`<p class="ux-review-rating">${star}<span>{{TODO: рейтинг и число отзывов}}</span></p>$1`);
+
+  // 10: homepage-only semantics; confirmed legal details remain unchanged.
+  html=html.replace('<html lang="ru">','<html lang="ru" class="home-ux-page">');
+  for(const section of mainSections(html).sections) {
+    if(/^<section[^>]*aria-labelledby=/.test(section))continue;
+    const id=sectionId(section)+'-title';
+    const labelled=section.replace(/^<section([^>]*)>/,`<section$1 aria-labelledby="${id}">`).replace('<h2>',`<h2 id="${id}">`);
+    html=html.replace(section,labelled);
+  }
+  html=html.replace('<p class="medical-note">','<p class="ux-license-date">{{TODO: дата лицензии}}</p><p class="medical-note">');
   return html;
 }

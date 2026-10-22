@@ -82,4 +82,8 @@
 
   mobile.addEventListener('change', refresh);
   refresh();
+
+  const updateHeader = () => document.body.classList.toggle('home-scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  updateHeader();
 })();

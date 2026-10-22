@@ -1,0 +1,82 @@
+{
+  "innerPages": {
+    "services/index.html": "01c6d84fbdfec8c9304b29e98c671cfaf737b8a3297c2e626a419cb1f02bbc3e",
+    "reviews/index.html": "7ec080c6efd0e54d1abe5180a4097ae897ddc8ddd8bdce452a859b154043ec9b",
+    "blog/index.html": "df33266ae6a1dcbb02fd5bfffd7418db5a7692fdffc2263b31f3735ae6ea121e",
+    "doctors/index.html": "1077502287a757666f66d80c35740d55b7d2a3cafc211051c59b4277b6c97251",
+    "services/ortoped/index.html": "82d46cacc4a147cc310e9ded7a169855dad23a4fd05177e76e1c710074c3c94f",
+    "services/odnomomentnaya-implantaciya/index.html": "c98c8fdecca018bcd6c0d4249a8f577e2147be2aa31e3142d4c7cfe9b7b627ab",
+    "services/all-on-4/index.html": "e641cd3c6e3547648844d51ed0af4c9429f31dc48c929f3e629c09c299f48d7e",
+    "services/all-on-6/index.html": "7c107309edd2c1f69a5896c12d692ea92a06679acc97abe580288b7daaca3eaf",
+    "services/dentium/index.html": "a9aa5e1b250de0dec3990a3b7b3efd97b6243aba32dcc54ae1e2975ce009338e",
+    "services/astra-tech/index.html": "03aa8769063dadc2bfb70a7eceb16e563a679e7807d07d71e9925bd57b51d1b6",
+    "blog/implantaciya-srazu-posle-udaleniya/index.html": "5415d3d718f635d360e946ac17057614c2b26956e97bcb61e28484b91bb4cc98",
+    "blog/all-on-4-ili-all-on-6/index.html": "fdc8f4b1f6f0765c22a88fc4d53c40512668ae2b874d96bde8cafc36828f92de",
+    "blog/iz-chego-skladyvaetsya-stoimost-implantacii/index.html": "9e6f2e18d9f16251425d62991347b52b0776391840458423a7a4f7210204bc0c",
+    "blog/etapy-i-sroki-implantacii-zuba/index.html": "a41e3c2ab0e01928df56b9a6dac6745467d8ca8022c1a9f1321b4a00c42cc0b6",
+    "blog/bol-i-otek-posle-implantacii/index.html": "26202e090ef764d09c7f8c96e822003aff42bafe995c18bb62ded0d6ccfd764d",
+    "blog/uhod-posle-implantacii-zubov/index.html": "4b2864d82d83d75ab0e6610873a7cb2254d0ba9da79f7ef85ca83a90b0eac32d"
+  },
+  "images": [
+    {
+      "src": "assets/logo.svg",
+      "alt": "Стоматология PREMIER"
+    },
+    {
+      "src": "assets/doctor-sharifullin-ruslan.webp",
+      "alt": "Шарифуллин Руслан Рушанович, хирург-имплантолог клиники Премьер"
+    },
+    {
+      "src": "assets/dentium-superline.webp",
+      "alt": "Dentium SuperLine — изображение производителя"
+    },
+    {
+      "src": "assets/astra-tech-ev.webp",
+      "alt": "Astra Tech Implant EV — изображение производителя"
+    },
+    {
+      "src": "assets/doctor-sharifullin-ruslan.webp",
+      "alt": "Шарифуллин Руслан Рушанович"
+    },
+    {
+      "src": "assets/doctor-saleddinov-sarkhan.webp",
+      "alt": "Саледдинов Сархан Гамлетович"
+    },
+    {
+      "src": "assets/doctor-fakhranurov-ildar.webp",
+      "alt": "Фахрануров Ильдар Индусович"
+    },
+    {
+      "src": "assets/lounge.webp",
+      "alt": "Зона ожидания стоматологии Премьер"
+    },
+    {
+      "src": "assets/reception.webp",
+      "alt": "Ресепшен клиники Премьер на улице Пушкина"
+    },
+    {
+      "src": "assets/lab-novikov-pavel.webp",
+      "alt": "Новиков Павел Сергеевич, зубной техник"
+    },
+    {
+      "src": "assets/lab-scanner.webp",
+      "alt": "Сканирование зубной модели в лаборатории"
+    },
+    {
+      "src": "assets/lab-printing.webp",
+      "alt": "Работа с 3D-принтером в лаборатории"
+    },
+    {
+      "src": "assets/lab-preparation.webp",
+      "alt": "Подготовка диска к обработке"
+    },
+    {
+      "src": "assets/lab-milling.webp",
+      "alt": "Фрезерование заготовки крупным планом"
+    },
+    {
+      "src": "assets/logo.svg",
+      "alt": "Стоматология PREMIER"
+    }
+  ]
+}
