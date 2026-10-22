@@ -10,6 +10,8 @@ import {escapeHtml as escape} from './page-shell.mjs';
 import {clinic} from '../content/site.mjs';
 import {doctors} from '../content/doctors.mjs';
 import {teamSection,laboratorySection} from './team-markup.mjs';
+import {desktopNavigation} from './navigation-markup.mjs';
+import {contactWidget} from './contact-widget-markup.mjs';
 const file = new URL('../index.html',import.meta.url);
 let html = await readFile(file,'utf8');
 const arrow = '<svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>';
@@ -62,7 +64,11 @@ else html=html.replace('<section class="section faq-section',blog+'\n<section cl
 html=html.replace(/(?:<a href="blog\/">Блог<\/a>)+/g,'');
 html=html.replaceAll('<a href="#contacts">Контакты</a>','<a href="blog/">Блог</a><a href="#contacts">Контакты</a>');
 if(!html.includes('href="blog.css"'))html=html.replace('</head>','<link rel="stylesheet" href="blog.css">\n</head>');
-html=html.replace(/<nav class="desktop-nav"[^>]*>[\s\S]*?<\/nav>/,'<nav class="desktop-nav" aria-label="Главное меню"><a href="services/">Услуги</a><a href="doctors/">Врачи</a><a href="#cost">Стоимость</a><a href="reviews/">Отзывы</a><a href="blog/">Блог</a><a href="#contacts">Контакты</a></nav>');
+html=html.replace(/<nav class="desktop-nav"[^>]*>[\s\S]*?<\/nav>/,desktopNavigation());
+if(!html.includes('class="site-header"')) {
+  html=html.replace('<header class="header wrap">','<div class="site-header"><header class="header wrap">');
+  html=html.replace(/(<nav id="mobile-menu"[^>]*>[\s\S]*?<\/nav>)/,'$1</div>');
+}
 const laboratory = `<aside class="clinic-lab"><h3>${escape(clinic.laboratory.heading)}</h3><a class="text-link" href="#laboratory">Посмотреть лабораторию ${arrow}</a></aside>`;
 if(html.includes('class="clinic-lab"'))html=html.replace(/<aside class="clinic-lab">[\s\S]*?<\/aside>/,laboratory);
 else html=html.replace(/(<div class="clinic-heading">[\s\S]*?)(<a class="text-link" href="#contacts">)/,'$1'+laboratory+'$2');
@@ -86,5 +92,8 @@ html=html.replace(/<p class="hero-price-note">[\s\S]*?<\/p>/,'');
 html=html.replace('<div class="hero-trust">','<p class="hero-price-note">Цена с металлокерамической коронкой. Диагностика, анестезия и дополнительные процедуры оплачиваются отдельно.</p><div class="hero-trust">');
 html=html.replace(/<button class="button button-dark"/g,'<button class="button button-dark booking-accent"');
 html=html.replace(/<link rel="preload"[^>]*as="image"[^>]*>/,'<link rel="preload" href="assets/doctor-sharifullin-ruslan.webp" as="image" imagesrcset="assets/doctor-sharifullin-ruslan-400.webp 400w, assets/doctor-sharifullin-ruslan.webp 800w" imagesizes="(max-width:600px) calc(100vw - 36px), 45vw" fetchpriority="high">');
+if(!html.includes('href="contact-widget.css"'))html=html.replace('</head>','<link rel="stylesheet" href="contact-widget.css">\n<script src="contact-widget.js" defer></script>\n</head>');
+html=html.replace(/<!-- CONTACT:WIDGET -->[\s\S]*?<!-- \/CONTACT:WIDGET -->\s*/g,'');
+html=html.replace('</body>','<!-- CONTACT:WIDGET -->'+contactWidget()+'<!-- /CONTACT:WIDGET -->\n</body>');
 await writeFile(file,html);
 console.log('Homepage updated: direct service links, implant images and brief prices.');

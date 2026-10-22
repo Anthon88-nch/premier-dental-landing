@@ -54,6 +54,41 @@ menuToggle.addEventListener('click', () => {
 mobileMenu.addEventListener('click', e => { if (e.target.closest('a')) closeMenu(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeMenu(); });
 
+// A normal site-navigation disclosure: links keep their usual browser behaviour.
+for(const disclosure of document.querySelectorAll('.nav-services')) {
+  const toggle=disclosure.querySelector('.nav-services-toggle');
+  const panel=disclosure.querySelector('.services-dropdown');
+  const desktop=window.matchMedia('(min-width:1101px)');
+  function setServicesOpen(open) {
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.setAttribute('aria-label',open?'Скрыть услуги':'Показать услуги');
+    panel.hidden=!open;
+  }
+  toggle.addEventListener('click',()=>setServicesOpen(toggle.getAttribute('aria-expanded')!=='true'));
+  disclosure.addEventListener('pointerenter',event=>{
+    if(desktop.matches && event.pointerType==='mouse')setServicesOpen(true);
+  });
+  disclosure.addEventListener('pointerleave',()=>{
+    if(!disclosure.contains(document.activeElement))setServicesOpen(false);
+  });
+  disclosure.addEventListener('focusin',event=>{if(event.target!==toggle)setServicesOpen(true);});
+  disclosure.addEventListener('focusout',event=>{
+    if(!disclosure.contains(event.relatedTarget))setServicesOpen(false);
+  });
+  disclosure.addEventListener('keydown',event=>{
+    if(event.key==='Escape') {
+      event.preventDefault();event.stopPropagation();setServicesOpen(false);toggle.focus({preventScroll:true});
+    } else if((event.key==='ArrowDown'||event.key==='ArrowUp') && !panel.contains(event.target)) {
+      event.preventDefault();setServicesOpen(true);
+      const links=panel.querySelectorAll('a');
+      links[event.key==='ArrowDown'?0:links.length-1].focus();
+    }
+  });
+  panel.addEventListener('click',event=>{if(event.target.closest('a'))setServicesOpen(false);});
+  document.addEventListener('click',event=>{if(!disclosure.contains(event.target))setServicesOpen(false);});
+  desktop.addEventListener('change',event=>{if(!event.matches)setServicesOpen(false);});
+}
+
 document.querySelectorAll('[data-book]').forEach(button => button.addEventListener('click', () => {
   trigger = button;
   closeMenu();

@@ -1,0 +1,26 @@
+.contact-widget{display:none}
+.contact-widget [hidden]{display:none!important}
+@media(min-width:901px){
+ .contact-widget{position:fixed;right:24px;bottom:24px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:12px;max-width:calc(100vw - 48px)}
+ body.locked .contact-widget{display:none}
+ .contact-widget__toggle{order:1}
+ .contact-widget__panel{order:0}
+ .contact-widget svg{display:block;width:22px;height:22px;flex:none;pointer-events:none}
+ .contact-widget__toggle{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:14px 24px;border:1px solid #a3482d;border-radius:32px;background:#a3482d;color:#fff;font-size:16px;font-weight:600;line-height:1.4;box-shadow:0 6px 24px #262b2c26;transition:background .18s,box-shadow .18s}
+ .contact-widget__toggle:hover{background:#8b3b24;box-shadow:0 8px 28px #262b2c30}
+ .contact-widget__toggle-close,.contact-widget__toggle[aria-expanded="true"] .contact-widget__toggle-chat{display:none}
+ .contact-widget__toggle[aria-expanded="true"] .contact-widget__toggle-close{display:block}
+ .contact-widget__panel{width:320px;max-width:100%;max-height:calc(100dvh - 128px);overflow-y:auto;overscroll-behavior:contain;padding:18px;background:var(--bg,#f6f4ef);color:var(--ink,#262b2c);border:1px solid var(--line,#dadbd3);border-radius:22px;box-shadow:0 12px 40px #262b2c24}
+ .contact-widget__heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+ .contact-widget__heading p{font-size:17px;font-weight:650;line-height:1.4;letter-spacing:-.02em}
+ .contact-widget__close{display:grid;place-items:center;flex:none;min-width:36px;min-height:36px;padding:6px;background:transparent;border-radius:50%;color:var(--muted,#6a6d68)}
+ .contact-widget__close:hover{background:#e9eae2;color:var(--ink,#262b2c)}
+ .contact-widget__close svg{width:20px;height:20px}
+ .contact-widget__links{display:grid;gap:8px}
+ .contact-widget__link{display:flex;align-items:center;gap:12px;min-height:56px;padding:12px;border:1px solid var(--line,#dadbd3);border-radius:14px;font-size:16px;line-height:1.4;transition:background .18s,border-color .18s}
+ .contact-widget__link:hover{background:#eed6c5;border-color:#cfae98}
+ .contact-widget__icon{color:#a3482d;flex:none}
+ .contact-widget__link>svg{margin-left:auto;width:18px;height:18px}
+ .contact-widget__link small{display:block;margin-top:2px;font-size:13px;color:var(--muted,#6a6d68);line-height:1.4}
+}
+@media(prefers-reduced-motion:reduce){.contact-widget__toggle,.contact-widget__link{transition:none}}
