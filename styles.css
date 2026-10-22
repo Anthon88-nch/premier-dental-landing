@@ -343,10 +343,17 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 .home-page .ux-hero-rating{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:14px;font-size:13px;line-height:1.5;max-width:100%}
 .home-page .ux-hero-rating svg{width:18px;height:18px;flex:none;color:#8b5830}
 .home-page .ux-hero-rating span{overflow-wrap:anywhere}
+.home-page .steps-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.home-page .steps-grid .ux-step-time{font-size:15px;font-weight:600;color:var(--ink);margin-block:14px}
+.home-page .ux-aftercare{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);scroll-margin-top:24px}
+.home-page .ux-aftercare>p{margin-bottom:14px}
+.home-page .ux-aftercare .aftercare-guarantee{margin-top:16px}
+.home-page .ux-aftercare summary{font-size:17px}
 @media(max-width:767px){
  .home-page .ux-system-comparison,.home-page .ux-arch-prices{grid-template-columns:minmax(0,1fr);gap:16px}
  .home-page .ux-system-card,.home-page .ux-arch-card{padding:22px}
  .home-page .ux-system-card dl>div{font-size:15px;gap:12px}
  .home-page .ux-implant-image img{height:120px}
  .home-page .ux-section-action .button{width:100%}
+ .home-page .steps-grid{grid-template-columns:minmax(0,1fr)}
 }

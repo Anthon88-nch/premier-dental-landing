@@ -71,5 +71,17 @@ export function homepageUx(html) {
   const hero=mainSections(html).sections[0].replace(/<div class="hero-bottom">[\s\S]*?<\/div>/,'')
     .replace(/(<div class="hero-actions"><button\b[^>]*>[\s\S]*?<\/button>)/,'$1'+consultation);
   html=replaceSection(html,'hero',hero);
+
+  // 06: follow-up and contractual guarantee remain reachable at #aftercare.
+  const followup=html.match(/<section\b[^>]*id="aftercare"[^>]*>[\s\S]*?<\/section>/)[0];
+  const followupBody=followup.replace(/^<section[^>]*>/,'<div class="ux-aftercare" id="aftercare">').replace(/<\/section>$/,'</div>')
+    .replace(/<p class="eyebrow">[\s\S]*?<\/p>/,'').replace(/<h2>[\s\S]*?<\/h2>/,'');
+  let updatedSteps=mainSections(html).sections.find(value=>sectionId(value)==='steps').replace(followup,'');
+  let stepIndex=0;
+  updatedSteps=updatedSteps.replace(/<article\b[^>]*>[\s\S]*?<\/article>/g,step=>{
+    const number=++stepIndex;
+    return step.replace('</h3>','</h3><p class="ux-step-time">{{TODO: срок}}</p>').replace('</article>',(number===4?followupBody:'')+'</article>');
+  });
+  html=replaceSection(html,'steps',updatedSteps);
   return html;
 }
