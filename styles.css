@@ -349,6 +349,18 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 .home-page .ux-aftercare>p{margin-bottom:14px}
 .home-page .ux-aftercare .aftercare-guarantee{margin-top:16px}
 .home-page .ux-aftercare summary{font-size:17px}
+.home-page .ux-clinic-intro .eyebrow{margin-bottom:20px}
+.home-page .ux-clinic-intro>p:not(.eyebrow){margin-block:24px;max-width:66ch}
+.home-page .ux-clinic .clinic-gallery{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:28px}
+.home-page .ux-clinic .clinic-photo img{aspect-ratio:2;object-fit:cover}
+.home-page .ux-laboratory{margin-top:40px;padding-top:32px;border-top:1px solid var(--line);min-width:0}
+.home-page .ux-laboratory-heading .eyebrow{margin-bottom:16px}
+.home-page .ux-laboratory-heading h3{font-size:clamp(30px,3.2vw,46px);line-height:1.15}
+.home-page .ux-laboratory-heading .section-intro{margin-top:20px;max-width:68ch}
+.home-page .laboratory-technician h4{font-size:26px;line-height:1.25;font-weight:500;letter-spacing:-.02em}
+.home-page .ux-laboratory>.text-link{margin-top:24px}
+.home-page .ux-contact-extras{grid-column:1/-1;display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-top:32px}
+.home-page .ux-map-placeholder,.home-page .ux-entrance-placeholder{height:320px;display:grid;place-items:center;padding:24px;border:1px dashed #a69685;border-radius:20px;background:#f6f4ef80;color:#595f59;font-size:16px;text-align:center;overflow-wrap:anywhere}
 @media(max-width:767px){
  .home-page .ux-system-comparison,.home-page .ux-arch-prices{grid-template-columns:minmax(0,1fr);gap:16px}
  .home-page .ux-system-card,.home-page .ux-arch-card{padding:22px}
@@ -356,6 +368,9 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
  .home-page .ux-implant-image img{height:120px}
  .home-page .ux-section-action .button{width:100%}
  .home-page .steps-grid{grid-template-columns:minmax(0,1fr)}
+ .home-page .ux-clinic .clinic-gallery,.home-page .ux-contact-extras{grid-template-columns:minmax(0,1fr)}
+ .home-page .ux-map-placeholder,.home-page .ux-entrance-placeholder{height:240px}
+ .home-page .laboratory-technician h4{font-size:21px}
 }
 
 .home-page .ux-carousel-status{display:none}

@@ -35,6 +35,16 @@ function carousel(html,className,id,label,slideTag) {
     .replace(new RegExp('<'+slideTag+'\\b','g'),'<'+slideTag+' data-ux-slide');
   return html.replace(original,track+`<p class="ux-carousel-status" data-carousel-status="${id}" role="status" aria-live="polite" aria-atomic="true" hidden>1 / ${count}</p>`);
 }
+function divByClass(html,className) {
+  const opening=new RegExp('<div class="'+className+'[^\"]*"[^>]*>').exec(html);
+  if(!opening)throw new Error(`Missing homepage group: ${className}`);
+  const tail=html.slice(opening.index);let depth=0;
+  for(const match of tail.matchAll(/<\/?div\b[^>]*>/g)) {
+    depth+=match[0].startsWith('</')?-1:1;
+    if(depth===0)return tail.slice(0,match.index+match[0].length);
+  }
+  throw new Error(`Unclosed homepage group: ${className}`);
+}
 
 export function homepageUx(html) {
   html=html.replace('<body>','<body class="home-page">');
@@ -104,5 +114,19 @@ export function homepageUx(html) {
   html=carousel(html,'review-grid','home-review-carousel','Отзывы пациентов','article');
   html=carousel(html,'laboratory-grid','home-laboratory-carousel','Фотографии зуботехнической лаборатории','figure');
   html=html.replace('</head>','<script src="home-ux.js" defer></script>\n</head>');
+
+  // 08: one clinic story, with real photographs, technician and existing video.
+  const lab=html.match(/<section\b[^>]*id="laboratory"[^>]*>[\s\S]*?<\/section>/)[0];
+  const labHeading=divByClass(lab,'section-heading').replace('class="section-heading"','class="ux-laboratory-heading"').replace('<h2>','<h3 id="laboratory-title">').replace('</h2>','</h3>');
+  const labTrack=divByClass(lab,'laboratory-grid');
+  const labCounter=lab.match(/<p class="ux-carousel-status"[^>]*>[\s\S]*?<\/p>/)[0];
+  const technician=divByClass(lab,'laboratory-technician').replace('<h3>','<h4>').replace('</h3>','</h4>');
+  const video=lab.match(/<figure class="laboratory-video">[\s\S]*?<\/figure>/)[0];
+  const labLink=lab.match(/<a class="text-link"[^>]*>[\s\S]*?<\/a>/)[0];
+  const clinicIntro=divByClass(blocks.clinic,'clinic-heading').replace('class="clinic-heading"','class="ux-clinic-intro"').replace(/<aside class="clinic-lab">[\s\S]*?<\/aside>/,'');
+  const clinicGallery=divByClass(blocks.clinic,'clinic-gallery');
+  html=replaceSection(html,'clinic',`<section class="section wrap ux-clinic" id="clinic">${clinicIntro}${clinicGallery}<div class="ux-laboratory" id="laboratory" role="group" aria-labelledby="laboratory-title">${labHeading}${labTrack}${labCounter}${technician}${video}${labLink}</div></section>`);
+  const contacts=mainSections(html).sections.find(section=>sectionId(section)==='contacts');
+  html=replaceSection(html,'contacts',contacts.replace(/<\/section>$/,'<div class="ux-contact-extras"><div class="ux-map-placeholder" role="img" aria-label="Место для Яндекс.Карты"><!-- TODO: виджет Яндекс.Карт --><span>{{TODO: виджет Яндекс.Карт}}</span></div><div class="ux-entrance-placeholder" role="img" aria-label="Место для фотографии входа"><span>{{TODO: фото входа в клинику}}</span></div></div></section>'));
   return html;
 }
