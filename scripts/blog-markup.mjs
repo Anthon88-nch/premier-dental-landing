@@ -1,0 +1,2 @@
+import {escapeHtml as e,headingHtml} from './page-shell.mjs';
+export const articleCards = (items,prefix='') => `<div class="blog-grid">${items.map((a,i)=>`<a class="blog-card" href="${prefix}blog/${a.slug}/"><span class="blog-card-top"><span class="eyebrow">${e(a.category)}</span><span class="blog-card-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</span></span><h3>${headingHtml(a.heading)}</h3><p>${e(a.description)}</p><span class="blog-card-bottom">${a.readMinutes} мин чтения <span aria-hidden="true">↗</span></span></a>`).join('')}</div>`;

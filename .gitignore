@@ -6,3 +6,6 @@ research/
 
 # Generated static deployment and local credentials
 site/
+
+# Internal local audit; not part of the customer demo
+/CRO-REPORT.html

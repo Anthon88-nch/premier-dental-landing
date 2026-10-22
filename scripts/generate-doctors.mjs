@@ -1,0 +1,13 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {doctors} from '../content/doctors.mjs';
+import {doctorCards,doctorsInGroup} from './team-markup.mjs';
+import {pageShell} from './page-shell.mjs';
+import {conversionCta} from './conversion-markup.mjs';
+const root = new URL('../',import.meta.url);
+const home = await readFile(new URL('index.html',root),'utf8');
+const implantologists=doctorsInGroup('implantology');
+const onlyOrthopedists=doctors.filter(d=>d.groups.includes('orthopedics')&&!d.groups.includes('implantology'));
+const body=`<nav class="breadcrumbs wrap" aria-label="Хлебные крошки"><a href="../index.html">Главная</a><span aria-hidden="true">/</span><span aria-current="page">Врачи</span></nav><section class="service-hub-hero wrap"><p class="eyebrow">КОМАНДА PREMIER</p><h1>Имплантологи<br><em>и ортопеды.</em></h1><p class="service-lead">Врачи клиники «Премьер» в Набережных Челнах. Выберите специалиста и оставьте заявку на приём.</p>${conversionCta('../')}<nav class="team-directory-nav" aria-label="Специализации врачей"><a href="#implantologists">Хирурги-имплантологи</a><a href="#orthopedists">Стоматологи-ортопеды</a></nav></section><section class="service-section wrap team-section" id="implantologists"><h2>Хирурги-<em>имплантологи.</em></h2><p class="service-lead">Проводят удаление зубов и установку имплантатов.</p>${doctorCards(implantologists,'../',{profiles:true})}${conversionCta('../')}</section><section class="service-section wrap team-section" id="orthopedists"><h2>Стоматологи-<em>ортопеды.</em></h2><p class="service-lead">Планируют восстановление зубов с помощью коронок и протезов. Ортопедическое лечение также проводит <a class="inline-link" href="#sharifullin-ruslan">Шарифуллин Руслан Рушанович</a>.</p>${doctorCards(onlyOrthopedists,'../',{profiles:true})}${conversionCta('../',{context:'Консультация ортопеда',implantology:false})}<div class="team-related-links"><a class="text-link" href="../services/ortoped/">Протезирование: методы и стоимость</a><a class="text-link" href="../index.html#laboratory">Собственная зуботехническая лаборатория</a></div></section>`;
+await mkdir(new URL('doctors/',root),{recursive:true});
+await writeFile(new URL('doctors/index.html',root),pageShell(home,'Врачи Премьер в Набережных Челнах — имплантологи и ортопеды','Врачи стоматологии Премьер: Шарифуллин, Саледдинов, Фахрануров, Дмитриев и Валиуллин. Фото, специализации, опыт работы и запись на приём.',body,'../'));
+console.log(`Generated doctor directory with ${doctors.length} profiles.`);

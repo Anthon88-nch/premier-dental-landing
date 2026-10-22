@@ -8,7 +8,9 @@
     "check": "node --check server.mjs && node --check admin-server.mjs && node --check app.js && node --check admin/admin.js",
     "test": "node --test tests/*.test.mjs",
     "admin:init": "node scripts/init-admin.mjs",
-    "build:pages": "node scripts/build-pages.mjs"
+    "build:pages": "node scripts/build-pages.mjs",
+    "build:production": "node scripts/build-pages.mjs --production",
+    "build:services": "node scripts/generate-site.mjs"
   },
   "engines": { "node": ">=22" }
 }

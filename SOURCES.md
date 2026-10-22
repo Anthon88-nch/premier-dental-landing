@@ -28,3 +28,23 @@
 Шрифт Manrope получен через Google Fonts, лицензия SIL Open Font License — `assets/Manrope-OFL.txt`. Иллюстрации в карточках — оригинальные схематичные SVG, не изображение клинического результата. Стаж конкретного врача, гарантии результата, стоимость лечения и отзывы не выдумывались.
 
 Снимок исходной страницы и вспомогательные исследовательские файлы хранятся в `research/`, исключены из Git и закрыты HTTP-сервером. В production не переносить.
+# Дополнение от 22.10.2026: внутренние страницы
+
+Заполненный бриф клиники на Пушкинской подтверждает Dentium, Astra Tech, одномоментную имплантацию и All-on-4/6. Карта запросов, источники и расхождения цен: `SERVICE-STRUCTURE.md`.
+
+Контакт для Пушкина, 4 исправлен на +7 (8552) 52-90-90: совпадает в брифе, на https://xn----7sbavlcsfcmfp6b5cr1e2c.xn--p1ai/ и https://premier-stom.ru/ . Последний источник относит прежний 59-77-00 к филиалу на Мира. Более ранние записи ниже описывают прежний источник, а не актуальный контакт этой версии.
+
+## Product images and patient reviews (2026-10-22)
+- Dentium SuperLine product illustration: https://www.dentiumusa.com/products/implant-systems/superline — saved unchanged as assets/dentium-superline.png. Example product, not proof of the clinic's exact model/stock.
+- Astra Tech EV product illustration: https://www.dentsplysirona.com/en-us/shop/BP-1000191262/astra-tech-implant-ev.html — saved unchanged as assets/astra-tech-ev.png. Example product; specific model selected by the clinician.
+- Three reviews transcribed from user-supplied screenshots i (2).webp, i (1).webp, i.webp. Original images retained as assets/review-*.webp. Source shown in screenshots: ПроДокторов. Original review permalinks were not supplied. The owner subsequently supplied the MyReviews tile widget; it is connected on home and reviews. No year inferred for 18 February or 30 September; 13 March 2024 is explicit. Statements about outcomes remain attributed patient quotations, not clinic promises. No aggregate-rating markup added.
+
+## SEO, блог и лаборатория — 22.10.2026
+
+Основной домен имплантация-челны.рф и наличие собственной зуботехнической лаборатории прямо подтверждены владельцем в переписке. Фото, видео, оборудование, сроки и технологии лаборатории пока не предоставлены; соответствующие обещания не добавлялись. Карта семантики и режимы индексации: SEO.md. Медицинские источники шести статей указаны в content/blog.mjs и на страницах блога. Текст не приписывает рецензирование врачу. Внешний MyReviews загружается при приближении блока к экрану.
+
+## Врачи, фотографии лаборатории и видео — 22.10.2026
+
+Два одинаковых DOCX «Информация про врачей» из предоставленных папок подтверждают пять врачей: Шарифуллин Руслан Рушанович (хирург-имплантолог-ортопед-терапевт), Саледдинов Сархан Гамлетович и Фахрануров Ильдар Индусович (хирурги-имплантологи), Дмитриев Андрей Владиславович (ортопед-терапевт), Валиуллин Ринат Рашитович (ортопед). Опыт Дмитриева — более 25 лет, остальных — более 8 лет, в точности по предоставленным описаниям. Образование, категории и сертификаты в этих файлах отсутствуют. Портреты сопоставлены с подписанными файлами; оригиналы сохранены, для сайта созданы WebP.
+
+Из 17 фотографий «Оборудование ЗубТех» выбраны IMG_8054, IMG_7895, IMG_7968, IMG_7974; IMG_8023-2 использован для представления сотрудника. Имя зубного техника Новиков Павел Сергеевич сообщено владельцем в переписке. Видео VID_20261019_211703_880_bsl.mp4 предоставлено владельцем. Веб-версия сохраняет процесс/звук с исключением планов 11,80–27,30с и 32,80–38,04с, где видны рабочая маркировка модели и записи на бланках. Аналитические контактные листы и технический manifest находятся только в закрытой research/.

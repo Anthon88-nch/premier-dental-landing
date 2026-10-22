@@ -1,0 +1,1 @@
+export const reviewsWidget = (prefix = '') => `<div class="reviews-widget"><iframe id="myReviews__block-widget" title="Виджет с отзывами «Плитка» от MyReviews"></iframe><p id="widget-error" hidden>Не удалось загрузить виджет. Ниже доступны отзывы пациентов.</p></div><script src="${prefix}reviews-widget.js" defer></script>`;

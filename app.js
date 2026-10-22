@@ -1,3 +1,22 @@
+// Only confirmed destinations become links. Blank Telegram/MAX channels stay hidden.
+const channelHosts = {whatsapp:['wa.me'],telegram:['t.me','telegram.me'],max:['max.ru']};
+const configuredChannels = window.PREMIER_CONFIG?.messengers || {};
+for(const link of document.querySelectorAll('[data-messenger]')) {
+  const channel = link.getAttribute('data-messenger');
+  if(!Object.hasOwn(channelHosts,channel)) continue;
+  link.hidden = true;
+  link.removeAttribute('href');
+  const value = configuredChannels[channel];
+  if(typeof value !== 'string' || !value.trim()) continue;
+  try {
+    const target = new URL(value.trim());
+    if(target.protocol !== 'https:' || target.username || target.password
+      || !channelHosts[channel].includes(target.hostname) || target.port || target.pathname === '/') continue;
+    link.setAttribute('href',target.href);
+    link.hidden = false;
+  } catch { /* An invalid destination remains hidden. */ }
+}
+
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('#mobile-menu');
 const booking = document.querySelector('#booking');
@@ -16,8 +35,8 @@ if(phoneOnly) {
   intro.textContent = 'Позвоните в клинику: администратор ответит на вопросы и согласует удобное время консультации.';
   const call = document.createElement('a');
   call.className = 'button button-dark booking-accent';
-  call.href = 'tel:+78552597700';
-  call.textContent = '+7 (8552) 59-77-00 ↗';
+  call.href = 'tel:+78552529090';
+  call.innerHTML = '+7 (8552) 52-90-90 <svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg>';
   intro.after(call);
 }
 
@@ -63,21 +82,116 @@ for (const dialog of [booking, privacy]) {
     if(dialog === booking && trigger) trigger.focus({ preventScroll: true });
   });
 }
-phone.addEventListener('input', () => { phone.setCustomValidity(''); error.textContent = ''; });
+const phoneError = 'Проверьте номер: введите 10 цифр после +7, без букв и добавочных номеров.';
+// Keep invalid input visible instead of silently cutting off a second number or letters.
+phone.removeAttribute('maxlength');
+function normalizePhone(value) {
+  const raw = value.trim();
+  if(!/^\+?[\d\s()-]+$/.test(raw)) return null;
+  const digits = raw.replace(/\D/g, '');
+  if(digits.length === 10 && !raw.startsWith('+')) return `7${digits}`;
+  if(digits.length === 11 && /^[78]/.test(digits) && (!raw.startsWith('+') || digits.startsWith('7'))) return `7${digits.slice(1)}`;
+  return null;
+}
+function partialPhone(value) {
+  const raw = value.trim();
+  if(!raw) return {national:'',prefix:0};
+  if(!/^\+?[\d\s()-]+$/.test(raw)) return null;
+  const digits = raw.replace(/\D/g, '');
+  if(!digits || digits.length > 11 || (raw.startsWith('+') && !digits.startsWith('7'))) return null;
+  const normalized = normalizePhone(raw);
+  if(normalized) return {national:normalized.slice(1),prefix:digits.length === 11 ? 1 : 0};
+  const prefix = raw.startsWith('+') || /^[78]/.test(digits) ? 1 : 0;
+  const national = digits.slice(prefix);
+  return national.length <= 10 ? {national,prefix} : null;
+}
+function formatPhone(national) {
+  let result = '+7';
+  if(national.length) result += ` (${national.slice(0,3)}`;
+  if(national.length >= 3) result += ')';
+  if(national.length > 3) result += ` ${national.slice(3,6)}`;
+  if(national.length > 6) result += `-${national.slice(6,8)}`;
+  if(national.length > 8) result += `-${national.slice(8,10)}`;
+  return result;
+}
+function formatPhoneInput() {
+  error.textContent = '';
+  const raw = phone.value;
+  if(!raw) { phone.setCustomValidity(''); return; }
+  const parts = partialPhone(raw);
+  if(!parts) { phone.setCustomValidity(phoneError); return; }
+  const cursor = phone.selectionStart ?? raw.length;
+  const beforeCursor = Math.max(0,raw.slice(0,cursor).replace(/\D/g,'').length - parts.prefix);
+  phone.value = formatPhone(parts.national);
+  let seen = -1,position = phone.value.length;
+  if(beforeCursor === 0) position = 2;
+  else for(let i=0;i<phone.value.length;i++) {
+    if(/\d/.test(phone.value[i])) seen++;
+    if(seen === beforeCursor) { position = i+1; break; }
+  }
+  phone.setSelectionRange(position,position);
+  phone.setCustomValidity(normalizePhone(phone.value) ? '' : phoneError);
+}
+phone.addEventListener('focus', () => {
+  if(!phone.value) { phone.value = '+7'; phone.setSelectionRange(2,2); }
+});
+phone.addEventListener('input',formatPhoneInput);
 phone.addEventListener('blur', () => {
-  const digits = phone.value.replace(/\D/g, '');
-  const normalized = digits.length === 10 ? `7${digits}` : digits.replace(/^8/, '7');
-  if(/^7\d{10}$/.test(normalized)) phone.value = `+7 (${normalized.slice(1,4)}) ${normalized.slice(4,7)}-${normalized.slice(7,9)}-${normalized.slice(9)}`;
+  if(phone.value === '+7') phone.value = '';
+  formatPhoneInput();
+});
+phone.addEventListener('paste', event => {
+  const pasted = event.clipboardData?.getData('text');
+  if(typeof pasted !== 'string') return;
+  event.preventDefault();
+  const start = phone.selectionStart ?? 0,end = phone.selectionEnd ?? phone.value.length;
+  const onlyPrefix = !phone.value || /^\+?7\s*$/.test(phone.value);
+  // A full number pasted into an empty field replaces the +7 hint.
+  phone.value = onlyPrefix || (start === 0 && end === phone.value.length)
+    ? pasted : phone.value.slice(0,start)+pasted+phone.value.slice(end);
+  phone.setSelectionRange((onlyPrefix ? 0 : start)+pasted.length,(onlyPrefix ? 0 : start)+pasted.length);
+  formatPhoneInput();
+});
+phone.addEventListener('beforeinput', event => {
+  if(!['deleteContentBackward','deleteContentForward'].includes(event.inputType)) return;
+  if(!partialPhone(phone.value)) return; // Let users erase invalid pasted text normally.
+  const start = phone.selectionStart,end = phone.selectionEnd;
+  if(start !== end || start === null) return;
+  const backward = event.inputType === 'deleteContentBackward';
+  let index = backward ? start-1 : start;
+  // Skip mask punctuation when deleting, so Backspace and Delete remove a digit.
+  while(index >= 0 && index < phone.value.length && !/\d/.test(phone.value[index])) index += backward ? -1 : 1;
+  if(index < 0 || index >= phone.value.length) return;
+  if(index === 1 && phone.value.startsWith('+7')) {
+    event.preventDefault();
+    if(backward) {
+      if(phone.value === '+7') { phone.value = ''; formatPhoneInput(); }
+      else phone.setSelectionRange(2,2);
+      return;
+    }
+    index = 2;
+    while(index < phone.value.length && !/\d/.test(phone.value[index])) index++;
+    if(index === phone.value.length) return;
+    phone.value = phone.value.slice(0,index)+phone.value.slice(index+1);
+    phone.setSelectionRange(index,index);
+    formatPhoneInput();
+    return;
+  }
+  if(index !== (backward ? start-1 : start)) {
+    event.preventDefault();
+    phone.value = phone.value.slice(0,index)+phone.value.slice(index+1);
+    phone.setSelectionRange(index,index);
+    formatPhoneInput();
+  }
 });
 form.addEventListener('submit', async event => {
   event.preventDefault();
   if(phoneOnly) return;
   if(submitting) return;
-  let digits = phone.value.replace(/\D/g, '');
-  if(digits.length === 10) digits = `7${digits}`;
-  digits = digits.replace(/^8/, '7');
-  if(!/^7\d{10}$/.test(digits)) {
-    error.textContent = 'Проверьте номер: нужно 11 цифр, начиная с +7 или 8.';
+  const digits = normalizePhone(phone.value);
+  if(!digits) {
+    error.textContent = phoneError;
+    phone.setCustomValidity(phoneError);
     phone.focus();
     return;
   }
@@ -97,12 +211,14 @@ form.addEventListener('submit', async event => {
       body: JSON.stringify({ name: form.elements.name.value.trim(), phone: `+${digits}`, consent: form.elements.consent.checked, website: form.elements.website.value, requestId })
     });
     const result = await response.json();
-    if(!response.ok) throw new Error(result.message || 'Не удалось отправить заявку. Попробуйте ещё раз или позвоните в клинику.');
+    if(!response.ok || typeof result.preview !== 'boolean') throw new Error(result.message || 'Не удалось подтвердить получение заявки. Попробуйте ещё раз или позвоните в клинику.');
     document.querySelector('#booking-content').hidden = true;
     document.querySelector('#booking-result').hidden = false;
+    document.querySelector('#booking-result h2').textContent = result.preview ? 'Заявка сохранена' : 'Заявка получена';
     document.querySelector('#result-message').textContent = result.preview
-      ? 'Заявка сохранена в локальной версии и не передана в клинику. Для записи на приём позвоните по номеру +7 (8552) 59-77-00.'
+      ? 'Заявка сохранена в локальной версии и не передана в клинику. Для записи на приём позвоните по номеру +7 (8552) 52-90-90.'
       : 'Заявка получена. Администратор свяжется с вами для согласования времени. Запись будет подтверждена после разговора.';
+    if(result.preview === false) window.PREMIER_ANALYTICS?.goal('lead_submit');
     document.querySelector('#booking-result').setAttribute('tabindex','-1');
     document.querySelector('#booking-result').focus({preventScroll:true});
     form.reset();
@@ -113,9 +229,10 @@ form.addEventListener('submit', async event => {
   } finally {
     submitting = false;
     submit.disabled = false;
-    submit.innerHTML = 'Оставить заявку <span class="arrow">↗</span>';
+    submit.innerHTML = 'Оставить заявку <span class="arrow"><svg class="icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 18 18 6M6 6h12v12"/></svg></span>';
   }
 });
 
 // Promotion is hidden automatically after its published end date (Europe/Moscow).
-if(Date.now() >= Date.parse('2026-10-01T00:00:00+03:00')) document.querySelector('#offer').hidden = true;
+const offer = document.querySelector('#offer');
+if(offer && Date.now() >= Date.parse('2026-10-01T00:00:00+03:00')) offer.hidden = true;

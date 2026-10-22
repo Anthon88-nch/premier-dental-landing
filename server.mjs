@@ -1,9 +1,11 @@
 import http from 'node:http';
+import {createReadStream} from 'node:fs';
 import { readFile, mkdir, writeFile, rename, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createAdmin } from './admin-server.mjs';
+import {publicPageFiles} from './scripts/public-pages.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 try { process.loadEnvFile(path.join(root, '.env')); } catch(error) { if(error.code !== 'ENOENT') throw error; }
@@ -14,8 +16,21 @@ const webhook = process.env.LEAD_WEBHOOK_URL || '';
 if(webhook && new URL(webhook).protocol !== 'https:') throw new Error('LEAD_WEBHOOK_URL must use HTTPS');
 const mime = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.svg':'image/svg+xml', '.jpg':'image/jpeg', '.webp':'image/webp', '.woff2':'font/woff2' };
 const inFlight = new Map();
+mime['.png'] = 'image/png';
+mime['.xml'] = 'application/xml; charset=utf-8';
+mime['.txt'] = 'text/plain; charset=utf-8';
+mime['.mp4'] = 'video/mp4';
 const rate = new Map();
 const allowed = new Set(['/index.html','/styles.css','/app.js','/site-config.js','/admin/index.html','/admin/admin.css','/admin/admin.js']);
+const serviceRoutes = new Set(publicPageFiles.filter(file=>file!=='index.html').map(file=>'/'+file.replace(/index\.html$/,'')));
+allowed.add('/services.css');
+allowed.add('/blog.css');
+allowed.add('/team.css');
+allowed.add('/robots.txt');
+allowed.add('/sitemap.xml');
+allowed.add('/reviews-widget.js');
+allowed.add('/analytics.js');
+for(const route of serviceRoutes) allowed.add(`${route}index.html`);
 const headers = { 'X-Content-Type-Options':'nosniff', 'Referrer-Policy':'strict-origin-when-cross-origin', 'X-Frame-Options':'DENY', 'Permissions-Policy':'camera=(), microphone=(), geolocation=()', 'Content-Security-Policy':"default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'" };
 function json(res, status, data) { res.writeHead(status, { ...headers, 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' }); res.end(JSON.stringify(data)); }
 function validLead(body) {
@@ -81,7 +96,10 @@ const server = http.createServer(async(req,res) => {
       finally { if(inFlight.get(id) === task) inFlight.delete(id); }
     }
     if(!['GET','HEAD'].includes(req.method)) return json(res,405,{message:'Метод не поддерживается.'});
-    const pathname = url.pathname === '/' ? '/index.html' : ['/admin','/admin/'].includes(url.pathname) ? '/admin/index.html' : decodeURIComponent(url.pathname);
+    if(serviceRoutes.has(`${url.pathname}/`)) {
+      res.writeHead(308,{...headers,Location:`${url.pathname}/${url.search}`});res.end();return;
+    }
+    const pathname = url.pathname === '/' ? '/index.html' : serviceRoutes.has(url.pathname) ? `${url.pathname}index.html` : ['/admin','/admin/'].includes(url.pathname) ? '/admin/index.html' : decodeURIComponent(url.pathname);
     const asset = /^\/assets\/[a-zA-Z0-9_.-]+$/.test(pathname);
     if(!allowed.has(pathname) && !asset) return json(res,404,{message:'Страница не найдена.'});
     const filename = path.join(root,pathname);
@@ -89,10 +107,31 @@ const server = http.createServer(async(req,res) => {
     if(!mime[ext]) return json(res,404,{message:'Файл не найден.'});
     const info = await stat(filename);
     if(!info.isFile()) return json(res,404,{message:'Файл не найден.'});
-    res.writeHead(200,{...headers,'Content-Type':mime[ext],'Content-Length':info.size,'Cache-Control':asset?'public, max-age=86400':'no-cache'});
+    const publicHtml = ext === '.html' && publicPageFiles.includes(pathname.slice(1));
+    const analyticsCsp = headers['Content-Security-Policy']
+      .replace("script-src 'self'", "script-src 'self' https://mc.yandex.ru https://mc.yandex.com")
+      .replace("connect-src 'self'", "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com")
+      .replace("img-src 'self' data:", "img-src 'self' data: https://mc.yandex.ru https://mc.yandex.com");
+    const pageHeaders = ['/index.html','/reviews/index.html'].includes(pathname) ? {...headers, 'Content-Security-Policy':"default-src 'self'; script-src 'self' https://myreviews.dev https://mc.yandex.ru https://mc.yandex.com; style-src 'self' 'unsafe-inline' https://myreviews.dev https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://myreviews.dev data:; img-src 'self' https: data:; connect-src 'self' https://myreviews.dev https://feed.myreviews.ru https://mc.yandex.ru https://mc.yandex.com; frame-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'none'"} : publicHtml ? {...headers,'Content-Security-Policy':analyticsCsp} : headers;
+    if(ext === '.mp4') {
+      let start=0,end=info.size-1;
+      const range=req.headers.range;
+      if(range) {
+        const match=/^bytes=(\d*)-(\d*)$/.exec(range);
+        if(!match || (!match[1]&&!match[2])) {res.writeHead(416,{...pageHeaders,'Content-Range':`bytes */${info.size}`});res.end();return;}
+        if(!match[1]) start=Math.max(0,info.size-Number(match[2]));
+        else {start=Number(match[1]);if(match[2])end=Math.min(Number(match[2]),end);}
+        if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||start>=info.size||end<start) {res.writeHead(416,{...pageHeaders,'Content-Range':`bytes */${info.size}`});res.end();return;}
+      }
+      res.writeHead(range?206:200,{...pageHeaders,'Content-Type':mime[ext],'Accept-Ranges':'bytes','Content-Length':end-start+1,'Cache-Control':'public, max-age=86400',...(range?{'Content-Range':`bytes ${start}-${end}/${info.size}`}:{})});
+      if(req.method==='HEAD')res.end();
+      else {const stream=createReadStream(filename,{start,end});res.on('close',()=>stream.destroy());stream.on('error',()=>res.destroy());stream.pipe(res);}
+      return;
+    }
+    res.writeHead(200,{...pageHeaders,'Content-Type':mime[ext],'Content-Length':info.size,'Cache-Control':asset?'public, max-age=86400':'no-cache'});
     res.end(req.method === 'HEAD' ? undefined : await readFile(filename));
   } catch(e) {
-    if(!res.headersSent) json(res,e.code === 'ENOENT'?404:503,{message:'Сервис временно недоступен. Позвоните в клинику: +7 (8552) 59-77-00.'});
+    if(!res.headersSent) json(res,e.code === 'ENOENT'?404:503,{message:'Сервис временно недоступен. Позвоните в клинику: +7 (8552) 52-90-90.'});
     else res.end();
     // Do not log request bodies, phone numbers, names, tokens, or webhook responses.
   }
