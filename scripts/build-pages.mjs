@@ -4,6 +4,7 @@ import {applySeo,crawlFiles} from './seo.mjs';
 import {seoConfig,clinic} from '../content/site.mjs';
 import {clientConfigScript} from './client-config.mjs';
 import {assertNoPlaceholders} from './release-guard.mjs';
+import {contactChannels} from '../content/contact-channels.mjs';
 await import('./generate-site.mjs');
 const output=new URL('../site/',import.meta.url),root=new URL('../',import.meta.url);
 await mkdir(output,{recursive:true});
@@ -12,7 +13,7 @@ const production=process.argv.includes('--production');
 const config=seoConfig(production?{...process.env,SITE_URL:process.env.SITE_URL || clinic.primaryUrl,SITE_INDEXABLE:'true'}:process.env);
 const htmlFiles = publicPageFiles;
 // A production release must not show {{TODO: …}} placeholders to patients: check before writing anything.
-if(production)assertNoPlaceholders(await Promise.all(htmlFiles.map(async file=>({file,html:await readFile(new URL(file,root),'utf8')}))));
+if(production)assertNoPlaceholders(await Promise.all(htmlFiles.map(async file=>({file,html:await readFile(new URL(file,root),'utf8')}))),{channels:contactChannels});
 // Remove only obsolete generated HTML within known page directories, never user data.
 async function prunePages(dir,relative='') {
   for(const entry of await readdir(dir,{withFileTypes:true})) {
@@ -27,7 +28,7 @@ for(const file of [...htmlFiles,'reviews-widget.js','styles.css','services.css',
   await copyFile(new URL(file,root),new URL(file,output));
 }
 await cp(new URL('assets/',root),new URL('assets/',output),{recursive:true});
-await writeFile(new URL('site-config.js',output),clientConfigScript({bookingMode:'phone',analyticsEnabled:production}));
+await writeFile(new URL('site-config.js',output),clientConfigScript({bookingMode:'phone',analyticsEnabled:production,messengerPlaceholders:!production}));
 for(const file of htmlFiles) {
 let html=await readFile(new URL(file,output),'utf8');
 html=html.replace('<form id="booking-form">','<form id="booking-form" hidden>');

@@ -1,6 +1,10 @@
 import {pricePlans} from '../content/pricing.mjs';
 import {reputation} from '../content/reputation.mjs';
 import {escapeHtml as e} from './page-shell.mjs';
+import {draftValues} from '../content/draft-values.mjs';
+
+// Demo figures stay marked until the clinic confirms them; the production build refuses data-draft.
+const draft=value=>draftValues.confirmed?e(value):`<span data-draft>${e(value)}</span>`;
 
 const money=value=>new Intl.NumberFormat('ru-RU').format(value)+' ₽';
 // Homepage composition is isolated from the unchanged inner-page shell.
@@ -56,7 +60,6 @@ export function homepageUx(html) {
   const clinic=blocks.clinic.replace('</section>',blocks.laboratory+'</section>');
   const order=[blocks.hero,blocks.solutions,cost,blocks.reviews,blocks.doctor,steps,clinic,blocks.faq,blocks.contacts];
   html=html.slice(0,start)+'\n'+order.join('\n')+'\n'+html.slice(end);
-  html=html.replace(/(<div class="footer-top">)/,'$1<a class="home-footer-blog" href="blog/">Блог</a>');
 
   // 02: one comparison and a visible treatment breakdown.
   const implantImages=[...blocks.systems.matchAll(/<img\b[^>]*>/g)].map(match=>match[0]);
@@ -69,7 +72,7 @@ export function homepageUx(html) {
   const costButton=blocks.cost.match(/<button\b[^>]*data-book[^>]*>[\s\S]*?<\/button>/)[0];
   const costNote=blocks.cost.match(/<p class="note">[\s\S]*?<\/p>/)[0];
   const systemNote=blocks.systems.match(/<p class="note">[\s\S]*?<\/p>/)[0];
-  html=replaceSection(html,'cost',`<section class="cost-section home-cost" id="cost" aria-labelledby="cost-title"><div class="wrap section"><div class="section-heading"><p class="eyebrow">ЦЕНЫ</p><h2 id="cost-title">Стоимость <em>лечения.</em></h2><p class="section-intro">Имплант с постоянной коронкой или протез на одну челюсть. Цены без скидок.</p></div><div class="ux-system-comparison" id="systems">${comparison}</div>${systemNote}<div class="ux-arch-prices">${fullArch}</div>${costNote}<p class="ux-installment">{{TODO: рассрочка от X ₽/мес}}</p><div class="home-cost-actions">${costButton}<a class="text-link" href="services/ortoped/#prices">Цены на коронки и протезы <span aria-hidden="true">→</span></a></div></div></section>`);
+  html=replaceSection(html,'cost',`<section class="cost-section home-cost" id="cost" aria-labelledby="cost-title"><div class="wrap section"><div class="section-heading"><p class="eyebrow">ЦЕНЫ</p><h2 id="cost-title">Стоимость <em>лечения.</em></h2><p class="section-intro">Имплант с постоянной коронкой или протез на одну челюсть. Цены без скидок.</p></div><div class="ux-system-comparison" id="systems">${comparison}</div>${systemNote}<div class="ux-arch-prices">${fullArch}</div>${costNote}<p class="ux-installment">${draft(draftValues.installment)}</p><div class="home-cost-actions">${costButton}<a class="text-link" href="services/ortoped/#prices">Цены на коронки и протезы <span aria-hidden="true">→</span></a></div></div></section>`);
   const mainStart=html.indexOf('<main id="main">'),mainEnd=html.indexOf('</main>');
   html=html.slice(0,mainStart)+html.slice(mainStart,mainEnd).replaceAll('Профессиональная гигиена оплачивается отдельно.','')+html.slice(mainEnd);
   html=html.replace('<p class="ux-installment">','<p class="note ux-hygiene-note">Профессиональная гигиена оплачивается отдельно.</p><p class="ux-installment">');
@@ -85,7 +88,7 @@ export function homepageUx(html) {
   }
 
   // 04: price orientation belongs to the existing service-card link.
-  const servicePrices={'odnomomentnaya-implantaciya':`от ${money(pricePlans.dentium[0].total)}`,'all-on-4':`от ${money(pricePlans['all-on-4'][0].total)}`,'all-on-6':`от ${money(pricePlans['all-on-6'][0].total)}`,ortoped:'{{TODO: цена от}}'};
+  const servicePrices={'odnomomentnaya-implantaciya':`от ${money(pricePlans.dentium[0].total)}`,'all-on-4':`от ${money(pricePlans['all-on-4'][0].total)}`,'all-on-6':`от ${money(pricePlans['all-on-6'][0].total)}`,ortoped:draft(draftValues.orthopedicFrom)};
   html=html.replace(/<a class="home-service" href="services\/([^"]+)\/">[\s\S]*?<\/a>/g,(card,slug)=>{
     const priced=card.replace('<span class="home-card-action">',`<p class="ux-service-price">${servicePrices[slug]}</p><span class="home-card-action">`);
     return slug==='all-on-4'?priced.replace('class="home-service"','class="home-service ux-featured-service"'):priced;
@@ -106,7 +109,7 @@ export function homepageUx(html) {
   let stepIndex=0;
   updatedSteps=updatedSteps.replace(/<article\b[^>]*>[\s\S]*?<\/article>/g,step=>{
     const number=++stepIndex;
-    return step.replace('</h3>','</h3><p class="ux-step-time">{{TODO: срок}}</p>').replace('</article>',(number===4?followupBody:'')+'</article>');
+    return step.replace('</h3>',`</h3><p class="ux-step-time">${draft(draftValues.stepTimes[number-1])}</p>`).replace('</article>',(number===4?followupBody:'')+'</article>');
   });
   html=replaceSection(html,'steps',updatedSteps);
 

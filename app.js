@@ -1,13 +1,25 @@
-// Only confirmed destinations become links. Blank Telegram/MAX channels stay hidden.
+// Only confirmed destinations become links. In preview builds a blank Telegram/MAX channel is shown
+// as an inactive button (no href) so the layout is final; production builds hide it and refuse to ship blanks.
 const channelHosts = {whatsapp:['wa.me'],telegram:['t.me','telegram.me'],max:['max.ru']};
 const configuredChannels = window.PREMIER_CONFIG?.messengers || {};
+const showPlaceholders = window.PREMIER_CONFIG?.messengerPlaceholders === true;
 for(const link of document.querySelectorAll('[data-messenger]')) {
   const channel = link.getAttribute('data-messenger');
   if(!Object.hasOwn(channelHosts,channel)) continue;
   link.hidden = true;
   link.removeAttribute('href');
+  link.classList?.remove('is-placeholder');
+  link.removeAttribute('aria-disabled');
   const value = configuredChannels[channel];
-  if(typeof value !== 'string' || !value.trim()) continue;
+  if(typeof value !== 'string' || !value.trim()) {
+    if(showPlaceholders && channel !== 'whatsapp') {
+      link.hidden = false;
+      link.classList?.add('is-placeholder');
+      link.setAttribute('aria-disabled','true');
+      link.title = 'Ссылка появится после запуска сайта';
+    }
+    continue;
+  }
   try {
     const target = new URL(value.trim());
     if(target.protocol !== 'https:' || target.username || target.password

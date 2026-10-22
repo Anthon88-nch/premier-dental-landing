@@ -47,7 +47,8 @@ test('homepage carousels are labelled regions and unknown clinic information sta
     assert.match(home,new RegExp(`id="${track}" data-ux-carousel role="region" aria-label="[^"]+" tabindex="0"`));
     assert.match(home,new RegExp(`data-carousel-status="${track}"[^>]*>1 / ${count}<`));
   }
-  assert.equal((home.match(/\{\{TODO: срок\}\}/g)||[]).length,4);
+  assert.equal((home.match(/<p class="ux-step-time"><span data-draft>[^<]+<\/span><\/p>/g)||[]).length,4);
+  assert.doesNotMatch(home,/\{\{TODO: (?:срок|цена от|рассрочка)/);
   assert.match(home,/\{\{TODO: дата лицензии\}\}/);
   assert.match(home,/ООО «ДЕНТА-РИА»/);
   assert.match(home,/<script src="home-ux\.js" defer>/);

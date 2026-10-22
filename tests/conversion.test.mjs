@@ -29,7 +29,7 @@ class Element {
   getBoundingClientRect() { return {left:0,right:100,top:0,bottom:100}; }
   closest(selector) { return selector === 'a[href]' && this.hasAttribute('href') ? this : null; }
 }
-function setup({enabled=false,bookingMode='local',url='https://implant.example/',fetchImpl,messengers=contactChannels}={}) {
+function setup({enabled=false,bookingMode='local',url='https://implant.example/',fetchImpl,messengers=contactChannels,messengerPlaceholders}={}) {
   const elements = new Map();
   for(const selector of ['.menu-toggle','#mobile-menu','#booking','#privacy','#booking-form','#phone','#form-error','.dialog-desc','#booking-content','#booking-result','#booking-result h2','#result-message']) elements.set(selector,new Element());
   const phone=elements.get('#phone'),form=elements.get('#booking-form');
@@ -52,7 +52,7 @@ function setup({enabled=false,bookingMode='local',url='https://implant.example/'
   document.head={append:element=>inserted.push(element)};
   document.body={classList:{add(){},remove(){}}};
   const calls=[],requests=[];
-  const window={location:new URL(url),PREMIER_CONFIG:{bookingMode,analytics:{enabled,metrikaId:95513342},messengers}};
+  const window={location:new URL(url),PREMIER_CONFIG:{bookingMode,analytics:{enabled,metrikaId:95513342},messengers,messengerPlaceholders}};
   const context=vm.createContext({window,document,console,URL,crypto:{randomUUID},AbortSignal,fetch:async(input,options)=>{
     requests.push({input,...options});
     return fetchImpl ? fetchImpl(input,options) : {ok:true,json:async()=>({preview:true})};
@@ -88,6 +88,24 @@ async function remove(harness,direction) {
   await input(harness,phone.value.slice(0,from)+phone.value.slice(to),from);
 }
 const goalNames=h=>h.calls.filter(call=>call[1]==='reachGoal').map(call=>call[2]);
+
+test('preview shows blank Telegram and MAX as inactive buttons without any destination or goal',()=>{
+  const h=setup({messengerPlaceholders:true});
+  for(const channel of ['telegram','max']) {
+    const link=h.messengerLinks.find(link=>link.getAttribute('data-messenger')===channel);
+    assert.equal(link.hidden,false,channel);assert.equal(link.hasAttribute('href'),false,channel);
+    assert.equal(link.getAttribute('aria-disabled'),'true',channel);
+  }
+  const whatsapp=h.messengerLinks[0];assert.equal(whatsapp.getAttribute('href'),contactChannels.whatsapp);assert.equal(whatsapp.hasAttribute('aria-disabled'),false);
+  const confirmed=setup({messengerPlaceholders:true,messengers:{...contactChannels,telegram:'https://t.me/premier_clinic'}});
+  const telegram=confirmed.messengerLinks.find(link=>link.getAttribute('data-messenger')==='telegram');
+  assert.equal(telegram.getAttribute('href'),'https://t.me/premier_clinic');assert.equal(telegram.hasAttribute('aria-disabled'),false);
+  assert.deepEqual(goalNames(h),[]);
+});
+
+test('production configuration never enables messenger placeholders',()=>{
+  assert.match(clientConfigScript({bookingMode:'phone',analyticsEnabled:true,messengerPlaceholders:false}),/"messengerPlaceholders":false/);
+});
 
 test('unconfigured Telegram and MAX remain hidden without placeholder destinations',()=>{
   const h=setup();

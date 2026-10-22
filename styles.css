@@ -439,3 +439,10 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
 }
 /* Reviews widget on phones: the tile shows one card, so a viewport-tall frame left ~250px of empty space. */
 @media (max-width:767px){.reviews-widget{height:540px;min-height:0}}
+/* Footer navigation on every page: the main sections, not just the blog. */
+.footer-nav{display:flex;flex-wrap:wrap;gap:0 32px;padding:14px 0;border-bottom:1px solid var(--line)}
+.footer-nav a{display:inline-flex;align-items:center;min-height:44px;font-size:var(--text-ui);line-height:1.45;color:var(--ink);transition:color .18s}
+.footer-nav a:hover{color:#a3482d}
+@media(max-width:600px){.footer-nav{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;padding:10px 0}}
+/* Telegram/MAX buttons waiting for the clinic's links (preview builds only). */
+[data-messenger].is-placeholder{opacity:.55;cursor:default;pointer-events:none}
