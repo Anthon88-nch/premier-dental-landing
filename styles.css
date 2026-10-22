@@ -437,3 +437,5 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
  .home-page .footer-top{flex-wrap:wrap;gap:12px 20px}
  .home-page .footer-legal{gap:8px}
 }
+/* Reviews widget on phones: the tile shows one card, so a viewport-tall frame left ~250px of empty space. */
+@media (max-width:767px){.reviews-widget{height:540px;min-height:0}}
