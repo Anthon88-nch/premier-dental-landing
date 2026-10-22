@@ -32,6 +32,7 @@ allowed.add('/reviews-widget.js');
 allowed.add('/analytics.js');
 allowed.add('/contact-widget.css');
 allowed.add('/contact-widget.js');
+allowed.add('/home-ux.js');
 for(const route of serviceRoutes) allowed.add(`${route}index.html`);
 const headers = { 'X-Content-Type-Options':'nosniff', 'Referrer-Policy':'strict-origin-when-cross-origin', 'X-Frame-Options':'DENY', 'Permissions-Policy':'camera=(), microphone=(), geolocation=()', 'Content-Security-Policy':"default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'" };
 function json(res, status, data) { res.writeHead(status, { ...headers, 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' }); res.end(JSON.stringify(data)); }

@@ -357,3 +357,42 @@ form label{font-size:16px}form label>span,.consent span{font-size:14px}.consent{
  .home-page .ux-section-action .button{width:100%}
  .home-page .steps-grid{grid-template-columns:minmax(0,1fr)}
 }
+
+.home-page .ux-carousel-status{display:none}
+@media(max-width:767px){
+  .home-page [data-ux-carousel]{
+    --ux-carousel-gap:12px;
+    display:grid;
+    grid-template-columns:none;
+    grid-auto-flow:column;
+    grid-auto-columns:calc(85% - var(--ux-carousel-gap));
+    gap:var(--ux-carousel-gap);
+    align-items:stretch;
+    min-width:0;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    overscroll-behavior-inline:contain;
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:0;
+    scrollbar-width:none;
+    padding-block:4px 12px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .home-page [data-ux-carousel]::-webkit-scrollbar{display:none}
+  .home-page [data-ux-carousel]>[data-ux-slide]{
+    min-width:0;
+    max-width:none;
+    scroll-snap-align:start;
+  }
+  .home-page [data-ux-carousel]:focus-visible{outline:3px solid #995333;outline-offset:5px}
+  .home-page .ux-carousel-status:not([hidden]){
+    display:block;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.5;
+    font-variant-numeric:tabular-nums;
+  }
+  .home-page .laboratory-grid[data-ux-carousel] img{height:260px;object-fit:cover}
+}

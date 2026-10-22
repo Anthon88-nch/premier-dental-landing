@@ -19,7 +19,7 @@ async function prunePages(dir,relative='') {
   }
 }
 await prunePages(output);
-for(const file of [...htmlFiles,'reviews-widget.js','styles.css','services.css','blog.css','team.css','app.js','analytics.js','contact-widget.css','contact-widget.js']) {
+for(const file of [...htmlFiles,'reviews-widget.js','styles.css','services.css','blog.css','team.css','app.js','analytics.js','contact-widget.css','contact-widget.js','home-ux.js']) {
   await mkdir(new URL('./',new URL(file,output)),{recursive:true});
   await copyFile(new URL(file,root),new URL(file,output));
 }

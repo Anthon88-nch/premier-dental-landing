@@ -20,6 +20,21 @@ export const replaceSection=(html,id,replacement)=>{
   if(!section)throw new Error(`Missing homepage section: ${id}`);
   return html.replace(section,replacement);
 };
+function carousel(html,className,id,label,slideTag) {
+  const opening=new RegExp('<div class="'+className+'[^\"]*">').exec(html);
+  if(!opening)throw new Error(`Missing carousel: ${className}`);
+  const tail=html.slice(opening.index);
+  let depth=0,end=0;
+  for(const match of tail.matchAll(/<\/?div\b[^>]*>/g)) {
+    depth+=match[0].startsWith('</')?-1:1;
+    if(depth===0){end=match.index+match[0].length;break;}
+  }
+  const original=tail.slice(0,end);
+  const count=[...original.matchAll(new RegExp('<'+slideTag+'\\b','g'))].length;
+  const track=original.replace(/^<div([^>]*)>/,`<div$1 id="${id}" data-ux-carousel role="region" aria-label="${label}" tabindex="0">`)
+    .replace(new RegExp('<'+slideTag+'\\b','g'),'<'+slideTag+' data-ux-slide');
+  return html.replace(original,track+`<p class="ux-carousel-status" data-carousel-status="${id}" role="status" aria-live="polite" aria-atomic="true" hidden>1 / ${count}</p>`);
+}
 
 export function homepageUx(html) {
   html=html.replace('<body>','<body class="home-page">');
@@ -83,5 +98,11 @@ export function homepageUx(html) {
     return step.replace('</h3>','</h3><p class="ux-step-time">{{TODO: срок}}</p>').replace('</article>',(number===4?followupBody:'')+'</article>');
   });
   html=replaceSection(html,'steps',updatedSteps);
+
+  // 07: native horizontal tracks; desktop grids and action handlers are intact.
+  html=carousel(html,'doctor-grid','home-doctor-carousel','Врачи клиники','article');
+  html=carousel(html,'review-grid','home-review-carousel','Отзывы пациентов','article');
+  html=carousel(html,'laboratory-grid','home-laboratory-carousel','Фотографии зуботехнической лаборатории','figure');
+  html=html.replace('</head>','<script src="home-ux.js" defer></script>\n</head>');
   return html;
 }
