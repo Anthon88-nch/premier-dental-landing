@@ -10,7 +10,7 @@ const json = data => JSON.stringify(data).replace(/</g,'\\u003c').replace(/\u202
 const text = html => html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').trim();
 
 export function applySeo(input,file,config = seoConfig()) {
-  let html = stripSeo(input);
+  let html = stripSeo(input.replace(/\r\n/g,'\n'));
   const url = new URL(pagePath(file),config.url).href;
   const absolute = path => new URL(path,config.url).href;
   const service = pages.find(p=>file === `services/${p.slug}/index.html`);

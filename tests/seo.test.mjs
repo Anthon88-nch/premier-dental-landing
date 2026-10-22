@@ -49,6 +49,8 @@ test('production and preview crawl directives are deliberate and support subdire
   assert.match(applySeo(html,'index.html',preview),/noindex,nofollow/);
   assert.match(applySeo(html,'index.html',production),/index,follow,max-image-preview:large/);
   assert.equal(applySeo(html,'index.html',preview),applySeo(applySeo(html,'index.html',preview),'index.html',preview));
+  const windowsHtml=html.replace(/\r?\n/g,'\r\n');
+  assert.equal(applySeo(windowsHtml,'index.html',preview),applySeo(applySeo(windowsHtml,'index.html',preview),'index.html',preview));
   const {robots,sitemap}=crawlFiles(production);
   assert.doesNotMatch(robots,/Disallow: \/\n/);assert.match(robots,/Disallow: \/admin\//);
   assert.equal((sitemap.match(/<loc>/g)||[]).length,publicPageFiles.length);
