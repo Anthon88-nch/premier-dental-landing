@@ -20,6 +20,7 @@ mime['.png'] = 'image/png';
 mime['.xml'] = 'application/xml; charset=utf-8';
 mime['.txt'] = 'text/plain; charset=utf-8';
 mime['.mp4'] = 'video/mp4';
+mime['.woff'] = 'font/woff';
 const rate = new Map();
 const allowed = new Set(['/index.html','/styles.css','/app.js','/site-config.js','/admin/index.html','/admin/admin.css','/admin/admin.js']);
 const serviceRoutes = new Set(publicPageFiles.filter(file=>file!=='index.html').map(file=>'/'+file.replace(/index\.html$/,'')));
@@ -34,6 +35,9 @@ allowed.add('/contact-widget.css');
 allowed.add('/contact-widget.js');
 allowed.add('/home-ux.js');
 for(const route of serviceRoutes) allowed.add(`${route}index.html`);
+// One-page landing for ad traffic: page, stylesheet and scripts; fonts and textures are served from /lp/media/.
+serviceRoutes.add('/lp/');
+for(const file of ['/lp/index.html','/lp/lp.css','/lp/lp.js','/lp/lp-head.js']) allowed.add(file);
 const headers = { 'X-Content-Type-Options':'nosniff', 'Referrer-Policy':'strict-origin-when-cross-origin', 'X-Frame-Options':'DENY', 'Permissions-Policy':'camera=(), microphone=(), geolocation=()', 'Content-Security-Policy':"default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'" };
 function json(res, status, data) { res.writeHead(status, { ...headers, 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' }); res.end(JSON.stringify(data)); }
 function validLead(body) {
@@ -103,7 +107,7 @@ const server = http.createServer(async(req,res) => {
       res.writeHead(308,{...headers,Location:`${url.pathname}/${url.search}`});res.end();return;
     }
     const pathname = url.pathname === '/' ? '/index.html' : serviceRoutes.has(url.pathname) ? `${url.pathname}index.html` : ['/admin','/admin/'].includes(url.pathname) ? '/admin/index.html' : decodeURIComponent(url.pathname);
-    const asset = /^\/assets\/[a-zA-Z0-9_.-]+$/.test(pathname);
+    const asset = /^\/(?:assets|lp\/media)\/[a-zA-Z0-9_.-]+$/.test(pathname);
     if(!allowed.has(pathname) && !asset) return json(res,404,{message:'Страница не найдена.'});
     const filename = path.join(root,pathname);
     const ext = path.extname(filename);

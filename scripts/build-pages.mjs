@@ -12,8 +12,10 @@ await mkdir(output,{recursive:true});
 const production=process.argv.includes('--production');
 const config=seoConfig(production?{...process.env,SITE_URL:process.env.SITE_URL || clinic.primaryUrl,SITE_INDEXABLE:'true'}:process.env);
 const htmlFiles = publicPageFiles;
+// One-page landing for ad traffic (lp/): static, always noindex, outside the sitemap and SEO pipeline.
+const landingFiles = ['lp/index.html'];
 // A production release must not show {{TODO: …}} placeholders to patients: check before writing anything.
-if(production)assertNoPlaceholders(await Promise.all(htmlFiles.map(async file=>({file,html:await readFile(new URL(file,root),'utf8')}))),{channels:contactChannels});
+if(production)assertNoPlaceholders(await Promise.all([...htmlFiles,...landingFiles].map(async file=>({file,html:await readFile(new URL(file,root),'utf8')}))),{channels:contactChannels});
 // Remove only obsolete generated HTML within known page directories, never user data.
 async function prunePages(dir,relative='') {
   for(const entry of await readdir(dir,{withFileTypes:true})) {
@@ -28,6 +30,7 @@ for(const file of [...htmlFiles,'reviews-widget.js','styles.css','services.css',
   await copyFile(new URL(file,root),new URL(file,output));
 }
 await cp(new URL('assets/',root),new URL('assets/',output),{recursive:true});
+await cp(new URL('lp/',root),new URL('lp/',output),{recursive:true,filter:source=>!/\.md$/i.test(source)});
 await writeFile(new URL('site-config.js',output),clientConfigScript({bookingMode:'phone',analyticsEnabled:production,messengerPlaceholders:!production}));
 for(const file of htmlFiles) {
 let html=await readFile(new URL(file,output),'utf8');
