@@ -47,6 +47,17 @@ test('doubts block shows the four reasons with matching bars', () => {
   for (const [, label, width] of reasons) assert.equal(Number(label.replace(',', '.')), Number(width));
 });
 
+test('owner edits of 29.10: six advantages, All-on-6 without a price, flags, video slot, no free-replacement promise', () => {
+  assert.equal((html.match(/<li class="adv__item">/g) || []).length, 6);
+  assert.ok(html.includes('https://prodoctorov.ru/naberezhnye-chelny/vrach/235262-dmitriev/'), 'Dmitriev profile link');
+  assert.ok(html.includes('src="../assets/doctor-tretyak-maxim.webp"'), 'anesthesiologist photo');
+  const aon6 = html.match(/<li class="var var--wide" id="all-on-6">([\s\S]*?)<\/li>/)?.[1] || '';
+  assert.ok(aon6.includes('All-on-6') && !aon6.includes('₽'), 'All-on-6 card has no price');
+  assert.ok(html.includes('aria-label="Флаг Южной Кореи"') && html.includes('aria-label="Флаг Швеции"'));
+  assert.ok(html.includes('id="video-lechenie"') && html.includes('id="video-lab"') && html.includes('data-play-video'));
+  assert.doesNotMatch(html, /заменим[^<]*бесплатно/, 'owner asked not to promise a free replacement');
+});
+
 test('every bar width used in the page has a CSS rule (no inline styles under CSP)', () => {
   for (const [, value] of html.matchAll(/class="meter__fill" data-v="([\d.]+)"/g)) {
     assert.ok(css.includes(`.meter__fill[data-v="${value}"]`), `missing CSS width for ${value}`);

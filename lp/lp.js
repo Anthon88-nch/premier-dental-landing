@@ -168,6 +168,18 @@
     $(`input[name="implant"][value="${state.implant}"]`, calc)?.focus({ preventScroll: true });
   });
 
+  // «Смотреть, как наш техник делает коронки»: прокрутить к видео и сразу включить его
+  document.addEventListener('click', event => {
+    const link = event.target.closest?.('[data-play-video]');
+    if (!link) return;
+    const figure = document.querySelector(link.getAttribute('href'));
+    const video = figure?.querySelector('video');
+    if (!video) return;
+    event.preventDefault();
+    figure.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    video.play().catch(() => {}); // если браузер не даст запустить — останется кнопка «Play»
+  });
+
   /* ---------- Мессенджеры ---------- */
   const channels = (() => {
     const source = window.PREMIER_CONFIG?.messengers || {};
