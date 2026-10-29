@@ -112,6 +112,9 @@ button { font: inherit; color: inherit; }
   font: 700 12.5px/1.2 var(--f-sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
 }
 .eyebrow::before { content: ""; width: 24px; height: 0; border-top: 1.5px solid currentColor; flex: none; }
+/* Узкие телефоны (360 px и меньше): подпись над заголовком — в одну строку */
+@media (max-width: 399px) { .eyebrow { letter-spacing: .07em; } }
+@media (max-width: 349px) { .eyebrow { font-size: 11.5px; gap: 8px; } .eyebrow::before { width: 14px; } }
 
 /* Ссылка «подробнее»: вниз по странице или на внешний сайт */
 .more {
