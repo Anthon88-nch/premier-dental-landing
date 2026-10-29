@@ -1,39 +1,40 @@
-// «Премьер» — лендинг имплантации: смета, окно записи, мессенджеры, нижняя панель.
+// «Премьер» — лендинг имплантации: смета, выбор системы, окно записи, мессенджеры, нижняя панель.
 // Без библиотек. Ссылки на мессенджеры берутся из ../site-config.js (content/contact-channels.mjs).
 (() => {
   'use strict';
 
-  // Цены из брифа клиники = content/pricing.mjs. Тест tests/lp.test.mjs сверяет их при каждой сборке.
+  // Цены лендинга. Тест tests/lp.test.mjs сверяет их с текстом страницы при каждой сборке.
+  // «Под ключ» = имплантат + абатмент и формирователь + коронка из своей лаборатории.
+  // Абатмент и формирователь (17 500 ₽) — остаток от 55 500 ₽ за вычетом импланта Osstem и коронки;
+  // для Dentium и Astra Tech взят тот же — уточнить у клиники (см. lp/README.md).
   const PRICES = /*prices:start*/{
-    "implant": { "dentium": 30000, "astra": 66000 },
-    "crown": { "dentium": { "mk": 25500, "zr": 35000 }, "astra": { "zr": 58000 } },
-    "extraction": [3000, 10000],
-    "tempCrown": { "dentium": 13800 },
+    "implant": { "osstem": 18000, "dentium": 30000, "astra": 66000 },
+    "parts": { "osstem": 17500, "dentium": 17500, "astra": 17500 },
+    "crown": 20000,
+    "extraction": 0,
+    "immediate": 9500,
+    "allOn4From": 300000,
+    "life": { "osstem": 5, "dentium": 15, "astra": 30 },
     "installmentMonths": 12,
     "refundRate": 0.13,
     "refundCap": 19500
   }/*prices:end*/;
 
-  const NAMES = {
-    implant: { dentium: 'Имплантат Dentium', astra: 'Имплантат Astra Tech' },
-    crown: { mk: 'Коронка — металлокерамика', zr: 'Коронка — оксид циркония' }
-  };
+  const IMPLANT_NAMES = { osstem: 'Osstem', dentium: 'Dentium', astra: 'Astra Tech' };
   const MAX_TEETH = 3;
 
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const nf = new Intl.NumberFormat('ru-RU');
-  const num = n => nf.format(n).replace(/[\u00a0\s]/g, '\u202f'); // разряды — узкий неразрывный пробел
-  const rub = n => `${num(n)}\u00a0₽`;
-  const range = (min, max) => (min === max ? num(min) : `${num(min)}–${num(max)}`);
-  // Для экрана: после тире можно перенести строку (U+200B), чтобы диапазон не распирал карточку
-  const rangeWrap = (min, max) => range(min, max).replace('–', '–\u200b');
+  const num = n => nf.format(n).replace(/[ \s]/g, ' '); // разряды — узкий неразрывный пробел
+  const rub = n => `${num(n)} ₽`;
   const plural = (n, one, few, many) => {
     const mod10 = n % 10, mod100 = n % 100;
     if (mod10 === 1 && mod100 !== 11) return one;
     if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return few;
     return many;
   };
+  const reducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- Уведомление ---------- */
   const toastEl = $('[data-toast]');
@@ -48,32 +49,27 @@
 
   /* ---------- Смета ---------- */
   const calc = $('[data-calc]');
-  const state = { count: 1, implant: 'dentium', crown: 'mk', extraction: false, temp: false, touched: false };
+  const state = { count: 1, implant: 'osstem', extraction: false, immediate: false, touched: false };
 
   function estimate() {
-    const n = state.count;
-    const crownPrice = PRICES.crown[state.implant][state.crown];
+    const n = state.count, sys = state.implant;
     const rows = [
-      { name: NAMES.implant[state.implant], qty: n, min: PRICES.implant[state.implant] * n },
-      { name: NAMES.crown[state.crown], qty: n, min: crownPrice * n }
+      { name: `Имплантат ${IMPLANT_NAMES[sys]}`, qty: n, sum: PRICES.implant[sys] * n },
+      { name: 'Абатмент и формирователь', qty: n, sum: PRICES.parts[sys] * n },
+      { name: 'Коронка — своя лаборатория', qty: n, sum: PRICES.crown * n }
     ];
-    if (state.extraction) rows.push({ name: 'Удаление зуба', qty: n, min: PRICES.extraction[0] * n, max: PRICES.extraction[1] * n });
-    if (state.temp && PRICES.tempCrown[state.implant]) rows.push({ name: 'Временная коронка', qty: n, min: PRICES.tempCrown[state.implant] * n });
-    rows.forEach(row => { if (row.max === undefined) row.max = row.min; });
-    const min = rows.reduce((sum, row) => sum + row.min, 0);
-    const max = rows.reduce((sum, row) => sum + row.max, 0);
-    return { rows, min, max };
+    if (state.extraction) rows.push({ name: 'Удаление зуба — бесплатно', qty: n, sum: PRICES.extraction * n, free: true });
+    if (state.immediate) rows.push({ name: 'Одномоментная установка', qty: n, sum: PRICES.immediate * n });
+    return { rows, total: rows.reduce((acc, row) => acc + row.sum, 0) };
   }
 
   function summaryText() {
-    const { min, max } = estimate();
+    const { total } = estimate();
     const n = state.count;
-    const extras = [state.extraction && 'удаление зуба', state.temp && 'временная коронка'].filter(Boolean);
-    const crown = state.crown === 'mk' ? 'металлокерамическая коронка' : 'коронка из оксида циркония';
-    const implant = state.implant === 'dentium' ? 'Dentium' : 'Astra Tech';
-    return `${n} ${plural(n, 'зуб', 'зуба', 'зубов')}: имплантат ${implant} + ${crown}`
-      + (extras.length ? ` + ${extras.join(', ')}` : '')
-      + ` — ${range(min, max)} ₽`;
+    const extras = [state.extraction && 'удаление зуба', state.immediate && 'одномоментно'].filter(Boolean);
+    return `${n} ${plural(n, 'зуб', 'зуба', 'зубов')} под ключ на имплантате ${IMPLANT_NAMES[state.implant]}`
+      + (extras.length ? ` (${extras.join(', ')})` : '')
+      + ` — ${num(total)} ₽`;
   }
 
   function messageText(context) {
@@ -93,18 +89,12 @@
   function renderCalc() {
     if (!calc) return;
     const form = $('[data-calc-form]', calc);
-    const astra = state.implant === 'astra';
 
-    // Astra Tech: только коронка из оксида циркония, цена временной коронки — у врача
-    const mk = $('input[name="crown"][value="mk"]', form);
-    mk.disabled = astra;
-    if (astra && state.crown === 'mk') { state.crown = 'zr'; $('input[name="crown"][value="zr"]', form).checked = true; }
-    $('[data-crown-price="zr"]', form).textContent = rub(PRICES.crown[state.implant].zr);
-    $('[data-astra-note]', form).hidden = !astra;
-    const temp = $('input[name="temp"]', form);
-    temp.disabled = astra;
-    if (astra) { temp.checked = false; state.temp = false; }
-    $('[data-temp-price]', form).textContent = astra ? 'для Astra Tech стоимость назовёт врач' : `${rub(PRICES.tempCrown.dentium)} за зуб`;
+    // Одномоментная установка возможна только вместе с удалением зуба
+    $('input[name="extraction"]', form).checked = state.extraction;
+    $('input[name="immediate"]', form).checked = state.immediate;
+    const radio = $(`input[name="implant"][value="${state.implant}"]`, form);
+    if (radio) radio.checked = true;
 
     // Количество зубов
     $('[data-count]', form).textContent = String(state.count);
@@ -112,11 +102,10 @@
     $('[data-step="1"]', form).disabled = state.count >= MAX_TEETH;
 
     // Спецификация
-    const { rows, min, max } = estimate();
-    const body = $('[data-spec-rows]', calc);
-    body.replaceChildren(...rows.map((row, i) => {
+    const { rows, total } = estimate();
+    $('[data-spec-rows]', calc).replaceChildren(...rows.map((row, i) => {
       const tr = document.createElement('tr');
-      [String(i + 1), row.name, String(row.qty), rangeWrap(row.min, row.max)].forEach((text, col) => {
+      [String(i + 1), row.name, String(row.qty), num(row.sum)].forEach((text, col) => {
         const td = document.createElement('td');
         td.textContent = text;
         // На узком экране колонка «Кол.» скрыта — количество дописываем к названию
@@ -126,21 +115,19 @@
           qty.textContent = ` × ${row.qty}`;
           td.append(qty);
         }
+        if (col === 3 && row.free) td.classList.add('is-free');
         tr.append(td);
       });
       return tr;
     }));
-    const total = $('[data-total]', calc);
-    const totalText = min === max ? rub(min) : `${rangeWrap(min, max)}\u00a0₽`;
-    total.classList.toggle('is-range', min !== max);
-    if (total.textContent !== totalText) {
-      total.textContent = totalText;
-      redrawPencil(total.closest('.spec__total-sum'));
+    const totalEl = $('[data-total]', calc);
+    const totalText = rub(total);
+    if (totalEl.textContent !== totalText) {
+      totalEl.textContent = totalText;
+      redrawPencil(totalEl.closest('.spec__total-sum'));
     }
-    const monthly = Math.ceil(min / PRICES.installmentMonths);
-    $('[data-monthly]', calc).textContent = `от ${rub(monthly)} в месяц`;
-    const refund = Math.min(Math.round(min * PRICES.refundRate), PRICES.refundCap);
-    $('[data-refund]', calc).textContent = `до ${rub(refund)}`;
+    $('[data-monthly]', calc).textContent = `от ${rub(Math.ceil(total / PRICES.installmentMonths))} в месяц`;
+    $('[data-refund]', calc).textContent = `до ${rub(Math.min(Math.round(total * PRICES.refundRate), PRICES.refundCap))}`;
 
     updateMessengerLinks();
   }
@@ -151,9 +138,14 @@
     form.addEventListener('change', event => {
       const input = event.target;
       if (input.name === 'implant') state.implant = input.value;
-      if (input.name === 'crown') state.crown = input.value;
-      if (input.name === 'extraction') state.extraction = input.checked;
-      if (input.name === 'temp') state.temp = input.checked;
+      if (input.name === 'extraction') {
+        state.extraction = input.checked;
+        if (!input.checked) state.immediate = false;
+      }
+      if (input.name === 'immediate') {
+        state.immediate = input.checked;
+        if (input.checked) state.extraction = true;
+      }
       state.touched = true;
       renderCalc();
     });
@@ -163,6 +155,18 @@
       renderCalc();
     }));
   }
+
+  // «Посчитать с Osstem / Dentium / Astra Tech» в сравнении систем: выбираем систему и ведём к смете
+  document.addEventListener('click', event => {
+    const pick = event.target.closest?.('[data-pick-implant]');
+    if (!pick || !calc || !PRICES.implant[pick.dataset.pickImplant]) return;
+    event.preventDefault();
+    state.implant = pick.dataset.pickImplant;
+    state.touched = true;
+    renderCalc();
+    calc.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+    $(`input[name="implant"][value="${state.implant}"]`, calc)?.focus({ preventScroll: true });
+  });
 
   /* ---------- Мессенджеры ---------- */
   const channels = (() => {
@@ -253,15 +257,15 @@
     dialog.addEventListener('close', () => { bookContext = 'Консультация по имплантации'; updateMessengerLinks(); });
   }
 
-  /* ---------- Чертёж: анимация при появлении ---------- */
-  const sheets = $$('.sheet');
+  /* ---------- Чертёж и пульс: анимация при появлении ---------- */
+  const live = $$('.sheet, [data-live]');
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('is-live'); io.unobserve(entry.target); }
     }), { threshold: 0.3 });
-    sheets.forEach(sheet => io.observe(sheet));
+    live.forEach(el => io.observe(el));
   } else {
-    sheets.forEach(sheet => sheet.classList.add('is-live'));
+    live.forEach(el => el.classList.add('is-live'));
   }
 
   /* ---------- Шапка и нижняя панель ---------- */
