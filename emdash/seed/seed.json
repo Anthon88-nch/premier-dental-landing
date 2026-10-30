@@ -1,0 +1,2375 @@
+{
+  "$schema": "https://emdashcms.com/seed.schema.json",
+  "version": "1",
+  "meta": {
+    "name": "Стоматология «Премьер» — имплантация",
+    "description": "Лендинг имплантации зубов в Набережных Челнах: цены под ключ, врачи, лечение во сне.",
+    "author": "Моргрим"
+  },
+  "settings": {
+    "title": "Стоматология «Премьер»",
+    "tagline": "Имплантация зубов в Набережных Челнах",
+    "timezone": "Europe/Moscow"
+  },
+  "blockTypes": [
+    {
+      "slug": "lp_hero",
+      "label": "Первый экран",
+      "description": "Оффер с ценой зуба под ключ и чертежом. Цена считается из коллекции «Импланты».",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "title_line",
+              "label": "Заголовок: первая строка (вторая строка — цена основного импланта под ключ)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "price_prefix",
+              "label": "Слово перед ценой",
+              "type": "string"
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "cta_label",
+              "label": "Главная кнопка: текст (открывает запись)",
+              "type": "string"
+            },
+            {
+              "slug": "cta2_label",
+              "label": "Вторая кнопка: текст",
+              "type": "string"
+            },
+            {
+              "slug": "cta2_url",
+              "label": "Вторая кнопка: адрес",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+              }
+            },
+            {
+              "slug": "proofs",
+              "label": "Факты под кнопками (до 3)",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "title",
+                    "label": "Жирная строка",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "text",
+                    "label": "Пояснение",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "url",
+                    "label": "Ссылка (необязательно)",
+                    "type": "string",
+                    "validation": {
+                      "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+                    }
+                  }
+                ],
+                "maxItems": 3
+              }
+            },
+            {
+              "slug": "drawing_crown_note",
+              "label": "Чертёж: пометка у коронки (красным)",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_advantages",
+      "label": "Преимущества",
+      "description": "Нумерованный список причин выбрать клинику.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #pochemu (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "items",
+              "label": "Пункты",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "title",
+                    "label": "Заголовок пункта",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "text",
+                    "label": "Текст",
+                    "type": "text"
+                  },
+                  {
+                    "slug": "link_label",
+                    "label": "Ссылка: текст",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "link_url",
+                    "label": "Ссылка: адрес (#якорь, /страница или https://…)",
+                    "type": "string",
+                    "validation": {
+                      "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+                    }
+                  }
+                ],
+                "maxItems": 12,
+                "minItems": 1
+              },
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_variants",
+      "label": "Варианты имплантации",
+      "description": "Карточки вариантов с ценой и мини-чертежом.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #varianty (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "items",
+              "label": "Карточки",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "drawing",
+                    "label": "Рисунок",
+                    "type": "select",
+                    "options": [
+                      "Один имплант",
+                      "Удаление и имплант",
+                      "All-on-4",
+                      "All-on-6",
+                      "Без рисунка"
+                    ]
+                  },
+                  {
+                    "slug": "case",
+                    "label": "Кому подходит (мелкая строка сверху)",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "title",
+                    "label": "Название",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "price",
+                    "label": "Цена: {зуб}, {одномоментная}, от {all-on-4} или своя («от 300 000 ₽»); пусто — без цены",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "tag",
+                    "label": "Пометка под ценой",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "tag_red",
+                    "label": "Пометка красным с подчёркиванием",
+                    "type": "boolean"
+                  },
+                  {
+                    "slug": "text",
+                    "label": "Описание",
+                    "type": "text"
+                  },
+                  {
+                    "slug": "text_strong",
+                    "label": "Выделенная строка (жирным)",
+                    "type": "text"
+                  },
+                  {
+                    "slug": "time",
+                    "label": "Срок (курсивом внизу)",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "link_label",
+                    "label": "Ссылка: текст",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "link_url",
+                    "label": "Ссылка: адрес (#якорь, /страница или https://…)",
+                    "type": "string",
+                    "validation": {
+                      "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+                    }
+                  },
+                  {
+                    "slug": "cta_label",
+                    "label": "Кнопка записи: текст",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "wide",
+                    "label": "Широкая карточка на всю строку",
+                    "type": "boolean"
+                  },
+                  {
+                    "slug": "card_id",
+                    "label": "ID карточки для ссылок (латиница, например all-on-6)",
+                    "type": "string",
+                    "validation": {
+                      "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+                    }
+                  }
+                ],
+                "maxItems": 8,
+                "minItems": 1
+              },
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_doubts",
+      "label": "Сомнения",
+      "description": "Причины, по которым откладывают имплантацию, и ответы клиники.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #somneniya (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "items",
+              "label": "Причины",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "percent",
+                    "label": "Доля, % (например 30.7)",
+                    "type": "number"
+                  },
+                  {
+                    "slug": "title",
+                    "label": "Причина",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "answer",
+                    "label": "Ответ клиники",
+                    "type": "text"
+                  },
+                  {
+                    "slug": "link_label",
+                    "label": "Ссылка: текст",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "link_url",
+                    "label": "Ссылка: адрес (#якорь, /страница или https://…)",
+                    "type": "string",
+                    "validation": {
+                      "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+                    }
+                  }
+                ],
+                "maxItems": 8,
+                "minItems": 1
+              },
+              "required": true
+            },
+            {
+              "slug": "source_note",
+              "label": "Подпись-источник под блоком",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_systems",
+      "label": "Сравнение имплантов",
+      "description": "Карточки из коллекции «Импланты»: цена, цена зуба под ключ и срок службы.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #sistemy (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*курсив*; {цены-тыс} — цены имплантов в тысячах)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "life_max",
+              "label": "Шкала срока службы: максимум, лет",
+              "type": "integer",
+              "validation": {
+                "min": 1,
+                "max": 100
+              }
+            },
+            {
+              "slug": "cta_prefix",
+              "label": "Кнопка: начало текста («Посчитать с» + название)",
+              "type": "string"
+            },
+            {
+              "slug": "foot_note",
+              "label": "Примечание под карточками",
+              "type": "text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_estimate",
+      "label": "Калькулятор сметы",
+      "description": "Расчёт зуба под ключ. Цены — из «Имплантов» и «Клиники».",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #cena (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "max_teeth",
+              "label": "Сколько зубов можно выбрать максимум",
+              "type": "integer",
+              "validation": {
+                "min": 1,
+                "max": 10
+              }
+            },
+            {
+              "slug": "teeth_hint",
+              "label": "Подсказка под выбором количества ([текст](#якорь) — ссылка)",
+              "type": "string"
+            },
+            {
+              "slug": "extraction_label",
+              "label": "Галочка «удаление»: текст",
+              "type": "string"
+            },
+            {
+              "slug": "immediate_label",
+              "label": "Галочка «одномоментно»: текст",
+              "type": "string"
+            },
+            {
+              "slug": "fine_print",
+              "label": "Мелкий текст под сметой",
+              "type": "text"
+            },
+            {
+              "slug": "extras_title",
+              "label": "Заголовок списка доп. услуг (список — в «Клинике»)",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_lab",
+      "label": "Лаборатория",
+      "description": "Цена коронки, фото и видео лаборатории.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #laboratoriya (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "price_label",
+              "label": "Подпись к цене коронки (цена — в «Клинике»)",
+              "type": "string"
+            },
+            {
+              "slug": "photos",
+              "label": "Фото",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "image",
+                    "label": "Фото",
+                    "type": "image",
+                    "required": true
+                  },
+                  {
+                    "slug": "caption",
+                    "label": "Подпись на фото",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "tall",
+                    "label": "Вертикальное фото (показать середину)",
+                    "type": "boolean"
+                  }
+                ],
+                "maxItems": 8
+              }
+            },
+            {
+              "slug": "video_url",
+              "label": "Видео: адрес файла (например /assets/lab-work.mp4)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+              }
+            },
+            {
+              "slug": "video_poster_url",
+              "label": "Видео: обложка (адрес картинки)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+              }
+            },
+            {
+              "slug": "video_caption",
+              "label": "Видео: подпись",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_team",
+      "label": "Команда",
+      "description": "Врачи из коллекции «Врачи и команда», по группам.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #vrachi (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "orthopedist_note",
+              "label": "Примечание под ортопедами",
+              "type": "string"
+            },
+            {
+              "slug": "profile_label",
+              "label": "Текст ссылки на профиль в карточке врача",
+              "type": "string"
+            },
+            {
+              "slug": "person_profile_label",
+              "label": "Текст ссылки на профиль у техника и анестезиолога",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_sleep",
+      "label": "Лечение во сне",
+      "description": "Виды обезболивания и анестезиолог (из «Врачей и команды»).",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #son (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "options",
+              "label": "Варианты обезболивания",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "title",
+                    "label": "Название",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "text",
+                    "label": "Описание",
+                    "type": "text"
+                  }
+                ],
+                "maxItems": 6,
+                "minItems": 1
+              },
+              "required": true
+            },
+            {
+              "slug": "duty_text",
+              "label": "Текст про анестезиолога (**жирный**)",
+              "type": "text"
+            },
+            {
+              "slug": "duty_note",
+              "label": "Мелкий текст",
+              "type": "text"
+            },
+            {
+              "slug": "profile_label",
+              "label": "Текст ссылки на профиль",
+              "type": "string"
+            },
+            {
+              "slug": "cta_label",
+              "label": "Кнопка записи: текст",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_steps",
+      "label": "Этапы лечения",
+      "description": "Видео о лечении и шаги на размерной линии.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #etapy (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "video_url",
+              "label": "Видео о лечении: адрес файла (пусто — заглушка)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+              }
+            },
+            {
+              "slug": "video_poster_url",
+              "label": "Видео: обложка (адрес картинки)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
+              }
+            },
+            {
+              "slug": "video_caption",
+              "label": "Видео: подпись",
+              "type": "string"
+            },
+            {
+              "slug": "video_placeholder",
+              "label": "Текст заглушки, пока видео нет",
+              "type": "string"
+            },
+            {
+              "slug": "steps",
+              "label": "Шаги",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "time",
+                    "label": "Срок",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "title",
+                    "label": "Шаг",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "text",
+                    "label": "Описание",
+                    "type": "text"
+                  }
+                ],
+                "maxItems": 10,
+                "minItems": 1
+              },
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_documents",
+      "label": "Документы и гарантия",
+      "description": "Карточки документов и печать гарантии.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #garantii (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "items",
+              "label": "Документы",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "label",
+                    "label": "Номер (мелко сверху)",
+                    "type": "string"
+                  },
+                  {
+                    "slug": "title",
+                    "label": "Название",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "text",
+                    "label": "Текст",
+                    "type": "text"
+                  },
+                  {
+                    "slug": "stamp",
+                    "label": "Поставить печать и показать условия гарантии",
+                    "type": "boolean"
+                  }
+                ],
+                "maxItems": 8,
+                "minItems": 1
+              },
+              "required": true
+            },
+            {
+              "slug": "terms_title",
+              "label": "Условия гарантии: заголовок раскрывашки",
+              "type": "string"
+            },
+            {
+              "slug": "terms_intro",
+              "label": "Условия гарантии: вступление",
+              "type": "text"
+            },
+            {
+              "slug": "terms",
+              "label": "Условия гарантии: пункты (каждый с новой строки)",
+              "type": "text"
+            },
+            {
+              "slug": "stamp_title",
+              "label": "Печать: верхняя строка",
+              "type": "string"
+            },
+            {
+              "slug": "stamp_value",
+              "label": "Печать: крупная строка",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_rating",
+      "label": "Рейтинг",
+      "description": "Оценка на ПроДокторов (цифры — в «Клинике»).",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #otzyvy (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок ({отзывы} — число отзывов)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "text",
+              "label": "Текст ({дата-рейтинга} — дата проверки)",
+              "type": "text"
+            },
+            {
+              "slug": "button_label",
+              "label": "Кнопка: текст",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_faq",
+      "label": "Вопросы и ответы",
+      "description": "Раскрывающиеся вопросы.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #voprosy (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "open_first",
+              "label": "Первый вопрос открыт",
+              "type": "boolean"
+            },
+            {
+              "slug": "items",
+              "label": "Вопросы",
+              "type": "repeater",
+              "validation": {
+                "subFields": [
+                  {
+                    "slug": "question",
+                    "label": "Вопрос",
+                    "type": "string",
+                    "required": true
+                  },
+                  {
+                    "slug": "answer",
+                    "label": "Ответ",
+                    "type": "text",
+                    "required": true
+                  }
+                ],
+                "maxItems": 30,
+                "minItems": 1
+              },
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_contacts",
+      "label": "Контакты и запись",
+      "description": "Адрес, часы и телефон берутся из «Клиники».",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #kontakty (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "type": "string",
+              "required": true
+            },
+            {
+              "slug": "lead",
+              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "type": "text"
+            },
+            {
+              "slug": "button_label",
+              "label": "Кнопка записи: текст",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "lp_text",
+      "label": "Текстовый блок",
+      "description": "Свободный текст с заголовком.",
+      "category": "Лендинг",
+      "currentVersion": 1,
+      "versions": [
+        {
+          "version": 1,
+          "fields": [
+            {
+              "slug": "anchor_id",
+              "label": "ID секции для ссылок вида #tekst (латиница)",
+              "type": "string",
+              "validation": {
+                "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
+              }
+            },
+            {
+              "slug": "eyebrow",
+              "label": "Надпись над заголовком",
+              "type": "string"
+            },
+            {
+              "slug": "headline",
+              "label": "Заголовок (*курсив*)",
+              "type": "string"
+            },
+            {
+              "slug": "body",
+              "label": "Текст",
+              "type": "portableText"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "collections": [
+    {
+      "slug": "pages",
+      "label": "Страницы",
+      "icon": "file-text",
+      "labelSingular": "Страница",
+      "description": "Лендинг и другие страницы. Главная — страница с адресом home.",
+      "sortOrder": 1,
+      "supports": [
+        "drafts",
+        "revisions",
+        "preview",
+        "seo"
+      ],
+      "urlPattern": "/{slug}",
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Название (для списка в админке)",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "content",
+          "label": "Блоки страницы",
+          "type": "blocks",
+          "validation": {
+            "allowedTypes": [
+              "lp_hero",
+              "lp_advantages",
+              "lp_variants",
+              "lp_doubts",
+              "lp_systems",
+              "lp_estimate",
+              "lp_lab",
+              "lp_team",
+              "lp_sleep",
+              "lp_steps",
+              "lp_documents",
+              "lp_rating",
+              "lp_faq",
+              "lp_contacts",
+              "lp_text"
+            ],
+            "maxItems": 40
+          }
+        }
+      ]
+    },
+    {
+      "slug": "clinic",
+      "label": "Клиника: контакты и цены",
+      "icon": "first-aid-kit",
+      "admin": {
+        "quickCreate": false
+      },
+      "labelSingular": "Настройки клиники",
+      "description": "Одна запись с адресом main: контакты, реквизиты и цены для всего сайта.",
+      "sortOrder": 2,
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "title",
+          "label": "Название записи",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "clinic_name",
+          "label": "Название клиники",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "phone_display",
+          "label": "Телефон, как показывать",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "phone_tel",
+          "label": "Телефон для звонка (+7…, без пробелов)",
+          "type": "string",
+          "required": true,
+          "validation": {
+            "pattern": "^\\+?[0-9]{10,15}$"
+          }
+        },
+        {
+          "slug": "address",
+          "label": "Адрес",
+          "type": "string"
+        },
+        {
+          "slug": "map_url",
+          "label": "Ссылка «Построить маршрут»",
+          "type": "url"
+        },
+        {
+          "slug": "hours",
+          "label": "Часы работы (каждая строка — отдельно)",
+          "type": "text",
+          "options": {
+            "rows": 3
+          }
+        },
+        {
+          "slug": "whatsapp_url",
+          "label": "WhatsApp: ссылка (https://wa.me/…)",
+          "type": "url"
+        },
+        {
+          "slug": "telegram_url",
+          "label": "Telegram: ссылка",
+          "type": "url"
+        },
+        {
+          "slug": "max_url",
+          "label": "MAX: ссылка",
+          "type": "url"
+        },
+        {
+          "slug": "booking_text",
+          "label": "Текст в окне записи ({консультация} — цена)",
+          "type": "text",
+          "options": {
+            "rows": 2
+          }
+        },
+        {
+          "slug": "crown_price",
+          "label": "Цена: коронка на имплант, ₽",
+          "type": "integer",
+          "required": true,
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "immediate_extra",
+          "label": "Цена: доплата за одномоментную установку, ₽",
+          "type": "integer",
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "extraction_price",
+          "label": "Цена: удаление зуба при имплантации, ₽ (0 — бесплатно)",
+          "type": "integer",
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "consultation_price",
+          "label": "Цена: консультация хирурга-имплантолога, ₽",
+          "type": "integer",
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "allon4_from",
+          "label": "Цена: All-on-4 «от», ₽ за челюсть",
+          "type": "integer",
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "installment_text",
+          "label": "Рассрочка: условия коротко (например «0% на 12 месяцев»)",
+          "type": "string"
+        },
+        {
+          "slug": "installment_months",
+          "label": "Рассрочка: число месяцев для расчёта платежа",
+          "type": "integer",
+          "validation": {
+            "min": 1,
+            "max": 60
+          }
+        },
+        {
+          "slug": "tax_refund_cap",
+          "label": "Налоговый вычет: максимум возврата за год, ₽",
+          "type": "integer",
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "extras",
+          "label": "Доп. услуги в калькуляторе («Отдельно и только если нужно»)",
+          "type": "repeater",
+          "validation": {
+            "subFields": [
+              {
+                "slug": "label",
+                "label": "Услуга",
+                "type": "string",
+                "required": true
+              },
+              {
+                "slug": "note",
+                "label": "Пояснение мелко",
+                "type": "string"
+              },
+              {
+                "slug": "price",
+                "label": "Цена текстом ({консультация} или «от 500 ₽»)",
+                "type": "string"
+              }
+            ],
+            "maxItems": 20
+          }
+        },
+        {
+          "slug": "prodoctorov_url",
+          "label": "ПроДокторов: профиль клиники",
+          "type": "url"
+        },
+        {
+          "slug": "rating",
+          "label": "ПроДокторов: оценка (например 5,0)",
+          "type": "string"
+        },
+        {
+          "slug": "reviews_count",
+          "label": "ПроДокторов: число отзывов",
+          "type": "integer",
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "rating_date",
+          "label": "ПроДокторов: дата проверки",
+          "type": "string"
+        },
+        {
+          "slug": "main_site_url",
+          "label": "Ссылка «Все услуги клиники» в подвале",
+          "type": "url"
+        },
+        {
+          "slug": "legal_name",
+          "label": "Юрлицо",
+          "type": "string"
+        },
+        {
+          "slug": "inn",
+          "label": "ИНН",
+          "type": "string"
+        },
+        {
+          "slug": "ogrn",
+          "label": "ОГРН",
+          "type": "string"
+        },
+        {
+          "slug": "license",
+          "label": "Лицензия",
+          "type": "string"
+        },
+        {
+          "slug": "warning",
+          "label": "Предупреждение в подвале",
+          "type": "string"
+        },
+        {
+          "slug": "disclaimer",
+          "label": "Оговорка в подвале",
+          "type": "text",
+          "options": {
+            "rows": 2
+          }
+        },
+        {
+          "slug": "metrika_id",
+          "label": "Яндекс Метрика: номер счётчика",
+          "type": "string",
+          "validation": {
+            "pattern": "^(?:$|[0-9]{4,12})$"
+          }
+        },
+        {
+          "slug": "metrika_on",
+          "label": "Яндекс Метрика: включить (работает только на https-домене, не на localhost)",
+          "type": "boolean"
+        },
+        {
+          "slug": "noindex",
+          "label": "Скрыть сайт от поисковиков (noindex)",
+          "type": "boolean"
+        },
+        {
+          "slug": "seo_title",
+          "label": "SEO главной: заголовок окна и поиска (токены работают)",
+          "type": "string"
+        },
+        {
+          "slug": "seo_description",
+          "label": "SEO главной: описание для поиска",
+          "type": "text",
+          "options": {
+            "rows": 3
+          }
+        },
+        {
+          "slug": "og_title",
+          "label": "SEO главной: заголовок при отправке ссылки в мессенджер",
+          "type": "string"
+        },
+        {
+          "slug": "og_description",
+          "label": "SEO главной: описание при отправке ссылки",
+          "type": "text",
+          "options": {
+            "rows": 2
+          }
+        }
+      ]
+    },
+    {
+      "slug": "implants",
+      "label": "Импланты",
+      "icon": "tooth",
+      "admin": {
+        "listColumns": [
+          "implant_price",
+          "service_life",
+          "featured"
+        ]
+      },
+      "labelSingular": "Имплант",
+      "description": "Системы имплантов: цены и срок службы. Отсюда считаются цены на всём сайте.",
+      "sortOrder": 3,
+      "titleField": "name",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "name",
+          "label": "Название системы",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "country",
+          "label": "Страна (для флажка)",
+          "type": "select",
+          "validation": {
+            "options": [
+              "Южная Корея",
+              "Швеция",
+              "Швейцария",
+              "Германия",
+              "Израиль",
+              "Россия",
+              "Другая"
+            ]
+          }
+        },
+        {
+          "slug": "implant_price",
+          "label": "Цена имплантата, ₽",
+          "type": "integer",
+          "required": true,
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "parts_price",
+          "label": "Абатмент и формирователь, ₽",
+          "type": "integer",
+          "required": true,
+          "validation": {
+            "min": 0
+          }
+        },
+        {
+          "slug": "service_life",
+          "label": "Срок службы, лет",
+          "type": "integer",
+          "validation": {
+            "min": 0,
+            "max": 100
+          }
+        },
+        {
+          "slug": "note",
+          "label": "Кому подходит (курсивом)",
+          "type": "string"
+        },
+        {
+          "slug": "featured",
+          "label": "Основной имплант: его цена — «зуб под ключ» в первом экране и {зуб}",
+          "type": "boolean"
+        },
+        {
+          "slug": "price_from",
+          "label": "Писать «от» перед ценой зуба под ключ",
+          "type": "boolean"
+        },
+        {
+          "slug": "sort_order",
+          "label": "Порядок показа",
+          "type": "integer"
+        }
+      ]
+    },
+    {
+      "slug": "doctors",
+      "label": "Врачи и команда",
+      "icon": "stethoscope",
+      "admin": {
+        "listColumns": [
+          "team_group",
+          "role"
+        ]
+      },
+      "labelSingular": "Сотрудник",
+      "description": "Врачи и сотрудники в блоке «Команда».",
+      "sortOrder": 4,
+      "titleField": "name",
+      "supports": [
+        "drafts",
+        "revisions"
+      ],
+      "fields": [
+        {
+          "slug": "name",
+          "label": "ФИО (фамилия — первым словом)",
+          "type": "string",
+          "required": true
+        },
+        {
+          "slug": "team_group",
+          "label": "Группа",
+          "type": "select",
+          "required": true,
+          "validation": {
+            "options": [
+              "Хирурги-имплантологи",
+              "Ортопеды",
+              "Зубной техник",
+              "Анестезиолог-реаниматолог"
+            ]
+          }
+        },
+        {
+          "slug": "role",
+          "label": "Специальность (курсивом)",
+          "type": "string"
+        },
+        {
+          "slug": "experience",
+          "label": "Опыт (например «Опыт более 8 лет»)",
+          "type": "string"
+        },
+        {
+          "slug": "bio",
+          "label": "Описание (для техника и анестезиолога)",
+          "type": "text",
+          "options": {
+            "rows": 3
+          }
+        },
+        {
+          "slug": "photo",
+          "label": "Фото",
+          "type": "image"
+        },
+        {
+          "slug": "profile_url",
+          "label": "Профиль на ПроДокторов",
+          "type": "url"
+        },
+        {
+          "slug": "sort_order",
+          "label": "Порядок в группе",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
+  "menus": [
+    {
+      "name": "primary",
+      "label": "Меню в шапке",
+      "items": [
+        {
+          "type": "custom",
+          "label": "Цены",
+          "url": "/#varianty"
+        },
+        {
+          "type": "custom",
+          "label": "Импланты",
+          "url": "/#sistemy"
+        },
+        {
+          "type": "custom",
+          "label": "Врачи",
+          "url": "/#vrachi"
+        },
+        {
+          "type": "custom",
+          "label": "Во сне",
+          "url": "/#son"
+        },
+        {
+          "type": "custom",
+          "label": "Вопросы",
+          "url": "/#voprosy"
+        },
+        {
+          "type": "custom",
+          "label": "Контакты",
+          "url": "/#kontakty"
+        }
+      ]
+    }
+  ],
+  "content": {
+    "clinic": [
+      {
+        "id": "clinic-main",
+        "slug": "main",
+        "status": "published",
+        "data": {
+          "title": "Основные настройки",
+          "clinic_name": "Стоматология «Премьер»",
+          "phone_display": "+7 (8552) 52-90-90",
+          "phone_tel": "+78552529090",
+          "address": "Набережные Челны, ул. Пушкина, 4 (45/05)",
+          "map_url": "https://yandex.ru/maps/?text=%D0%9D%D0%B0%D0%B1%D0%B5%D1%80%D0%B5%D0%B6%D0%BD%D1%8B%D0%B5%20%D0%A7%D0%B5%D0%BB%D0%BD%D1%8B%20%D0%9F%D1%83%D1%88%D0%BA%D0%B8%D0%BD%D0%B0%204%20%D1%81%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3%D0%B8%D1%8F%20%D0%9F%D1%80%D0%B5%D0%BC%D1%8C%D0%B5%D1%80",
+          "hours": "Пн–Пт 08:00–20:00\nСб 08:00–14:00, Вс — выходной",
+          "whatsapp_url": "https://wa.me/79274513261",
+          "booking_text": "Позвоните или напишите — администратор подберёт время. Консультация хирурга-имплантолога — {консультация}, при лечении у нас — бесплатно.",
+          "crown_price": 20000,
+          "immediate_extra": 9500,
+          "extraction_price": 0,
+          "consultation_price": 1000,
+          "allon4_from": 300000,
+          "installment_text": "0% на 12 месяцев",
+          "installment_months": 12,
+          "tax_refund_cap": 19500,
+          "extras": [
+            {
+              "label": "Консультация хирурга-имплантолога",
+              "note": "бесплатно, если ставите имплант у нас",
+              "price": "{консультация}"
+            },
+            {
+              "label": "3D-снимок (КТ)",
+              "price": "около 3 500 ₽"
+            },
+            {
+              "label": "Местная анестезия",
+              "price": "от 500 ₽"
+            },
+            {
+              "label": "Седация или наркоз",
+              "price": "назовёт анестезиолог"
+            },
+            {
+              "label": "Пластика десны",
+              "price": "10 000 ₽"
+            },
+            {
+              "label": "Синус-лифтинг закрытый",
+              "price": "от 16 000 ₽"
+            },
+            {
+              "label": "Синус-лифтинг открытый",
+              "price": "от 26 500 ₽"
+            }
+          ],
+          "prodoctorov_url": "https://prodoctorov.ru/naberezhnye-chelny/lpu/28283-stomatologiya-na-pushkinskoy-denta-ria/",
+          "rating": "5,0",
+          "reviews_count": 344,
+          "rating_date": "22.10.2026",
+          "main_site_url": "https://anthon88-nch.github.io/premier-dental-landing/",
+          "legal_name": "ООО «ДЕНТА-РИА»",
+          "inn": "1639015757",
+          "ogrn": "1021601372539",
+          "license": "ЛО-16-01-003799",
+          "warning": "Имеются противопоказания. Необходима консультация специалиста.",
+          "disclaimer": "Информация на сайте носит справочный характер и не является публичной офертой. Итоговую стоимость определяет врач после осмотра.",
+          "metrika_id": "95513342",
+          "metrika_on": false,
+          "noindex": true,
+          "seo_title": "Имплантация зуба под ключ в Набережных Челнах — {зуб} | «Премьер»",
+          "seo_description": "Имплантат {система}, абатмент и коронка — {зуб} под ключ, удаление зуба бесплатно. Своя цифровая лаборатория, имплантация во сне, {рейтинг} на ПроДокторов. «Премьер», Пушкина, 4.",
+          "og_title": "Зуб на импланте за {зуб} — «Премьер», Набережные Челны",
+          "og_description": "Имплантат {система} и коронка одной суммой, удаление зуба бесплатно. Цена зуба, а не импланта."
+        }
+      }
+    ],
+    "implants": [
+      {
+        "id": "implant-osstem",
+        "slug": "osstem",
+        "status": "published",
+        "data": {
+          "name": "Osstem",
+          "country": "Южная Корея",
+          "implant_price": 18000,
+          "parts_price": 17500,
+          "service_life": 5,
+          "note": "Когда важна цена",
+          "featured": true,
+          "price_from": false,
+          "sort_order": 1
+        }
+      },
+      {
+        "id": "implant-dentium",
+        "slug": "dentium",
+        "status": "published",
+        "data": {
+          "name": "Dentium",
+          "country": "Южная Корея",
+          "implant_price": 30000,
+          "parts_price": 17500,
+          "service_life": 15,
+          "note": "Баланс цены и срока службы",
+          "featured": false,
+          "price_from": true,
+          "sort_order": 2
+        }
+      },
+      {
+        "id": "implant-astra-tech",
+        "slug": "astra-tech",
+        "status": "published",
+        "data": {
+          "name": "Astra Tech",
+          "country": "Швеция",
+          "implant_price": 66000,
+          "parts_price": 17500,
+          "service_life": 30,
+          "note": "Когда нужен самый долгий срок",
+          "featured": false,
+          "price_from": true,
+          "sort_order": 3
+        }
+      }
+    ],
+    "doctors": [
+      {
+        "id": "doctor-sharifullin-ruslan",
+        "slug": "sharifullin-ruslan",
+        "status": "published",
+        "data": {
+          "name": "Шарифуллин Руслан Рушанович",
+          "team_group": "Хирурги-имплантологи",
+          "role": "Хирург-имплантолог, ортопед, терапевт",
+          "experience": "Опыт более 8 лет",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-sharifullin-ruslan.webp",
+              "alt": "Шарифуллин Руслан Рушанович",
+              "filename": "doctor-sharifullin-ruslan.webp"
+            }
+          },
+          "sort_order": 1
+        }
+      },
+      {
+        "id": "doctor-saleddinov-sarkhan",
+        "slug": "saleddinov-sarkhan",
+        "status": "published",
+        "data": {
+          "name": "Саледдинов Сархан Гамлетович",
+          "team_group": "Хирурги-имплантологи",
+          "role": "Хирург-имплантолог",
+          "experience": "Опыт более 8 лет",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-saleddinov-sarkhan.webp",
+              "alt": "Саледдинов Сархан Гамлетович",
+              "filename": "doctor-saleddinov-sarkhan.webp"
+            }
+          },
+          "sort_order": 2
+        }
+      },
+      {
+        "id": "doctor-fakhranurov-ildar",
+        "slug": "fakhranurov-ildar",
+        "status": "published",
+        "data": {
+          "name": "Фахрануров Ильдар Индусович",
+          "team_group": "Хирурги-имплантологи",
+          "role": "Хирург-имплантолог",
+          "experience": "Опыт более 8 лет",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-fakhranurov-ildar.webp",
+              "alt": "Фахрануров Ильдар Индусович",
+              "filename": "doctor-fakhranurov-ildar.webp"
+            }
+          },
+          "sort_order": 3
+        }
+      },
+      {
+        "id": "doctor-dmitriev-andrey",
+        "slug": "dmitriev-andrey",
+        "status": "published",
+        "data": {
+          "name": "Дмитриев Андрей Владиславович",
+          "team_group": "Ортопеды",
+          "role": "Ортопед, терапевт",
+          "experience": "Опыт более 25 лет",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-dmitriev-andrey.webp",
+              "alt": "Дмитриев Андрей Владиславович",
+              "filename": "doctor-dmitriev-andrey.webp"
+            }
+          },
+          "profile_url": "https://prodoctorov.ru/naberezhnye-chelny/vrach/235262-dmitriev/",
+          "sort_order": 1
+        }
+      },
+      {
+        "id": "doctor-valiullin-rinat",
+        "slug": "valiullin-rinat",
+        "status": "published",
+        "data": {
+          "name": "Валиуллин Ринат Рашитович",
+          "team_group": "Ортопеды",
+          "role": "Ортопед",
+          "experience": "Опыт более 8 лет",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-valiullin-rinat.webp",
+              "alt": "Валиуллин Ринат Рашитович",
+              "filename": "doctor-valiullin-rinat.webp"
+            }
+          },
+          "sort_order": 2
+        }
+      },
+      {
+        "id": "doctor-novikov-pavel",
+        "slug": "novikov-pavel",
+        "status": "published",
+        "data": {
+          "name": "Новиков Павел Сергеевич",
+          "team_group": "Зубной техник",
+          "role": "Зубной техник",
+          "bio": "Изготавливает коронки в нашей цифровой лаборатории — по скану, без пересылок.",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/lab-novikov-pavel.webp",
+              "alt": "Новиков Павел Сергеевич",
+              "filename": "lab-novikov-pavel.webp"
+            }
+          },
+          "sort_order": 1
+        }
+      },
+      {
+        "id": "doctor-tretyak-maxim",
+        "slug": "tretyak-maxim",
+        "status": "published",
+        "data": {
+          "name": "Третьяк Максим Юрьевич",
+          "team_group": "Анестезиолог-реаниматолог",
+          "role": "Анестезиолог-реаниматолог высшей категории",
+          "bio": "Заведует отделением в Набережночелнинском онкодиспансере. В «Премьере» проводит седацию и наркоз и всю операцию следит за дыханием, давлением и пульсом.",
+          "photo": {
+            "$media": {
+              "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-tretyak-maxim.webp",
+              "alt": "Третьяк Максим Юрьевич",
+              "filename": "doctor-tretyak-maxim.webp"
+            }
+          },
+          "profile_url": "https://prodoctorov.ru/naberezhnye-chelny/vrach/290263-tretyak/#speciality=anesteziolog-reanimatolog",
+          "sort_order": 1
+        }
+      }
+    ],
+    "pages": [
+      {
+        "id": "page-home",
+        "slug": "home",
+        "status": "published",
+        "data": {
+          "title": "Главная — имплантация",
+          "content": [
+            {
+              "_type": "lp_hero",
+              "_version": 1,
+              "_key": "hero",
+              "eyebrow": "Имплантация в Набережных Челнах",
+              "title_line": "Зуб на импланте",
+              "price_prefix": "за",
+              "lead": "Имплантат {система}, формирователь, абатмент и коронка — одной суммой. Удаление зуба — бесплатно. *Цена зуба, а не импланта.*",
+              "cta_label": "Записаться на консультацию",
+              "cta2_label": "Посчитать свой случай",
+              "cta2_url": "#smeta",
+              "proofs": [
+                {
+                  "title": "С 1999 года",
+                  "text": "ставим импланты в Челнах"
+                },
+                {
+                  "title": "{рейтинг} на ПроДокторов",
+                  "text": "{отзывы}",
+                  "url": "https://prodoctorov.ru/naberezhnye-chelny/lpu/28283-stomatologiya-na-pushkinskoy-denta-ria/"
+                },
+                {
+                  "title": "Можно во сне",
+                  "text": "седация или наркоз",
+                  "url": "#son"
+                }
+              ],
+              "drawing_crown_note": "своя цифровая лаборатория"
+            },
+            {
+              "_type": "lp_advantages",
+              "_version": 1,
+              "_key": "advantages",
+              "anchor_id": "pochemu",
+              "eyebrow": "Почему стоматология «Премьер»",
+              "headline": "Имплантация *без сюрпризов*",
+              "lead": "Шесть вещей, которые мы делаем иначе, чем «имплант по акции».",
+              "items": [
+                {
+                  "title": "С 1999 года",
+                  "text": "Первые импланты поставили больше 25 лет назад, рейтинг {рейтинг} на ПроДокторов по {отзывам}. Проверили больше десяти систем имплантов и оставили три: Osstem, Dentium и Astra Tech.",
+                  "link_label": "Читать отзывы",
+                  "link_url": "https://prodoctorov.ru/naberezhnye-chelny/lpu/28283-stomatologiya-na-pushkinskoy-denta-ria/"
+                },
+                {
+                  "title": "Консультация — {консультация}",
+                  "text": "Хирург не торопится: осматривает, изучает снимок, объясняет варианты и называет точную сумму. Это время врача и стерильные инструменты — поэтому консультация платная. Если решите ставить имплант у нас, она станет для вас бесплатной."
+                },
+                {
+                  "title": "Можно во сне",
+                  "text": "Боитесь операции — проведём её под седацией или наркозом. Всю операцию за вами следит врач-анестезиолог-реаниматолог высшей категории Максим Юрьевич Третьяк. Он ещё и заведует отделением в Набережночелнинском онкодиспансере.",
+                  "link_label": "Профиль врача на ПроДокторов",
+                  "link_url": "https://prodoctorov.ru/naberezhnye-chelny/vrach/290263-tretyak/#speciality=anesteziolog-reanimatolog"
+                },
+                {
+                  "title": "Своя цифровая лаборатория",
+                  "text": "Коронку сканируем, проектируем и фрезеруем у себя, без посредников — поэтому она стоит {коронка}. Анализ крови перед операцией сдаёте прямо в клинике.",
+                  "link_label": "Смотреть, как наш техник Павел Сергеевич делает коронки",
+                  "link_url": "#video-lab"
+                },
+                {
+                  "title": "Три хирурга-имплантолога",
+                  "text": "У каждого больше 8 лет практики. План лечения хирург составляет вместе с ортопедом ещё до операции.",
+                  "link_label": "Познакомиться с врачами",
+                  "link_url": "#vrachi"
+                },
+                {
+                  "title": "Три ортопеда",
+                  "text": "Ортопед продумывает будущую коронку ещё до операции, а потом ставит её. Самый опытный из них — Андрей Владиславович Дмитриев, ортопед и терапевт с опытом больше 25 лет.",
+                  "link_label": "Профиль врача на ПроДокторов",
+                  "link_url": "https://prodoctorov.ru/naberezhnye-chelny/vrach/235262-dmitriev/"
+                }
+              ]
+            },
+            {
+              "_type": "lp_variants",
+              "_version": 1,
+              "_key": "variants",
+              "anchor_id": "varianty",
+              "eyebrow": "Варианты и цены",
+              "headline": "Варианты *имплантации*",
+              "lead": "Цена одного зуба — под ключ: имплантат, формирователь, абатмент и коронка. Что подойдёт именно вам, хирург скажет по снимку.",
+              "items": [
+                {
+                  "drawing": "Один имплант",
+                  "case": "Нет одного зуба",
+                  "title": "Одиночный имплант",
+                  "price": "{зуб}",
+                  "tag": "Удаление зуба — бесплатно",
+                  "tag_red": true,
+                  "text": "Имплантат {система}, формирователь, абатмент и коронка из нашей лаборатории. Соседние зубы не обтачиваем, как для моста.",
+                  "time": "Коронка — через 3–4 месяца",
+                  "cta_label": "Записаться",
+                  "wide": false
+                },
+                {
+                  "drawing": "Удаление и имплант",
+                  "case": "Зуб нужно удалить",
+                  "title": "Одномоментная имплантация",
+                  "price": "{одномоментная}",
+                  "tag": "За один визит",
+                  "tag_red": false,
+                  "text": "Удаляем зуб и сразу ставим имплант в лунку. Лечение короче на 3–4 месяца.",
+                  "time": "Можно ли сразу — решает хирург по КТ",
+                  "cta_label": "Записаться",
+                  "wide": false
+                },
+                {
+                  "drawing": "All-on-4",
+                  "case": "Нет зубов на челюсти",
+                  "title": "All-on-4",
+                  "price": "от {all-on-4}",
+                  "tag": "За челюсть",
+                  "tag_red": false,
+                  "text": "Несъёмный протез на четырёх имплантах: задние ставим под наклоном, чтобы обойтись без наращивания кости там, где это возможно.",
+                  "time": "Постоянный протез — через 4–6 месяцев",
+                  "link_label": "Если кости достаточно — All-on-6",
+                  "link_url": "#all-on-6",
+                  "cta_label": "Записаться",
+                  "wide": false
+                },
+                {
+                  "drawing": "All-on-6",
+                  "case": "Нет зубов на челюсти, а кости достаточно",
+                  "title": "All-on-6",
+                  "tag": "Стоимость — после консультации и КТ",
+                  "tag_red": false,
+                  "text": "Несъёмный протез на шести имплантах: нагрузка распределяется на шесть опор. Цена зависит от состояния кости, поэтому точную сумму врач назовёт после снимка.",
+                  "text_strong": "Уже восстанавливали пациентам всю челюсть во сне — под седацией или наркозом.",
+                  "cta_label": "Записаться на консультацию",
+                  "wide": true,
+                  "card_id": "all-on-6"
+                }
+              ]
+            },
+            {
+              "_type": "lp_doubts",
+              "_version": 1,
+              "_key": "doubts",
+              "anchor_id": "somneniya",
+              "eyebrow": "Сомнения",
+              "headline": "Почему имплантацию *откладывают*",
+              "lead": "Четыре главные причины — и что мы сделали с каждой.",
+              "items": [
+                {
+                  "percent": 30.7,
+                  "title": "Высокая стоимость",
+                  "answer": "Сразу называем цену зуба под ключ — {зуб}, удаление бесплатно. Три системы имплантов под разный бюджет, беспроцентная рассрочка и вычет 13%.",
+                  "link_label": "Сравнить импланты",
+                  "link_url": "#sistemy"
+                },
+                {
+                  "percent": 27,
+                  "title": "Неуверенность в результате",
+                  "answer": "С 1999 года, {рейтинг} на ПроДокторов. Хирург и ортопед планируют лечение вместе ещё до операции, коронку делает своя лаборатория. Приживаемость имплантов — 98%.",
+                  "link_label": "Кто будет лечить",
+                  "link_url": "#vrachi"
+                },
+                {
+                  "percent": 20.8,
+                  "title": "Страх осложнений",
+                  "answer": "Перед операцией — КТ и анализ крови прямо в клинике: хирург заранее видит кость и знает о вашем здоровье. После — бесплатные контрольные осмотры.",
+                  "link_label": "Как проходит лечение",
+                  "link_url": "#etapy"
+                },
+                {
+                  "percent": 18.8,
+                  "title": "Страх операции",
+                  "answer": "Можно во сне — под седацией или наркозом. Всю операцию рядом анестезиолог-реаниматолог.",
+                  "link_label": "Про лечение во сне",
+                  "link_url": "#son"
+                }
+              ],
+              "source_note": "По данным опроса о том, почему откладывают имплантацию."
+            },
+            {
+              "_type": "lp_systems",
+              "_version": 1,
+              "_key": "systems",
+              "anchor_id": "sistemy",
+              "eyebrow": "Импланты",
+              "headline": "Чем отличаются импланты *за {цены-тыс}*",
+              "lead": "Мы отобрали три системы. Все — оригинальные: документы о покупке у официального дилера покажем по запросу. Разница — в цене и сроке службы.",
+              "life_max": 30,
+              "cta_prefix": "Посчитать с",
+              "foot_note": "Срок службы — по данным клиники, при регулярных осмотрах и гигиене. Какая система подойдёт вам, хирург скажет по КТ: важны объём кости и место установки."
+            },
+            {
+              "_type": "lp_estimate",
+              "_version": 1,
+              "_key": "estimate",
+              "anchor_id": "cena",
+              "eyebrow": "Смета",
+              "headline": "Цена зуба, *а не импланта*",
+              "lead": "«Имплант от …» — так обычно рекламируют сам имплантат: без формирователя, абатмента и коронки. Но жевать можно только целым зубом. Поэтому мы сразу называем честную цену под ключ: сам имплантат {система} у нас стоит {имплант}, а зуб целиком — {зуб}.",
+              "max_teeth": 3,
+              "teeth_hint": "Больше трёх подряд или вся челюсть — [All-on-4](#varianty).",
+              "extraction_label": "Зуб ещё на месте — удалим",
+              "immediate_label": "Поставить имплант сразу после удаления, за один визит",
+              "fine_print": "Точную смету врач составит после осмотра и КТ — до операции. Если по ходу понадобится что-то ещё, сначала согласуем с вами.",
+              "extras_title": "Отдельно и только если нужно"
+            },
+            {
+              "_type": "lp_lab",
+              "_version": 1,
+              "_key": "lab",
+              "anchor_id": "laboratoriya",
+              "eyebrow": "Лаборатория",
+              "headline": "Своя цифровая *лаборатория*",
+              "lead": "Коронку не заказываем на стороне: сканируем, проектируем на компьютере и фрезеруем здесь же. Без посредников и пересылок — поэтому и цена такая.",
+              "price_label": "Коронка на имплант",
+              "photos": [
+                {
+                  "image": {
+                    "$media": {
+                      "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/lab-scanner-600.webp",
+                      "alt": "3D-сканер в лаборатории клиники",
+                      "filename": "lab-scanner-600.webp"
+                    }
+                  },
+                  "caption": "Сканирование",
+                  "tall": false
+                },
+                {
+                  "image": {
+                    "$media": {
+                      "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/lab-printing-600.webp",
+                      "alt": "Зубной техник у 3D-принтера",
+                      "filename": "lab-printing-600.webp"
+                    }
+                  },
+                  "caption": "3D-печать",
+                  "tall": true
+                },
+                {
+                  "image": {
+                    "$media": {
+                      "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/lab-preparation-600.webp",
+                      "alt": "Заготовку для коронки ставят в станок",
+                      "filename": "lab-preparation-600.webp"
+                    }
+                  },
+                  "caption": "Заготовка в станке",
+                  "tall": false
+                },
+                {
+                  "image": {
+                    "$media": {
+                      "url": "https://anthon88-nch.github.io/premier-dental-landing/assets/lab-milling-600.webp",
+                      "alt": "Фрезерование коронки",
+                      "filename": "lab-milling-600.webp"
+                    }
+                  },
+                  "caption": "Фрезерование",
+                  "tall": false
+                }
+              ],
+              "video_url": "/assets/lab-work.mp4",
+              "video_poster_url": "/assets/lab-video-poster.webp",
+              "video_caption": "Зубной техник Павел Сергеевич Новиков показывает, как мы изготавливаем коронки"
+            },
+            {
+              "_type": "lp_team",
+              "_version": 1,
+              "_key": "team",
+              "anchor_id": "vrachi",
+              "eyebrow": "Команда",
+              "headline": "Кто будет *вас лечить*",
+              "lead": "Хирург ставит имплант. Ортопед ещё до операции продумывает коронку, а потом ставит её. Зубной техник изготавливает коронку в нашей лаборатории. Если выбираете лечение во сне — рядом анестезиолог-реаниматолог.",
+              "orthopedist_note": "Ортопедический приём ведёт и хирург Руслан Рушанович Шарифуллин.",
+              "profile_label": "ПроДокторов",
+              "person_profile_label": "Профиль на ПроДокторов"
+            },
+            {
+              "_type": "lp_sleep",
+              "_version": 1,
+              "_key": "sleep",
+              "anchor_id": "son",
+              "eyebrow": "Без страха",
+              "headline": "Имплантация *во сне*",
+              "lead": "Страх операции — одна из главных причин откладывать имплантацию. Поэтому обезболивание выбираем вместе с вами.",
+              "options": [
+                {
+                  "title": "Местная анестезия",
+                  "text": "Обезболиваем только зону операции. Вы в сознании и можете говорить с врачом."
+                },
+                {
+                  "title": "Седация — «лечение во сне»",
+                  "text": "Лёгкий медикаментозный сон: вы спокойны и расслаблены, дышите сами. Операция проходит, пока вы дремлете."
+                },
+                {
+                  "title": "Наркоз",
+                  "text": "Полный сон на всё время операции. Так восстанавливали пациентам всю челюсть: All-on-4 и All-on-6. Решение принимает анестезиолог."
+                }
+              ],
+              "duty_text": "Всю операцию за вашим состоянием следит врач-анестезиолог-реаниматолог высшей категории **Третьяк Максим Юрьевич** — заведующий отделением в Набережночелнинском онкодиспансере.",
+              "duty_note": "Перед седацией или наркозом — осмотр анестезиолога и анализ крови. Анализ сдаёте прямо в клинике.",
+              "profile_label": "Профиль врача на ПроДокторов",
+              "cta_label": "Записаться на консультацию"
+            },
+            {
+              "_type": "lp_steps",
+              "_version": 1,
+              "_key": "steps",
+              "anchor_id": "etapy",
+              "eyebrow": "Этапы",
+              "headline": "Как проходит *лечение*",
+              "lead": "От операции до постоянной коронки обычно 3–4 месяца, иногда дольше: столько нужно, чтобы имплант сросся с костью.",
+              "video_caption": "Ролик с пояснениями: как проходит имплантация от первой консультации до коронки.",
+              "video_placeholder": "Видео скоро появится",
+              "steps": [
+                {
+                  "time": "1 визит, около часа",
+                  "title": "Консультация и КТ",
+                  "text": "Хирург изучает 3D-снимок, ортопед продумывает коронку. Обсуждаем варианты, импланты и цены."
+                },
+                {
+                  "time": "до 7 дней после диагностики",
+                  "title": "Анализы и план",
+                  "text": "Анализ крови сдаёте здесь же, в клинике. Расписываем этапы и итоговую сумму, договор подписываем, когда вам всё понятно."
+                },
+                {
+                  "time": "до 1 часа",
+                  "title": "Операция",
+                  "text": "Под местной анестезией, седацией или наркозом. Если зуб нужно удалить, по показаниям ставим имплант в тот же день."
+                },
+                {
+                  "time": "3–6 месяцев",
+                  "title": "Приживление",
+                  "text": "Имплант срастается с костью. Через 10 дней снимаем швы и проверяем, как идёт заживление."
+                },
+                {
+                  "time": "обычно через 3–4 месяца",
+                  "title": "Коронка",
+                  "text": "Ставим формирователь десны, затем абатмент и коронку из нашей лаборатории."
+                },
+                {
+                  "time": "раз в 6 месяцев",
+                  "title": "Наблюдение",
+                  "text": "Контрольные осмотры — бесплатно. Профессиональная гигиена оплачивается отдельно."
+                }
+              ]
+            },
+            {
+              "_type": "lp_documents",
+              "_version": 1,
+              "_key": "documents",
+              "anchor_id": "garantii",
+              "eyebrow": "Документы и гарантия",
+              "headline": "Всё, о чём договорились, — *на бумаге*",
+              "items": [
+                {
+                  "label": "Документ 1",
+                  "title": "План лечения и смета",
+                  "text": "Этапы, сроки и итоговая сумма — в договоре, до операции.",
+                  "stamp": false
+                },
+                {
+                  "label": "Документ 2",
+                  "title": "Документы на имплант",
+                  "text": "По запросу покажем, что имплантат, абатмент и винт куплены у официального дилера.",
+                  "stamp": false
+                },
+                {
+                  "label": "Документ 3",
+                  "title": "Гарантия 1 год",
+                  "text": "На стабильность имплантата и несъёмные конструкции — по договору.",
+                  "stamp": true
+                },
+                {
+                  "label": "Документ 4",
+                  "title": "Справка для вычета",
+                  "text": "Вернёте 13% стоимости лечения — до {вычет} за год.",
+                  "stamp": false
+                }
+              ],
+              "terms_title": "Условия гарантии",
+              "terms_intro": "Гарантия 1 год на стабильность имплантата и несъёмные конструкции действует, если вы:",
+              "terms": "выполняете план лечения и рекомендации врача;\nраз в 6 месяцев проходите осмотр и профгигиену в клинике «Премьер»;\nследите за гигиеной каждый день;\nлечите эти зубы только в клиниках «Премьер».",
+              "stamp_title": "ГАРАНТИЯ",
+              "stamp_value": "1 ГОД"
+            },
+            {
+              "_type": "lp_rating",
+              "_version": 1,
+              "_key": "rating",
+              "anchor_id": "otzyvy",
+              "headline": "Оценка пациентов на ПроДокторов, *{отзывы}*",
+              "text": "Отзывы пациентов клиники на Пушкина читайте на независимой площадке. Данные на {дата-рейтинга}.",
+              "button_label": "Читать отзывы"
+            },
+            {
+              "_type": "lp_faq",
+              "_version": 1,
+              "_key": "faq",
+              "anchor_id": "voprosy",
+              "eyebrow": "Вопросы",
+              "headline": "Спрашивают *чаще всего*",
+              "open_first": true,
+              "items": [
+                {
+                  "question": "Что входит в {зуб}?",
+                  "answer": "Имплантат {система}, формирователь десны, абатмент и коронка из нашей лаборатории. Удаление зуба — бесплатно. Отдельно, если понадобятся: КТ, анестезия, седация или наркоз, подготовка кости — их стоимость врач вписывает в смету до операции. Консультация стоит {консультация}, а если решите ставить имплант у нас, она бесплатна."
+                },
+                {
+                  "question": "Чем Osstem отличается от Dentium и Astra Tech?",
+                  "answer": "Ценой и сроком службы: Osstem — 5 лет, Dentium — 15, Astra Tech — 30. Все три системы оригинальные, документы о покупке покажем по запросу. Какая подойдёт вам, хирург скажет по КТ: важны объём кости и место установки."
+                },
+                {
+                  "question": "Можно удалить зуб и сразу поставить имплант?",
+                  "answer": "Да, если состояние кости и десны позволяет. Это одномоментная имплантация, она стоит {одномоментная}. Временную коронку в день операции ставят по показаниям, постоянную — после заживления. При воспалении имплантацию иногда приходится отложить."
+                },
+                {
+                  "question": "Делаете All-on-6?",
+                  "answer": "Да. Если кости достаточно, несъёмный протез ставим на шесть имплантов. Стоимость зависит от состояния кости — врач назовёт её после консультации и КТ."
+                },
+                {
+                  "question": "Можно сделать имплантацию во сне?",
+                  "answer": "Да. Под седацией вы в лёгком медикаментозном сне, под наркозом — спите всю операцию. Вариант выбирает анестезиолог-реаниматолог после осмотра и анализов. Анализ крови сдаёте прямо в клинике."
+                },
+                {
+                  "question": "Это больно?",
+                  "answer": "Операцию проводят под местной анестезией, а если страшно — под седацией или наркозом. Несколько дней после неё возможны отёк и дискомфорт — врач расскажет, как их снять, и назначит осмотр."
+                },
+                {
+                  "question": "Когда будет постоянная коронка?",
+                  "answer": "На один имплант — обычно через 3–4 месяца после операции, протез All-on-4 или All-on-6 — через 4–6 месяцев. Если нужна подготовка кости, срок дольше. Перед протезированием врач проверяет заживление."
+                },
+                {
+                  "question": "Какая гарантия на имплант?",
+                  "answer": "1 год на стабильность имплантата и несъёмные конструкции, по договору. Условия: осмотр и профгигиена раз в полгода и выполнение рекомендаций врача."
+                },
+                {
+                  "question": "Есть рассрочка?",
+                  "answer": "Да, беспроцентная, без банка. Условия администратор расскажет при записи."
+                },
+                {
+                  "question": "Можно вернуть налог?",
+                  "answer": "Да, 13% через налоговый вычет: до {вычет} за год, если расходы на лечение до 150 000 ₽ (лимит общий для социальных вычетов). Справку об оплате медицинских услуг оформим. Заявить вычет можно за три прошлых года."
+                },
+                {
+                  "question": "Что взять на консультацию?",
+                  "answer": "Снимки и планы лечения, если есть. Расскажите врачу о хронических заболеваниях и лекарствах, которые принимаете. Новые исследования заранее делать не нужно — врач назначит, если понадобятся."
+                }
+              ]
+            },
+            {
+              "_type": "lp_contacts",
+              "_version": 1,
+              "_key": "contacts",
+              "anchor_id": "kontakty",
+              "eyebrow": "Запись",
+              "headline": "Приходите *на консультацию*",
+              "lead": "Хирург-имплантолог осмотрит, изучит снимок и назовёт сумму. Консультация — {консультация}, а если решите ставить имплант у нас — бесплатно.",
+              "button_label": "Записаться на консультацию"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

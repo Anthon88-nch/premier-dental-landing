@@ -1,0 +1,101 @@
+---
+// 8. Команда: хирурги → ортопеды → техник → анестезиолог (коллекция «Врачи и команда»).
+import { Image } from "emdash/ui";
+import SectionHead from "../SectionHead.astro";
+import { TEAM_ORDER, type Doctor } from "../../lib/site";
+import { rich } from "../../lib/text";
+import { anchor, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+
+const byTeam = (team: string) => site.doctors.filter((d) => d.team === team);
+const [surgeons, orthopedists, technicians, anesthesiologists] = TEAM_ORDER.map(byTeam);
+const nameParts = (doc: Doctor) => {
+	const [surname, ...rest] = doc.name.split(/\s+/);
+	return { surname, rest: rest.join(" ") };
+};
+const cardLabel = value.profile_label || "ПроДокторов";
+const personLabel = value.person_profile_label || "Профиль на ПроДокторов";
+const cardGroups = [
+	{ title: TEAM_ORDER[0], people: surgeons, mod: "crew__group--surg", note: "" },
+	{ title: TEAM_ORDER[1], people: orthopedists, mod: "crew__group--orto", note: value.orthopedist_note },
+].filter((g) => g.people.length > 0);
+const personGroups = [
+	{ title: TEAM_ORDER[2], people: technicians },
+	{ title: TEAM_ORDER[3], people: anesthesiologists },
+].filter((g) => g.people.length > 0);
+---
+
+<section class="section" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<div class="crew">
+			{
+				cardGroups.map((g) => (
+					<div class:list={["crew__group", g.mod]}>
+						<h3 class="crew__title">{g.title}</h3>
+						<ul class="team" aria-label={g.title}>
+							{g.people.map((doc) => {
+								const { surname, rest } = nameParts(doc);
+								return (
+									<li class="doc">
+										{doc.photo ? (
+											<Image image={doc.photo} alt={doc.name} sizes="(min-width: 1024px) 220px, (min-width: 640px) 42vw, 74vw" />
+										) : (
+											<div class="doc__nophoto" aria-hidden="true" />
+										)}
+										<p class="doc__name">
+											<b>{surname}</b> {rest}
+										</p>
+										{doc.role && <p class="doc__role" set:html={t(doc.role)} />}
+										{doc.experience && <p class="doc__exp" set:html={t(doc.experience)} />}
+										{doc.profileUrl && (
+											<a class="more more--out doc__link" href={doc.profileUrl} target="_blank" rel="noopener" set:html={t(cardLabel)} />
+										)}
+									</li>
+								);
+							})}
+						</ul>
+						{g.note && <p class="crew__note" set:html={t(g.note)} />}
+					</div>
+				))
+			}
+			{
+				personGroups.length > 0 && (
+					<div class="crew__pair">
+						{personGroups.map((g) => (
+							<div class="crew__group">
+								<h3 class="crew__title">{g.title}</h3>
+								{g.people.map((doc) => {
+									const { surname, rest } = nameParts(doc);
+									return (
+										<article class="person">
+											{doc.photo ? (
+												<Image image={doc.photo} alt={doc.name} class="person__pic" sizes="140px" />
+											) : (
+												<div class="person__pic doc__nophoto" aria-hidden="true" />
+											)}
+											<div class="person__body">
+												<p class="doc__name">
+													<b>{surname}</b> {rest}
+												</p>
+												{doc.role && <p class="doc__role" set:html={t(doc.role)} />}
+												{doc.bio && <p class="person__text" set:html={t(doc.bio)} />}
+												{doc.profileUrl && (
+													<a class="more more--out" href={doc.profileUrl} target="_blank" rel="noopener" set:html={t(personLabel)} />
+												)}
+											</div>
+										</article>
+									);
+								})}
+							</div>
+						))}
+					</div>
+				)
+			}
+		</div>
+	</div>
+</section>

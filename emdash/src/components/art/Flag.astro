@@ -1,0 +1,12 @@
+---
+// Маленький флаг страны производителя импланта.
+import { FLAGS } from "./svgs";
+
+interface Props {
+	country: string;
+}
+
+const flag = FLAGS[Astro.props.country];
+---
+
+{flag && <svg class="flag" viewBox={flag.viewBox} role="img" aria-label={flag.label} set:html={flag.inner} />}

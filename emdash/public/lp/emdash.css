@@ -1,0 +1,11 @@
+/* Дополнения к lp.css для версии на EmDash: заглушки без фото, видео о лечении, текстовый блок. */
+.doc__nophoto { width: 100%; aspect-ratio: 4 / 5; background: #EEF0F3 url('media/grain-dark.png'); }
+.person__pic.doc__nophoto { width: 112px; height: 140px; aspect-ratio: auto; flex: none; }
+@media (min-width: 1024px) { .person__pic.doc__nophoto { width: 140px; height: 175px; } }
+.howto__video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #0B0F24; }
+.prose { max-width: 70ch; font-size: 17px; line-height: 1.6; }
+.prose > * + * { margin-top: 1em; }
+.prose h2, .prose h3 { margin-top: 1.6em; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.prose img { max-width: 100%; height: auto; }

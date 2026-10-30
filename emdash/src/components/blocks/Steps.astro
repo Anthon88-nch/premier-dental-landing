@@ -1,0 +1,48 @@
+---
+// 10. Как проходит лечение: видео и шаги.
+import SectionHead from "../SectionHead.astro";
+import { rich, safeHref } from "../../lib/text";
+import { anchor, list, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const steps = list<Record<string, any>>(value.steps).filter((s) => s?.title);
+const video = safeHref(value.video_url);
+const poster = safeHref(value.video_poster_url);
+---
+
+<section class="section section--tint" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		{
+			(video || value.video_placeholder || value.video_caption) && (
+				<figure class="howto" id="video-lechenie">
+					{video ? (
+						<video class="howto__video" controls preload="none" playsinline poster={poster} width="1280" height="720">
+							<source src={video} type="video/mp4" />
+						</video>
+					) : (
+						<div class="howto__slot">
+							<svg class="howto__play" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="32" r="30" /><path d="M26 20 46 32 26 44Z" /></svg>
+							{value.video_placeholder && <p class="howto__soon" set:html={t(value.video_placeholder)} />}
+						</div>
+					)}
+					{value.video_caption && <figcaption set:html={t(value.video_caption)} />}
+				</figure>
+			)
+		}
+		<ol class="steps">
+			{
+				steps.map((step) => (
+					<li class="step">
+						{step.time && <p class="step__time" set:html={t(step.time)} />}
+						<h3 set:html={t(step.title)} />
+						{step.text && <p set:html={t(step.text)} />}
+					</li>
+				))
+			}
+		</ol>
+	</div>
+</section>

@@ -1,0 +1,30 @@
+# Зависимости
+node_modules/
+
+# Сборка
+dist/
+
+# Astro и EmDash (генерируются при запуске)
+.astro/
+.emdash/
+emdash-env.d.ts
+
+# Данные локальной CMS: база и загруженные файлы
+data.db
+data.db-*
+uploads/
+
+# Переменные окружения
+.env
+.env.*
+!.env.example
+
+# Редакторы и ОС
+.vscode/*
+.idea/
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+npm-debug.log*

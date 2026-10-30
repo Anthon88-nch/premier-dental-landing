@@ -1,0 +1,21 @@
+---
+// Свободный текстовый блок (на случай новых разделов).
+import { PortableText } from "emdash/ui";
+import SectionHead from "../SectionHead.astro";
+import { anchor, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const tid = titleId(value, index);
+---
+
+<section class="section" id={anchor(value)} aria-labelledby={value.headline ? tid : undefined}>
+	<div class="wrap">
+		{(value.eyebrow || value.headline) && <SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} />}
+		{Array.isArray(value.body) && value.body.length > 0 && (
+			<div class="prose">
+				<PortableText value={value.body} />
+			</div>
+		)}
+	</div>
+</section>

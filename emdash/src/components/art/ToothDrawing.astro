@@ -1,0 +1,92 @@
+---
+// Чертёж «зуб на импланте, разрез А–А» с первого экрана.
+// Цены подставляются из «Клиники» (коронка) и основного импланта из «Имплантов».
+import type { Implant } from "../../lib/site";
+import { group, money, splitNote } from "../../lib/text";
+
+interface Props {
+	implant: Implant;
+	crown: number;
+	note?: string | null;
+}
+
+const { implant, crown, note: noteText } = Astro.props;
+const total = implant.implant + implant.parts + crown;
+const note = splitNote(noteText ?? "");
+const implantNote = [implant.name, implant.countryShort].filter(Boolean).join(", ");
+const rub = (n: number) => `${group(n)} рублей`;
+const desc = `Позиция 1 — коронка, ${rub(crown)}${noteText ? `, ${noteText}` : ""}. Позиция 2 — абатмент и формирователь, ${rub(implant.parts)}. Позиция 3 — имплантат ${implantNote}, ${rub(implant.implant)}. Итого ${rub(total)}.`;
+---
+
+<figure class="sheet hero__sheet">
+  <svg class="drawing" viewBox="0 0 364 410" role="img" aria-labelledby="dr-title dr-desc" focusable="false">
+    <title id="dr-title">Зуб на импланте в разрезе</title>
+    <desc id="dr-desc">{desc}</desc>
+
+    <g class="dr-context">
+      <path class="dr-tissue" d="M40 170C62 160 82 154 94 152H146C158 154 178 160 200 170V196C176 188 154 184 144 184H96C86 184 64 188 40 196Z"/>
+      <path class="dr-bone" d="M40 196C64 188 86 184 96 184H144C154 184 176 188 200 196V402H40Z"/>
+      <path class="dr-line dr-thin dr-draw" pathLength="1" d="M40 168C37 186 43 204 40 222S43 258 40 276S43 312 40 330S43 366 40 384S43 400 40 402"/>
+      <path class="dr-line dr-thin dr-draw" pathLength="1" d="M200 168C203 186 197 204 200 222S197 258 200 276S197 312 200 330S197 366 200 384S197 400 200 402"/>
+      <path class="dr-line dr-thin dr-draw" pathLength="1" d="M40 402C60 398 80 406 100 402S140 398 160 402S190 406 200 402"/>
+      <path class="dr-line dr-draw" pathLength="1" d="M40 170C62 160 82 154 94 152"/>
+      <path class="dr-line dr-draw" pathLength="1" d="M146 152C158 154 178 160 200 170"/>
+      <path class="dr-line dr-main dr-draw" pathLength="1" d="M40 196C64 188 86 184 96 184"/>
+      <path class="dr-line dr-main dr-draw" pathLength="1" d="M144 184C154 184 176 188 200 196"/>
+      <path class="dr-line dr-thin dr-fade" d="M40 203C64 195 86 191 97 191M143 191C154 191 176 195 200 203"/>
+    </g>
+
+    <g class="dr-part">
+      <path class="dr-paper" d="M96,178 L96,186 L101.6,192 L96.8,198 L102.1,204 L97.3,210 L102.6,216 L97.8,222 L103.1,228 L98.3,234 L103.6,240 L98.8,246 L104.1,252 L99.3,258 L104.6,264 L99.8,270 L105.1,276 L100.3,282 L105.6,288 L100.8,294 L106.1,300 L101.3,306 L106.6,312 L101.8,318 L107.1,324 L102.3,330 L107.6,336 L102.8,342 L103,346 C103,360 112,366 120,366 C128,366 137,360 137,346 L137.2,342 L132.4,336 L137.7,330 L132.9,324 L138.2,318 L133.4,312 L138.7,306 L133.9,300 L139.2,294 L134.4,288 L139.7,282 L134.9,276 L140.2,270 L135.4,264 L140.7,258 L135.9,252 L141.2,246 L136.4,240 L141.7,234 L136.9,228 L142.2,222 L137.4,216 L142.7,210 L137.9,204 L143.2,198 L138.4,192 L143.7,186 L144,178 Z"/>
+      <path class="dr-metal dr-fade" d="M96,178 L96,186 L101.6,192 L96.8,198 L102.1,204 L97.3,210 L102.6,216 L97.8,222 L103.1,228 L98.3,234 L103.6,240 L98.8,246 L104.1,252 L99.3,258 L104.6,264 L99.8,270 L105.1,276 L100.3,282 L105.6,288 L100.8,294 L106.1,300 L101.3,306 L106.6,312 L101.8,318 L107.1,324 L102.3,330 L107.6,336 L102.8,342 L103,346 C103,360 112,366 120,366 C128,366 137,360 137,346 L137.2,342 L132.4,336 L137.7,330 L132.9,324 L138.2,318 L133.4,312 L138.7,306 L133.9,300 L139.2,294 L134.4,288 L139.7,282 L134.9,276 L140.2,270 L135.4,264 L140.7,258 L135.9,252 L141.2,246 L136.4,240 L141.7,234 L136.9,228 L142.2,222 L137.4,216 L142.7,210 L137.9,204 L143.2,198 L138.4,192 L143.7,186 L144,178 Z"/>
+      <path class="dr-line dr-main dr-draw" pathLength="1" d="M96,178 L96,186 L101.6,192 L96.8,198 L102.1,204 L97.3,210 L102.6,216 L97.8,222 L103.1,228 L98.3,234 L103.6,240 L98.8,246 L104.1,252 L99.3,258 L104.6,264 L99.8,270 L105.1,276 L100.3,282 L105.6,288 L100.8,294 L106.1,300 L101.3,306 L106.6,312 L101.8,318 L107.1,324 L102.3,330 L107.6,336 L102.8,342 L103,346 C103,360 112,366 120,366 C128,366 137,360 137,346 L137.2,342 L132.4,336 L137.7,330 L132.9,324 L138.2,318 L133.4,312 L138.7,306 L133.9,300 L139.2,294 L134.4,288 L139.7,282 L134.9,276 L140.2,270 L135.4,264 L140.7,258 L135.9,252 L141.2,246 L136.4,240 L141.7,234 L136.9,228 L142.2,222 L137.4,216 L142.7,210 L137.9,204 L143.2,198 L138.4,192 L143.7,186 L144,178 Z"/>
+      <path class="dr-line dr-hidden dr-fade" d="M112 178V232H128V178"/>
+      <path class="dr-paper" d="M94 150H146L142 178H98Z"/>
+      <path class="dr-metal dr-fade" d="M94 150H146L142 178H98Z"/>
+      <path class="dr-line dr-main dr-draw" pathLength="1" d="M94 150H146L142 178H98Z"/>
+      <path class="dr-paper" d="M88 150C70 146 60 128 61 108C62 86 68 64 82 54C90 48 98 48 104 54C112 62 116 68 120 68C124 68 128 62 136 54C142 48 150 48 158 54C172 64 178 86 179 108C180 128 170 146 152 150Z"/>
+      <path class="dr-line dr-thin dr-fade" transform="translate(120 150) scale(.84) translate(-120 -150)" vector-effect="non-scaling-stroke" d="M88 150C70 146 60 128 61 108C62 86 68 64 82 54C90 48 98 48 104 54C112 62 116 68 120 68C124 68 128 62 136 54C142 48 150 48 158 54C172 64 178 86 179 108C180 128 170 146 152 150Z"/>
+      <path class="dr-line dr-hidden dr-fade" d="M98 150L103 98H137L142 150"/>
+      <path class="dr-line dr-main dr-draw" pathLength="1" d="M88 150C70 146 60 128 61 108C62 86 68 64 82 54C90 48 98 48 104 54C112 62 116 68 120 68C124 68 128 62 136 54C142 48 150 48 158 54C172 64 178 86 179 108C180 128 170 146 152 150Z"/>
+    </g>
+
+    <path class="dr-axis dr-fade" d="M120 24V398"/>
+    <text class="dr-text dr-fade" x="14" y="30">А–А</text>
+
+    <g class="dr-callout dr-callout--1">
+      <circle class="dr-dot" cx="162" cy="96" r="2.4"/>
+      <path class="dr-line dr-thin dr-draw" pathLength="1" d="M162 96L222 53H356"/>
+      <text class="dr-text dr-pos" x="224" y="46">1</text>
+      <text class="dr-text" x="238" y="46">Коронка</text>
+      <text class="dr-text dr-price" x="224" y="76">{money(crown)}</text>
+      {note[0] && <text class="dr-text dr-note dr-note--red" x="224" y="94">{note[0]}</text>}
+      {note[1] && <text class="dr-text dr-note dr-note--red" x="224" y="110">{note[1]}</text>}
+    </g>
+    <g class="dr-callout dr-callout--2">
+      <circle class="dr-dot" cx="134" cy="165" r="2.4"/>
+      <path class="dr-line dr-thin dr-draw" pathLength="1" d="M134 165L222 141H356"/>
+      <text class="dr-text dr-pos" x="224" y="134">2</text>
+      <text class="dr-text" x="238" y="134">Абатмент</text>
+      <text class="dr-text dr-price" x="224" y="164">{money(implant.parts)}</text>
+      <text class="dr-text dr-note" x="224" y="182">и формирователь</text>
+    </g>
+    <g class="dr-callout dr-callout--3">
+      <circle class="dr-dot" cx="128" cy="262" r="2.4"/>
+      <path class="dr-line dr-thin dr-draw" pathLength="1" d="M128 262L222 219H356"/>
+      <text class="dr-text dr-pos" x="224" y="212">3</text>
+      <text class="dr-text" x="238" y="212">Имплантат</text>
+      <text class="dr-text dr-price" x="224" y="242">{money(implant.implant)}</text>
+      <text class="dr-text dr-note" x="224" y="260">{implantNote}</text>
+    </g>
+    <g class="dr-sum">
+      <text class="dr-text dr-note" x="224" y="300">Итого, поз. 1–3</text>
+      <text class="dr-text dr-total" x="226" y="340">{money(total)}</text>
+      <path class="dr-pencil" pathLength="1" d="M219 337C214 319 246 306 287 306C327 306 357 316 356 331C355 348 326 356 288 356C249 356 219 347 220 331C221 322 232 314 247 310"/>
+      <path class="dr-pencil dr-pencil--2" pathLength="1" d="M221 335C217 320 248 308 288 308C326 308 354 317 354 332C353 347 325 354 288 354C251 354 222 346 222 332"/>
+    </g>
+  </svg>
+  <figcaption class="sheet__stamp">
+    <span>Зуб на&nbsp;импланте, разрез <span class="nowrap">А–А</span></span>
+    <span>«Премьер»</span>
+  </figcaption>
+</figure>

@@ -1,0 +1,23 @@
+---
+import type { Site } from "../lib/site";
+import { rich } from "../lib/text";
+
+interface Props {
+	site: Site;
+	titleId: string;
+	eyebrow?: string;
+	headline?: string;
+	lead?: string;
+	class?: string;
+}
+
+const { site, titleId, eyebrow, headline, lead, class: className } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+---
+
+<div class:list={["section__head", className]}>
+	{eyebrow && <p class="eyebrow" set:html={t(eyebrow)} />}
+	{headline && <h2 id={titleId} set:html={t(headline)} />}
+	{lead && <p class="section__lead" set:html={t(lead)} />}
+	<slot />
+</div>

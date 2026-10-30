@@ -1,0 +1,57 @@
+---
+// Блоки страницы → компоненты. Новый тип блока: добавить в seed/seed.json и сюда.
+import type { Site } from "../lib/site";
+import Advantages from "./blocks/Advantages.astro";
+import Contacts from "./blocks/Contacts.astro";
+import Documents from "./blocks/Documents.astro";
+import Doubts from "./blocks/Doubts.astro";
+import Estimate from "./blocks/Estimate.astro";
+import Faq from "./blocks/Faq.astro";
+import Hero from "./blocks/Hero.astro";
+import Lab from "./blocks/Lab.astro";
+import Rating from "./blocks/Rating.astro";
+import Sleep from "./blocks/Sleep.astro";
+import Steps from "./blocks/Steps.astro";
+import Systems from "./blocks/Systems.astro";
+import Team from "./blocks/Team.astro";
+import TextBlock from "./blocks/TextBlock.astro";
+import Variants from "./blocks/Variants.astro";
+
+interface Props {
+	blocks: Array<Record<string, any>>;
+	site: Site;
+}
+
+const COMPONENTS: Record<string, any> = {
+	lp_hero: Hero,
+	lp_advantages: Advantages,
+	lp_variants: Variants,
+	lp_doubts: Doubts,
+	lp_systems: Systems,
+	lp_estimate: Estimate,
+	lp_lab: Lab,
+	lp_team: Team,
+	lp_sleep: Sleep,
+	lp_steps: Steps,
+	lp_documents: Documents,
+	lp_rating: Rating,
+	lp_faq: Faq,
+	lp_contacts: Contacts,
+	lp_text: TextBlock,
+};
+
+const { blocks, site } = Astro.props;
+const known = blocks.filter((block) => block && COMPONENTS[block._type]);
+if (import.meta.env.DEV) {
+	for (const block of blocks) {
+		if (block && !COMPONENTS[block._type]) console.warn(`[premier] Нет компонента для блока «${block._type}»`);
+	}
+}
+---
+
+{
+	known.map((block, index) => {
+		const Component = COMPONENTS[block._type];
+		return <Component value={block} site={site} index={index} />;
+	})
+}

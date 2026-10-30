@@ -1,0 +1,73 @@
+name: EmDash check
+# Проверка EmDash-версии лендинга (папка emdash/, ветка emdash). На main и GitHub Pages не влияет.
+on:
+  push:
+    branches: [emdash]
+    paths:
+      - 'emdash/**'
+      - '.github/emdash-ci/**'
+      - '.github/workflows/emdash-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: emdash-check
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install site dependencies
+        working-directory: emdash
+        run: npm install --no-audit --no-fund 2>&1 | tee ../ci-npm-install.log
+
+      - name: Versions
+        working-directory: emdash
+        run: |
+          { node -v; npm -v; npm ls astro emdash @astrojs/node @astrojs/react react --depth=0; } 2>&1 | tee ../ci-versions.log
+
+      - name: Validate seed
+        working-directory: emdash
+        run: npx emdash seed seed/seed.json --validate 2>&1 | tee ../ci-seed.log
+
+      - name: Build
+        working-directory: emdash
+        run: npm run build 2>&1 | tee ../ci-build.log
+
+      - name: Install checker
+        working-directory: .github/emdash-ci
+        run: npm install --no-audit --no-fund && npx playwright install --with-deps chromium
+
+      - name: Run dev server and check
+        run: |
+          cd emdash
+          nohup npm run dev -- --host 127.0.0.1 --port 4321 > ../ci-dev.log 2>&1 &
+          cd ..
+          node .github/emdash-ci/check.mjs
+
+      - name: Publish report to branch emdash-ci-report
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p ci-report
+          cp ci-*.log ci-report/ 2>/dev/null || true
+          cp emdash/package-lock.json ci-report/ 2>/dev/null || true
+          cp emdash/emdash-env.d.ts ci-report/ 2>/dev/null || true
+          echo "${GITHUB_SHA}" > ci-report/commit.txt
+          cd ci-report
+          git init -q
+          git checkout -q -b emdash-ci-report
+          git add -A
+          git -c user.name="emdash-ci" -c user.email="emdash-ci@users.noreply.github.com" commit -qm "EmDash check report for ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" emdash-ci-report

@@ -1,0 +1,61 @@
+---
+// 11. Документы и гарантия.
+import SectionHead from "../SectionHead.astro";
+import { lines, rich } from "../../lib/text";
+import { anchor, list, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const items = list<Record<string, any>>(value.items).filter((item) => item?.title);
+const terms = lines(value.terms);
+const ringText = "ПРЕМЬЕР · НАБЕРЕЖНЫЕ ЧЕЛНЫ · С 1999 ·";
+---
+
+<section class="section" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} />
+		<ul class="papers">
+			{
+				items.map((item, i) => {
+					const ringId = `${tid}-ring-${i}`;
+					return (
+						<li class:list={["paper", { "paper--stamped": item.stamp }]}>
+							{item.label && <p class="paper__no" set:html={t(item.label)} />}
+							<h3 set:html={t(item.title)} />
+							{item.text && <p set:html={t(item.text)} />}
+							{item.stamp && (value.terms_intro || terms.length > 0) && (
+								<details class="paper__more">
+									<summary set:html={t(value.terms_title || "Условия гарантии")} />
+									{value.terms_intro && <p set:html={t(value.terms_intro)} />}
+									{terms.length > 0 && (
+										<ul>
+											{terms.map((term) => (
+												<li set:html={t(term)} />
+											))}
+										</ul>
+									)}
+								</details>
+							)}
+							{item.stamp && (
+								<svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
+									<defs>
+										<path id={ringId} d="M60 60m-43 0a43 43 0 1 1 86 0a43 43 0 1 1-86 0" />
+									</defs>
+									<circle class="stamp__ring" cx="60" cy="60" r="57" />
+									<circle class="stamp__ring stamp__ring--thin" cx="60" cy="60" r="35" />
+									<text class="stamp__arc">
+										<textPath href={`#${ringId}`} textLength="262" lengthAdjust="spacing">{ringText}</textPath>
+									</text>
+									{value.stamp_title && <text class="stamp__mid" x="60" y="56">{value.stamp_title}</text>}
+									{value.stamp_value && <text class="stamp__big" x="60" y="75">{value.stamp_value}</text>}
+								</svg>
+							)}
+						</li>
+					);
+				})
+			}
+		</ul>
+	</div>
+</section>

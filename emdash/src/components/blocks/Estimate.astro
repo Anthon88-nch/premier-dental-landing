@@ -1,0 +1,158 @@
+---
+// 6. Смета: калькулятор зуба под ключ. Цены — из «Имплантов» и «Клиники», считает public/lp/lp.js.
+import SectionHead from "../SectionHead.astro";
+import { group, jsonForScript, money, plural, rich } from "../../lib/text";
+import { anchor, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const featured = site.featured;
+const maxTeeth = Math.min(10, Math.max(1, Number(value.max_teeth) || 3));
+const years = (n: number) => `${n}\u00A0${plural(n, "год", "года", "лет")}`;
+const extras = (Array.isArray(site.clinic.extras) ? site.clinic.extras : []).filter((row: any) => row?.label);
+
+const calcData = {
+	implants: Object.fromEntries(
+		site.implants.map((i) => [i.key, { name: i.name, implant: i.implant, parts: i.parts, life: i.life }]),
+	),
+	defaultImplant: featured?.key ?? "",
+	crown: site.crown,
+	extraction: site.extraction,
+	immediate: site.immediate,
+	installmentMonths: site.installmentMonths,
+	refundRate: 0.13,
+	refundCap: site.refundCap,
+	maxTeeth,
+};
+
+const rows = featured
+	? [
+			{ name: `Имплантат ${featured.name}`, sum: featured.implant },
+			{ name: "Абатмент и формирователь", sum: featured.parts },
+			{ name: "Коронка — своя лаборатория", sum: site.crown },
+		]
+	: [];
+const total = featured?.turnkey ?? 0;
+const monthly = Math.ceil(total / site.installmentMonths);
+const refund = Math.min(Math.round(total * 0.13), site.refundCap);
+const installment = typeof site.clinic.installment_text === "string" ? site.clinic.installment_text.trim() : "";
+const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
+---
+
+<section class="section section--blue" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+
+		{
+			featured && (
+				<div class="calc" id="smeta" data-calc>
+					<script is:inline type="application/json" data-calc-data set:html={jsonForScript(calcData)}></script>
+					<form class="calc__form" aria-label="Расчёт стоимости имплантации" data-calc-form>
+						<fieldset class="calc__group">
+							<legend>Сколько зубов восстановить</legend>
+							<div class="stepper">
+								<button type="button" class="stepper__btn" data-step="-1" aria-label="Меньше зубов">−</button>
+								<output class="stepper__val" data-count aria-live="polite">1</output>
+								<button type="button" class="stepper__btn" data-step="1" aria-label="Больше зубов">+</button>
+							</div>
+							{value.teeth_hint && <p class="calc__hint" set:html={t(value.teeth_hint)} />}
+						</fieldset>
+
+						<fieldset class="calc__group">
+							<legend>Имплантат</legend>
+							{site.implants.map((implant) => (
+								<label class="opt">
+									<input type="radio" name="implant" value={implant.key} checked={implant.key === featured.key} />
+									<span class="opt__body">
+										<span class="opt__name">{implant.name}</span>
+										<span class="opt__meta">
+											{[implant.countryShort, implant.life ? `срок службы ${years(implant.life)}` : ""].filter(Boolean).join(" · ")}
+										</span>
+										<span class="opt__price">{money(implant.implant)}</span>
+									</span>
+								</label>
+							))}
+						</fieldset>
+
+						<fieldset class="calc__group calc__group--checks">
+							<legend>Если нужно</legend>
+							<label class="check">
+								<input type="checkbox" name="extraction" />
+								<span>
+									<Fragment set:html={t(value.extraction_label || "Зуб ещё на месте — удалим")} />{" "}
+									<small set:html={site.extraction > 0 ? t(`+${money(site.extraction)} за зуб`) : "бесплатно"} />
+								</span>
+							</label>
+							<label class="check">
+								<input type="checkbox" name="immediate" />
+								<span>
+									<Fragment set:html={t(value.immediate_label || "Поставить имплант сразу после удаления, за один визит")} />{" "}
+									<small set:html={t(`+${money(site.immediate)} за зуб`)} />
+								</span>
+							</label>
+						</fieldset>
+					</form>
+
+					<div class="calc__out">
+						<div class="spec">
+							<p class="spec__title" id={`${tid}-spec`}>Спецификация</p>
+							<table class="spec__table" aria-labelledby={`${tid}-spec`}>
+								<thead>
+									<tr><th scope="col">Поз.</th><th scope="col">Наименование</th><th scope="col">Кол.</th><th scope="col">Сумма, ₽</th></tr>
+								</thead>
+								<tbody data-spec-rows>
+									{rows.map((row, i) => (
+										<tr><td>{i + 1}</td><td>{row.name}</td><td>1</td><td>{group(row.sum)}</td></tr>
+									))}
+								</tbody>
+							</table>
+							<div class="spec__total">
+								<span class="spec__total-label">Итого под ключ</span>
+								<span class="spec__total-sum">
+									<output class="num" data-total aria-live="polite">{money(total)}</output>
+									<svg class="pencil" viewBox="0 0 200 70" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 41C1 20 48 5 104 5C156 5 197 17 195 36C193 56 152 65 101 65C49 65 7 55 9 35C10 25 24 15 44 10" /></svg>
+								</span>
+							</div>
+							<ul class="spec__extra">
+								<li>
+									<Fragment set:html={t(installment ? `В рассрочку ${installment}:` : "В рассрочку:")} />{" "}
+									<b data-monthly>{`от\u00A0${money(monthly)} в\u00A0месяц`}</b>
+								</li>
+								<li>
+									Налоговый вычет вернёт <b data-refund>{`до\u00A0${money(refund)}`}</b>
+								</li>
+							</ul>
+							<div class="spec__actions">
+								{tel && <a class="btn btn--red" href={tel} data-messenger-wa hidden>Отправить расчёт в&nbsp;WhatsApp</a>}
+								{tel && <a class="btn btn--line" href={tel}>Позвонить: {site.phoneShort}</a>}
+							</div>
+							{value.fine_print && <p class="spec__fine" set:html={t(value.fine_print)} />}
+						</div>
+
+						{
+							extras.length > 0 && (
+								<div class="extras">
+									{value.extras_title && <p class="extras__title" set:html={t(value.extras_title)} />}
+									<dl class="extras__list">
+										{extras.map((row: any) => (
+											<div>
+												<dt>
+													<Fragment set:html={t(row.label)} />
+													{row.note && " "}
+													{row.note && <small set:html={t(row.note)} />}
+												</dt>
+												<dd set:html={t(row.price)} />
+											</div>
+										))}
+									</dl>
+								</div>
+							)
+						}
+					</div>
+				</div>
+			)
+		}
+	</div>
+</section>

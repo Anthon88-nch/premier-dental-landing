@@ -1,0 +1,36 @@
+---
+import { getEmDashEntry } from "emdash";
+import Base from "../layouts/Base.astro";
+import PageView from "../components/PageView.astro";
+import { pageSeo } from "../lib/seo";
+import { loadSite } from "../lib/site";
+
+const [{ entry: page, cacheHint }, site] = await Promise.all([getEmDashEntry("pages", "home"), loadSite()]);
+if (Astro.cache?.enabled) {
+	Astro.cache.set(cacheHint);
+	for (const hint of site.cacheHints) Astro.cache.set(hint as any);
+}
+const seo = pageSeo(page, site, true);
+---
+
+<Base
+	site={site}
+	{...seo}
+	content={page ? { collection: "pages", id: page.data.id, slug: page.id } : undefined}
+>
+	{
+		page ? (
+			<PageView page={page} site={site} />
+		) : (
+			<main id="main" class="section">
+				<div class="wrap">
+					<h1>Лендинг ещё не наполнен</h1>
+					<p class="section__lead">
+						Нет опубликованной страницы с адресом <b>home</b>. Откройте <a href="/_emdash/admin">админку</a> и примените
+						демо-контент или создайте страницу home в разделе «Страницы».
+					</p>
+				</div>
+			</main>
+		)
+	}
+</Base>

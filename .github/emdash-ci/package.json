@@ -1,0 +1,9 @@
+{
+  "name": "premier-emdash-ci",
+  "private": true,
+  "type": "module",
+  "description": "Проверка EmDash-версии лендинга в GitHub Actions: сайт отдаётся, правка в CMS видна на сайте, скриншоты.",
+  "dependencies": {
+    "playwright": "^1.56.0"
+  }
+}

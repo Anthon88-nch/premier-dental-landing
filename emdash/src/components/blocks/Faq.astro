@@ -1,0 +1,30 @@
+---
+// 13. Вопросы и ответы.
+import SectionHead from "../SectionHead.astro";
+import { paragraphs, rich } from "../../lib/text";
+import { anchor, list, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const items = list<Record<string, any>>(value.items).filter((item) => item?.question);
+---
+
+<section class="section" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap faq">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} />
+		<div class="faq__list">
+			{
+				items.map((item, i) => (
+					<details class="qa" open={value.open_first && i === 0}>
+						<summary set:html={t(item.question)} />
+						{paragraphs(item.answer).map((p) => (
+							<p set:html={t(p)} />
+						))}
+					</details>
+				))
+			}
+		</div>
+	</div>
+</section>

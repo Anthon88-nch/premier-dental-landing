@@ -1,0 +1,46 @@
+---
+// 9. Имплантация во сне: виды обезболивания и анестезиолог.
+import { Image } from "emdash/ui";
+import SectionHead from "../SectionHead.astro";
+import { PULSE } from "../art/svgs";
+import { plain, rich } from "../../lib/text";
+import { anchor, list, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const options = list<Record<string, any>>(value.options).filter((o) => o?.title);
+const doctor = site.doctors.find((d) => d.team === "Анестезиолог-реаниматолог");
+const book = plain(value.headline, site.tokens) || "Имплантация во сне";
+---
+
+<section class="section section--night" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<svg class="pulse" data-live viewBox="0 0 1200 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" set:html={PULSE} />
+		<ol class="calm">
+			{
+				options.map((option) => (
+					<li class="calm__item">
+						<h3 set:html={t(option.title)} />
+						{option.text && <p set:html={t(option.text)} />}
+					</li>
+				))
+			}
+		</ol>
+		<div class="duty">
+			{doctor?.photo && <Image image={doctor.photo} alt={doctor.name} class="duty__pic" sizes="120px" />}
+			<div class="duty__body">
+				{value.duty_text && <p class="duty__text" set:html={t(value.duty_text)} />}
+				{
+					doctor?.profileUrl && value.profile_label && (
+						<a class="more more--out" href={doctor.profileUrl} target="_blank" rel="noopener" set:html={t(value.profile_label)} />
+					)
+				}
+				{value.duty_note && <p class="duty__note" set:html={t(value.duty_note)} />}
+			</div>
+			{value.cta_label && <button class="btn btn--red duty__cta" type="button" data-book={book} set:html={t(value.cta_label)} />}
+		</div>
+	</div>
+</section>

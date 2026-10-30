@@ -1,0 +1,26 @@
+---
+// 12. Оценка на ПроДокторов. Цифры — в «Клинике».
+import { plain, rich, safeHref } from "../../lib/text";
+import { anchor, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const rating = plain(site.clinic.rating, site.tokens);
+const url = safeHref(site.clinic.prodoctorov_url);
+---
+
+<section class="rating" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap rating__in">
+		{rating && <p class="rating__score num" aria-hidden="true">{rating}</p>}
+		<div class="rating__copy">
+			<h2 id={tid}>
+				{rating && <span class="sr">{rating} — </span>}
+				<Fragment set:html={t(value.headline)} />
+			</h2>
+			{value.text && <p set:html={t(value.text)} />}
+		</div>
+		{url && value.button_label && <a class="btn btn--line" href={url} target="_blank" rel="noopener" set:html={t(value.button_label)} />}
+	</div>
+</section>

@@ -1,0 +1,80 @@
+---
+// 3. Варианты имплантации: карточки с ценой и мини-чертежом.
+import Mini from "../art/Mini.astro";
+import SectionHead from "../SectionHead.astro";
+import { plain, rich } from "../../lib/text";
+import { anchor, linkProps, list, titleId, type BlockProps } from "../../lib/ui";
+
+type Props = BlockProps;
+const { value, site, index } = Astro.props;
+const t = (text: unknown) => rich(text, site.tokens);
+const tid = titleId(value, index);
+const DRAWINGS: Record<string, string> = {
+	"Один имплант": "single",
+	"Удаление и имплант": "immediate",
+	"All-on-4": "allon4",
+	"All-on-6": "allon6",
+};
+
+const cards = list<Record<string, any>>(value.items)
+	.filter((item) => item?.title)
+	.map((item) => {
+		const price = plain(item.price, site.tokens);
+		const from = /^от\s/i.test(price);
+		const amount = from ? price.replace(/^от\s+/i, "") : price;
+		const title = plain(item.title, site.tokens);
+		return {
+			item,
+			price: amount,
+			from,
+			book: price ? `${title} — ${price}` : title,
+			drawing: DRAWINGS[item.drawing as string],
+			link: item.link_label ? linkProps(item.link_url, "more var__more") : null,
+			cardId: typeof item.card_id === "string" && item.card_id.trim() ? item.card_id.trim() : undefined,
+		};
+	});
+---
+
+<section class="section" id={anchor(value)} aria-labelledby={tid}>
+	<div class="wrap">
+		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<ul class="vars">
+			{
+				cards.map(({ item, price, from, book, drawing, link, cardId }) => {
+					const body = (
+						<Fragment>
+							{item.case && <p class="var__case" set:html={t(item.case)} />}
+							<h3 class="var__title" set:html={t(item.title)} />
+							{price && (
+								<p class="var__price">
+									{from && <small>от</small>}
+									{from && " "}
+									<span class="num">{price}</span>
+								</p>
+							)}
+							{item.tag && <p class:list={["var__tag", { "var__tag--ink": !item.tag_red }]} set:html={t(item.tag)} />}
+							{item.text && <p class="var__text" set:html={t(item.text)} />}
+							{item.text_strong && <p class="var__text var__text--strong" set:html={t(item.text_strong)} />}
+							{item.time && <p class="var__time" set:html={t(item.time)} />}
+							{link && <a {...link} set:html={t(item.link_label)} />}
+							{item.cta_label && (
+								<button class="btn btn--line btn--sm var__cta" type="button" data-book={book} set:html={t(item.cta_label)} />
+							)}
+						</Fragment>
+					);
+					return item.wide ? (
+						<li class="var var--wide" id={cardId}>
+							{drawing && <Mini kind={drawing} wide />}
+							<div class="var__body">{body}</div>
+						</li>
+					) : (
+						<li class="var" id={cardId}>
+							{drawing && <Mini kind={drawing} />}
+							{body}
+						</li>
+					);
+				})
+			}
+		</ul>
+	</div>
+</section>

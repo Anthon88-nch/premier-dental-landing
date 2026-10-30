@@ -1,0 +1,24 @@
+---
+// Мини-чертёж для карточки варианта (один имплант, удаление, All-on-4, All-on-6).
+import { MINI } from "./svgs";
+
+interface Props {
+	kind: string;
+	wide?: boolean;
+}
+
+const { kind, wide = false } = Astro.props;
+const art = MINI[kind];
+---
+
+{
+	art && (
+		<svg
+			class:list={["var__pic", { "var__pic--wide": wide }]}
+			viewBox={art.viewBox}
+			aria-hidden="true"
+			focusable="false"
+			set:html={art.inner}
+		/>
+	)
+}
