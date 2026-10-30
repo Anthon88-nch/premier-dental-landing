@@ -71,3 +71,48 @@ jobs:
           git add -A
           git -c user.name="emdash-ci" -c user.email="emdash-ci@users.noreply.github.com" commit -qm "EmDash check report for ${GITHUB_SHA}"
           git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" emdash-ci-report
+
+  # Тот же запуск на Windows — так, как его делает владелец сайта: npm ci, сборка, npm run dev.
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install site dependencies (from package-lock.json)
+        working-directory: emdash
+        run: npm ci --no-audit --no-fund 2>&1 | tee ../win-npm-install.log
+
+      - name: Build
+        working-directory: emdash
+        run: npm run build 2>&1 | tee ../win-build.log
+
+      - name: Run dev server and smoke test
+        run: |
+          cd emdash
+          npm run dev -- --port 4321 > ../win-dev.log 2>&1 &
+          cd ..
+          REPORT_DIR=win-report node .github/emdash-ci/smoke.mjs
+
+      - name: Publish report to branch emdash-ci-report-win
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p win-report
+          cp win-*.log win-report/ 2>/dev/null || true
+          { node -v; npm -v; } > win-report/versions.txt 2>&1
+          echo "${GITHUB_SHA}" > win-report/commit.txt
+          cd win-report
+          git init -q
+          git checkout -q -b emdash-ci-report-win
+          git add -A
+          git -c user.name="emdash-ci" -c user.email="emdash-ci@users.noreply.github.com" commit -qm "Windows smoke report for ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" emdash-ci-report-win

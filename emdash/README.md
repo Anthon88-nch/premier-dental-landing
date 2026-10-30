@@ -6,15 +6,19 @@
 
 ## Запуск на своём компьютере
 
-Нужен Node.js 22.16 или новее (лучше 24 LTS): https://nodejs.org
+Нужны Node.js 22.16 или новее (лучше 24 LTS, https://nodejs.org) и git. Проверка: `node -v`.
 
-```bash
-git fetch origin
-git switch emdash          # ветка с EmDash-версией
-cd emdash
-npm install                # 1–3 минуты при первом запуске
+Отдельная папка, чтобы не трогать рабочую копию основного сайта (Windows, PowerShell):
+
+```powershell
+cd D:\Work
+git clone -b emdash https://github.com/Anthon88-nch/premier-dental-landing.git Premier-emdash
+cd Premier-emdash\emdash
+npm install
 npm run dev
 ```
+
+`npm install` при первом запуске идёт 1–3 минуты. `npm run dev` запускает сайт и должен работать всё время, пока вы смотрите: окно терминала не закрывать. Готово, когда в нём появилась строка `Local http://localhost:4321/`. Остановить — Ctrl+C.
 
 Без git: скачать архив ветки https://github.com/Anthon88-nch/premier-dental-landing/archive/refs/heads/emdash.zip, распаковать, открыть папку `emdash` в терминале и выполнить `npm install` и `npm run dev`.
 
@@ -27,6 +31,13 @@ npm run dev
 Фото врачей и лаборатории при первой загрузке скачиваются с GitHub Pages (`anthon88-nch.github.io/premier-dental-landing/assets/…`), нужен интернет.
 
 Начать с нуля: остановить `npm run dev` (Ctrl+C), удалить `data.db` и папку `uploads`, запустить снова.
+
+### Если не открывается
+
+- «Не удаётся получить доступ к сайту» — сайт не запущен: нет окна с работающим `npm run dev` или оно закрыто.
+- Порт 4321 занят — Astro возьмёт следующий (4322 …), точный адрес написан в терминале после `Local`.
+- `node` или `npm` «не является внутренней или внешней командой» — не установлен Node.js; после установки открыть новое окно терминала.
+- Первое открытие админки может занять 10–30 секунд: Vite собирает её при первом запросе.
 
 ## Где что править
 
