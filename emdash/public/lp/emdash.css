@@ -9,3 +9,7 @@
 .prose ul, .prose ol { padding-left: 1.3em; }
 .prose a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 .prose img { max-width: 100%; height: auto; }
+/* 320–379px: длинное «Набережночелнинском» не помещается рядом с фото — ставим фото над текстом */
+@media (max-width: 379px) {
+  .person { grid-template-columns: minmax(0, 1fr); }
+}

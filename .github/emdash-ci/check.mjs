@@ -102,6 +102,11 @@ async function main() {
   check('noindex для черновика', /<meta[^>]+name="robots"[^>]+noindex|<meta[^>]+noindex[^>]+name="robots"/.test(html));
   check('секций на странице ≥ 14', (html.match(/<section\b/g) || []).length >= 14, (html.match(/<section\b/g) || []).length);
 
+  const homeAlias = await fetch(`${BASE}/home`, { redirect: 'manual' });
+  check('/home ведёт на главную (301)', homeAlias.status === 301 && homeAlias.headers.get('location')?.endsWith('/'), `HTTP ${homeAlias.status} → ${homeAlias.headers.get('location')}`);
+  const missing = await fetch(`${BASE}/net-takoy-stranicy`);
+  check('несуществующая страница — 404', missing.status === 404, `HTTP ${missing.status}`);
+
   // Браузер: скриншоты, калькулятор, окно записи, ширина на телефоне.
   const browser = await chromium.launch();
   const problems = [];
@@ -117,6 +122,16 @@ async function main() {
       window.scrollTo(0, 0);
       document.querySelectorAll('.sheet, [data-live]').forEach(el => el.classList.add('is-live'));
     });
+    await page.evaluate(async () => {
+      document.querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
+      await Promise.all([...document.images].map(img => img.complete ? null : new Promise(done => {
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+        setTimeout(done, 20000);
+      })));
+    });
+    const broken = await page.evaluate(() => [...document.images].filter(img => !img.naturalWidth).map(img => img.currentSrc || img.src));
+    check(`все картинки загрузились (${label}px)`, broken.length === 0, broken.slice(0, 3).join(' '));
     await page.waitForTimeout(3200);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     check(`нет горизонтальной прокрутки (${label}px)`, overflow <= 0, `лишние ${overflow}px`);
@@ -183,8 +198,13 @@ async function main() {
 
   // Админка: вход через dev-bypass, скриншоты разделов.
   const admin = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1, locale: 'ru-RU' });
+  const dismissWelcome = async () => {
+    const button = admin.getByRole('button', { name: /^(Начать|Get started)$/ });
+    if (await button.count()) { await button.first().click().catch(() => {}); await admin.waitForTimeout(600); }
+  };
   await admin.goto(`${BASE}/_emdash/api/auth/dev-bypass?redirect=/_emdash/admin`, { waitUntil: 'networkidle' });
   await admin.waitForTimeout(2500);
+  await dismissWelcome();
   await admin.screenshot({ path: join(OUT, 'admin-dashboard.png') });
   const pagesList = cli(['content', 'list', 'pages']);
   writeFileSync(join(OUT, 'cli-list-pages.json'), pagesList.stdout + pagesList.stderr);
@@ -206,6 +226,7 @@ async function main() {
     if (!path) { check(`админка: ${name}`, false, 'нет id записи'); continue; }
     const res = await admin.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
     await admin.waitForTimeout(2500);
+    await dismissWelcome();
     check(`админка: ${name}`, res && res.status() < 400, `HTTP ${res?.status()}`);
     await admin.screenshot({ path: join(OUT, `${name}.png`), fullPage: name.endsWith('editor') });
   }

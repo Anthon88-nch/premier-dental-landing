@@ -1443,8 +1443,7 @@
       "admin": {
         "listColumns": [
           "implant_price",
-          "service_life",
-          "featured"
+          "service_life"
         ]
       },
       "labelSingular": "Имплант",
