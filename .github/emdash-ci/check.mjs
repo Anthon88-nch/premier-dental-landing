@@ -130,13 +130,30 @@ async function main() {
         setTimeout(done, 20000);
       })));
     });
-    const broken = await page.evaluate(() => [...document.images].filter(img => !img.naturalWidth).map(img => img.currentSrc || img.src));
+    // Полностраничный снимок рисует только уже декодированные картинки — декодируем и прокручиваем ещё раз
+    await page.evaluate(async () => {
+      await Promise.all([...document.images].map(img => img.decode().catch(() => {})));
+      for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 120)); }
+      window.scrollTo(0, 0);
+    });
+    const images = await page.evaluate(() => [...document.images].map(img => ({
+      alt: img.alt, src: img.currentSrc || img.src, natural: `${img.naturalWidth}x${img.naturalHeight}`,
+      box: `${Math.round(img.getBoundingClientRect().width)}x${Math.round(img.getBoundingClientRect().height)}`,
+    })));
+    writeFileSync(join(OUT, `images-${label}.json`), JSON.stringify(images, null, 2));
+    const broken = images.filter(img => img.natural.startsWith('0x')).map(img => img.src);
     check(`все картинки загрузились (${label}px)`, broken.length === 0, broken.slice(0, 3).join(' '));
     await page.waitForTimeout(3200);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     check(`нет горизонтальной прокрутки (${label}px)`, overflow <= 0, `лишние ${overflow}px`);
     await page.screenshot({ path: join(OUT, `site-${label}.jpg`), fullPage: true, type: 'jpeg', quality: 72 });
     await page.screenshot({ path: join(OUT, `site-${label}-first-screen.png`), fullPage: false });
+    const crew = page.locator('.crew').first();
+    if (await crew.count()) {
+      await crew.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(800);
+      await crew.screenshot({ path: join(OUT, `team-${label}.png`) });
+    }
 
     if (label === '390') {
       for (const w of [360, 320]) {
