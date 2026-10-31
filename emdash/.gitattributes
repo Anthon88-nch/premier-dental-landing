@@ -1,0 +1,2 @@
+# Батники Windows храним с CRLF как есть
+*.cmd -text

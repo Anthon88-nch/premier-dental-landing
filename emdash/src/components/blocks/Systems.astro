@@ -2,12 +2,14 @@
 // 5. Сравнение систем имплантов — карточки из коллекции «Импланты».
 import Flag from "../art/Flag.astro";
 import SectionHead from "../SectionHead.astro";
+import { adminLink, blockEditor, implantEdit, infoEdit, TURNKEY_INFO } from "../../lib/edit";
 import { money, plural, rich } from "../../lib/text";
 import { anchor, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
 const lifeMax = Math.max(1, Number(value.life_max) || Math.max(1, ...site.implants.map((i) => i.life)));
 const years = (n: number) => `${n}\u00A0${plural(n, "год", "года", "лет")}`;
@@ -16,32 +18,32 @@ const ctaPrefix = typeof value.cta_prefix === "string" && value.cta_prefix.trim(
 
 <section class="section" id={anchor(value)} aria-labelledby={tid}>
 	<div class="wrap">
-		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<SectionHead site={site} edit={e} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
 		<ul class="systems">
 			{
 				site.implants.map((implant) => (
 					<li class="sys">
 						{implant.country && (
-							<p class="sys__country">
+							<p class="sys__country" {...adminLink(site, `/_emdash/admin/content/implants/${implant.id}`, "Страна выбирается в админке: Импланты")}>
 								<Flag country={implant.country} />
 								{implant.country}
 							</p>
 						)}
-						<h3 class="sys__name">{implant.name}</h3>
+						<h3 class="sys__name" {...implantEdit(site, implant, "name", { reload: true })}>{implant.name}</h3>
 						<dl class="sys__prices">
 							<div>
 								<dt>Имплантат</dt>
-								<dd>{money(implant.implant)}</dd>
+								<dd {...implantEdit(site, implant, "implant_price", { t: "int", reload: true })}>{money(implant.implant)}</dd>
 							</div>
 							<div>
 								<dt>Зуб под ключ</dt>
-								<dd>{implant.priceFrom ? `от\u00A0${money(implant.turnkey)}` : money(implant.turnkey)}</dd>
+								<dd {...infoEdit(site, TURNKEY_INFO)}>{implant.priceFrom ? `от\u00A0${money(implant.turnkey)}` : money(implant.turnkey)}</dd>
 							</div>
 						</dl>
 						{implant.life > 0 && (
 							<div class="sys__life">
 								<p class="sys__life-head">
-									<span>Срок службы</span> <b>{years(implant.life)}</b>
+									<span>Срок службы</span> <b {...implantEdit(site, implant, "service_life", { t: "int", reload: true })}>{years(implant.life)}</b>
 								</p>
 								<div class="meter meter--ink meter--ticks" aria-hidden="true">
 									<span class="meter__fill" style={`width:${Math.min(100, (implant.life / lifeMax) * 100).toFixed(2)}%`} />
@@ -52,12 +54,12 @@ const ctaPrefix = typeof value.cta_prefix === "string" && value.cta_prefix.trim(
 								</p>
 							</div>
 						)}
-						{implant.note && <p class="sys__note" set:html={t(implant.note)} />}
-						<a class="btn btn--line btn--sm sys__cta" href="#smeta" data-pick-implant={implant.key} set:html={t(`${ctaPrefix} ${implant.name}`)} />
+						{implant.note && <p class="sys__note" {...implantEdit(site, implant, "note")} set:html={t(implant.note)} />}
+						<a class="btn btn--line btn--sm sys__cta" href="#smeta" data-pick-implant={implant.key} {...e(["cta_prefix"], { reload: true })} set:html={t(`${ctaPrefix} ${implant.name}`)} />
 					</li>
 				))
 			}
 		</ul>
-		{value.foot_note && <p class="sys__foot" set:html={t(value.foot_note)} />}
+		{value.foot_note && <p class="sys__foot" {...e(["foot_note"], { t: "text" })} set:html={t(value.foot_note)} />}
 	</div>
 </section>

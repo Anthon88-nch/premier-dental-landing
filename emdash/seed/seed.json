@@ -29,7 +29,7 @@
             },
             {
               "slug": "title_line",
-              "label": "Заголовок: первая строка (вторая строка — цена основного импланта под ключ)",
+              "label": "Заголовок (цена под ним считается сама)",
               "type": "string",
               "required": true
             },
@@ -40,22 +40,22 @@
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
               "slug": "cta_label",
-              "label": "Главная кнопка: текст (открывает запись)",
+              "label": "Кнопка записи",
               "type": "string"
             },
             {
               "slug": "cta2_label",
-              "label": "Вторая кнопка: текст",
+              "label": "Вторая кнопка",
               "type": "string"
             },
             {
               "slug": "cta2_url",
-              "label": "Вторая кнопка: адрес",
+              "label": "Вторая кнопка: ссылка",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
@@ -80,7 +80,7 @@
                   },
                   {
                     "slug": "url",
-                    "label": "Ссылка (необязательно)",
+                    "label": "Ссылка",
                     "type": "string",
                     "validation": {
                       "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
@@ -92,7 +92,7 @@
             },
             {
               "slug": "drawing_crown_note",
-              "label": "Чертёж: пометка у коронки (красным)",
+              "label": "Пометка у коронки на чертеже",
               "type": "string"
             }
           ]
@@ -111,7 +111,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #pochemu (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -124,13 +124,13 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
@@ -185,7 +185,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #varianty (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -198,13 +198,13 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
@@ -227,7 +227,7 @@
                   },
                   {
                     "slug": "case",
-                    "label": "Кому подходит (мелкая строка сверху)",
+                    "label": "Кому подходит",
                     "type": "string"
                   },
                   {
@@ -238,17 +238,17 @@
                   },
                   {
                     "slug": "price",
-                    "label": "Цена: {зуб}, {одномоментная}, от {all-on-4} или своя («от 300 000 ₽»); пусто — без цены",
+                    "label": "Цена",
                     "type": "string"
                   },
                   {
                     "slug": "tag",
-                    "label": "Пометка под ценой",
+                    "label": "Пометка",
                     "type": "string"
                   },
                   {
                     "slug": "tag_red",
-                    "label": "Пометка красным с подчёркиванием",
+                    "label": "Пометка красным",
                     "type": "boolean"
                   },
                   {
@@ -258,12 +258,12 @@
                   },
                   {
                     "slug": "text_strong",
-                    "label": "Выделенная строка (жирным)",
+                    "label": "Жирная строка",
                     "type": "text"
                   },
                   {
                     "slug": "time",
-                    "label": "Срок (курсивом внизу)",
+                    "label": "Срок",
                     "type": "string"
                   },
                   {
@@ -281,17 +281,17 @@
                   },
                   {
                     "slug": "cta_label",
-                    "label": "Кнопка записи: текст",
+                    "label": "Кнопка записи",
                     "type": "string"
                   },
                   {
                     "slug": "wide",
-                    "label": "Широкая карточка на всю строку",
+                    "label": "Широкая карточка",
                     "type": "boolean"
                   },
                   {
                     "slug": "card_id",
-                    "label": "ID карточки для ссылок (латиница, например all-on-6)",
+                    "label": "Якорь карточки (латиницей)",
                     "type": "string",
                     "validation": {
                       "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -319,7 +319,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #somneniya (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -332,13 +332,13 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
@@ -349,7 +349,7 @@
                 "subFields": [
                   {
                     "slug": "percent",
-                    "label": "Доля, % (например 30.7)",
+                    "label": "Доля, %",
                     "type": "number"
                   },
                   {
@@ -360,7 +360,7 @@
                   },
                   {
                     "slug": "answer",
-                    "label": "Ответ клиники",
+                    "label": "Ответ",
                     "type": "text"
                   },
                   {
@@ -384,7 +384,7 @@
             },
             {
               "slug": "source_note",
-              "label": "Подпись-источник под блоком",
+              "label": "Источник",
               "type": "string"
             }
           ]
@@ -403,7 +403,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #sistemy (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -416,18 +416,18 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*курсив*; {цены-тыс} — цены имплантов в тысячах)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
               "slug": "life_max",
-              "label": "Шкала срока службы: максимум, лет",
+              "label": "Шкала срока службы, лет",
               "type": "integer",
               "validation": {
                 "min": 1,
@@ -436,12 +436,12 @@
             },
             {
               "slug": "cta_prefix",
-              "label": "Кнопка: начало текста («Посчитать с» + название)",
+              "label": "Кнопка (перед названием импланта)",
               "type": "string"
             },
             {
               "slug": "foot_note",
-              "label": "Примечание под карточками",
+              "label": "Примечание",
               "type": "text"
             }
           ]
@@ -460,7 +460,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #cena (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -473,18 +473,18 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
               "slug": "max_teeth",
-              "label": "Сколько зубов можно выбрать максимум",
+              "label": "Максимум зубов",
               "type": "integer",
               "validation": {
                 "min": 1,
@@ -493,17 +493,17 @@
             },
             {
               "slug": "teeth_hint",
-              "label": "Подсказка под выбором количества ([текст](#якорь) — ссылка)",
+              "label": "Подсказка под количеством",
               "type": "string"
             },
             {
               "slug": "extraction_label",
-              "label": "Галочка «удаление»: текст",
+              "label": "Галочка «удаление»",
               "type": "string"
             },
             {
               "slug": "immediate_label",
-              "label": "Галочка «одномоментно»: текст",
+              "label": "Галочка «одномоментно»",
               "type": "string"
             },
             {
@@ -513,7 +513,7 @@
             },
             {
               "slug": "extras_title",
-              "label": "Заголовок списка доп. услуг (список — в «Клинике»)",
+              "label": "Заголовок доп. услуг",
               "type": "string"
             }
           ]
@@ -532,7 +532,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #laboratoriya (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -545,18 +545,18 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
               "slug": "price_label",
-              "label": "Подпись к цене коронки (цена — в «Клинике»)",
+              "label": "Подпись к цене коронки",
               "type": "string"
             },
             {
@@ -573,12 +573,12 @@
                   },
                   {
                     "slug": "caption",
-                    "label": "Подпись на фото",
+                    "label": "Подпись",
                     "type": "string"
                   },
                   {
                     "slug": "tall",
-                    "label": "Вертикальное фото (показать середину)",
+                    "label": "Вертикальное фото",
                     "type": "boolean"
                   }
                 ],
@@ -587,7 +587,7 @@
             },
             {
               "slug": "video_url",
-              "label": "Видео: адрес файла (например /assets/lab-work.mp4)",
+              "label": "Видео: файл",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
@@ -595,7 +595,7 @@
             },
             {
               "slug": "video_poster_url",
-              "label": "Видео: обложка (адрес картинки)",
+              "label": "Видео: обложка",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
@@ -622,7 +622,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #vrachi (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -635,13 +635,13 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
@@ -651,12 +651,12 @@
             },
             {
               "slug": "profile_label",
-              "label": "Текст ссылки на профиль в карточке врача",
+              "label": "Ссылка на профиль (карточки)",
               "type": "string"
             },
             {
               "slug": "person_profile_label",
-              "label": "Текст ссылки на профиль у техника и анестезиолога",
+              "label": "Ссылка на профиль (техник, анестезиолог)",
               "type": "string"
             }
           ]
@@ -675,7 +675,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #son (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -688,13 +688,13 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
@@ -722,7 +722,7 @@
             },
             {
               "slug": "duty_text",
-              "label": "Текст про анестезиолога (**жирный**)",
+              "label": "Текст про анестезиолога",
               "type": "text"
             },
             {
@@ -732,12 +732,12 @@
             },
             {
               "slug": "profile_label",
-              "label": "Текст ссылки на профиль",
+              "label": "Ссылка на профиль",
               "type": "string"
             },
             {
               "slug": "cta_label",
-              "label": "Кнопка записи: текст",
+              "label": "Кнопка записи",
               "type": "string"
             }
           ]
@@ -756,7 +756,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #etapy (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -769,18 +769,18 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
               "slug": "video_url",
-              "label": "Видео о лечении: адрес файла (пусто — заглушка)",
+              "label": "Видео: файл (пусто — заглушка)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
@@ -788,7 +788,7 @@
             },
             {
               "slug": "video_poster_url",
-              "label": "Видео: обложка (адрес картинки)",
+              "label": "Видео: обложка",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|(?:https?://|mailto:|tel:|/(?!/)|#).+)$"
@@ -801,7 +801,7 @@
             },
             {
               "slug": "video_placeholder",
-              "label": "Текст заглушки, пока видео нет",
+              "label": "Текст заглушки",
               "type": "string"
             },
             {
@@ -848,7 +848,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #garantii (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -861,7 +861,7 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
@@ -873,7 +873,7 @@
                 "subFields": [
                   {
                     "slug": "label",
-                    "label": "Номер (мелко сверху)",
+                    "label": "Номер",
                     "type": "string"
                   },
                   {
@@ -889,7 +889,7 @@
                   },
                   {
                     "slug": "stamp",
-                    "label": "Поставить печать и показать условия гарантии",
+                    "label": "Печать и условия гарантии",
                     "type": "boolean"
                   }
                 ],
@@ -900,27 +900,27 @@
             },
             {
               "slug": "terms_title",
-              "label": "Условия гарантии: заголовок раскрывашки",
+              "label": "Условия: заголовок",
               "type": "string"
             },
             {
               "slug": "terms_intro",
-              "label": "Условия гарантии: вступление",
+              "label": "Условия: вступление",
               "type": "text"
             },
             {
               "slug": "terms",
-              "label": "Условия гарантии: пункты (каждый с новой строки)",
+              "label": "Условия: пункты (с новой строки)",
               "type": "text"
             },
             {
               "slug": "stamp_title",
-              "label": "Печать: верхняя строка",
+              "label": "Печать: верх",
               "type": "string"
             },
             {
               "slug": "stamp_value",
-              "label": "Печать: крупная строка",
+              "label": "Печать: низ",
               "type": "string"
             }
           ]
@@ -939,7 +939,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #otzyvy (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -947,18 +947,18 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок ({отзывы} — число отзывов)",
+              "label": "Заголовок",
               "type": "string",
               "required": true
             },
             {
               "slug": "text",
-              "label": "Текст ({дата-рейтинга} — дата проверки)",
+              "label": "Текст",
               "type": "text"
             },
             {
               "slug": "button_label",
-              "label": "Кнопка: текст",
+              "label": "Кнопка",
               "type": "string"
             }
           ]
@@ -977,7 +977,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #voprosy (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -990,7 +990,7 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
@@ -1039,7 +1039,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #kontakty (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -1052,18 +1052,18 @@
             },
             {
               "slug": "headline",
-              "label": "Заголовок (*слова в звёздочках* — курсивом)",
+              "label": "Заголовок (*курсив*)",
               "type": "string",
               "required": true
             },
             {
               "slug": "lead",
-              "label": "Подзаголовок (цены подставятся сами: {зуб} {имплант} {коронка} {одномоментная} {консультация})",
+              "label": "Подзаголовок",
               "type": "text"
             },
             {
               "slug": "button_label",
-              "label": "Кнопка записи: текст",
+              "label": "Кнопка записи",
               "type": "string"
             }
           ]
@@ -1082,7 +1082,7 @@
           "fields": [
             {
               "slug": "anchor_id",
-              "label": "ID секции для ссылок вида #tekst (латиница)",
+              "label": "Якорь для ссылок (латиницей)",
               "type": "string",
               "validation": {
                 "pattern": "^(?:$|[a-z][a-z0-9_-]*)$"
@@ -1126,7 +1126,7 @@
       "fields": [
         {
           "slug": "title",
-          "label": "Название (для списка в админке)",
+          "label": "Название",
           "type": "string",
           "required": true
         },
@@ -1159,13 +1159,13 @@
     },
     {
       "slug": "clinic",
-      "label": "Клиника: контакты и цены",
+      "label": "Клиника",
       "icon": "first-aid-kit",
       "admin": {
         "quickCreate": false
       },
-      "labelSingular": "Настройки клиники",
-      "description": "Одна запись с адресом main: контакты, реквизиты и цены для всего сайта.",
+      "labelSingular": "Клиника",
+      "description": "Контакты, цены и реквизиты — одна запись на весь сайт.",
       "sortOrder": 2,
       "supports": [
         "drafts",
@@ -1174,7 +1174,7 @@
       "fields": [
         {
           "slug": "title",
-          "label": "Название записи",
+          "label": "Название",
           "type": "string",
           "required": true
         },
@@ -1186,13 +1186,13 @@
         },
         {
           "slug": "phone_display",
-          "label": "Телефон, как показывать",
+          "label": "Телефон на сайте",
           "type": "string",
           "required": true
         },
         {
           "slug": "phone_tel",
-          "label": "Телефон для звонка (+7…, без пробелов)",
+          "label": "Телефон для звонка (+7…)",
           "type": "string",
           "required": true,
           "validation": {
@@ -1206,12 +1206,12 @@
         },
         {
           "slug": "map_url",
-          "label": "Ссылка «Построить маршрут»",
+          "label": "Ссылка на карту",
           "type": "url"
         },
         {
           "slug": "hours",
-          "label": "Часы работы (каждая строка — отдельно)",
+          "label": "Часы работы",
           "type": "text",
           "options": {
             "rows": 3
@@ -1219,22 +1219,22 @@
         },
         {
           "slug": "whatsapp_url",
-          "label": "WhatsApp: ссылка (https://wa.me/…)",
+          "label": "WhatsApp",
           "type": "url"
         },
         {
           "slug": "telegram_url",
-          "label": "Telegram: ссылка",
+          "label": "Telegram",
           "type": "url"
         },
         {
           "slug": "max_url",
-          "label": "MAX: ссылка",
+          "label": "MAX",
           "type": "url"
         },
         {
           "slug": "booking_text",
-          "label": "Текст в окне записи ({консультация} — цена)",
+          "label": "Текст в окне записи",
           "type": "text",
           "options": {
             "rows": 2
@@ -1242,7 +1242,7 @@
         },
         {
           "slug": "crown_price",
-          "label": "Цена: коронка на имплант, ₽",
+          "label": "Коронка, ₽",
           "type": "integer",
           "required": true,
           "validation": {
@@ -1251,7 +1251,7 @@
         },
         {
           "slug": "immediate_extra",
-          "label": "Цена: доплата за одномоментную установку, ₽",
+          "label": "Доплата за одномоментную установку, ₽",
           "type": "integer",
           "validation": {
             "min": 0
@@ -1259,7 +1259,7 @@
         },
         {
           "slug": "extraction_price",
-          "label": "Цена: удаление зуба при имплантации, ₽ (0 — бесплатно)",
+          "label": "Удаление зуба, ₽ (0 — бесплатно)",
           "type": "integer",
           "validation": {
             "min": 0
@@ -1267,7 +1267,7 @@
         },
         {
           "slug": "consultation_price",
-          "label": "Цена: консультация хирурга-имплантолога, ₽",
+          "label": "Консультация, ₽",
           "type": "integer",
           "validation": {
             "min": 0
@@ -1275,7 +1275,7 @@
         },
         {
           "slug": "allon4_from",
-          "label": "Цена: All-on-4 «от», ₽ за челюсть",
+          "label": "All-on-4 от, ₽",
           "type": "integer",
           "validation": {
             "min": 0
@@ -1283,12 +1283,12 @@
         },
         {
           "slug": "installment_text",
-          "label": "Рассрочка: условия коротко (например «0% на 12 месяцев»)",
+          "label": "Рассрочка: условия",
           "type": "string"
         },
         {
           "slug": "installment_months",
-          "label": "Рассрочка: число месяцев для расчёта платежа",
+          "label": "Рассрочка: месяцев",
           "type": "integer",
           "validation": {
             "min": 1,
@@ -1297,7 +1297,7 @@
         },
         {
           "slug": "tax_refund_cap",
-          "label": "Налоговый вычет: максимум возврата за год, ₽",
+          "label": "Налоговый вычет: максимум, ₽",
           "type": "integer",
           "validation": {
             "min": 0
@@ -1305,7 +1305,7 @@
         },
         {
           "slug": "extras",
-          "label": "Доп. услуги в калькуляторе («Отдельно и только если нужно»)",
+          "label": "Доп. услуги в смете",
           "type": "repeater",
           "validation": {
             "subFields": [
@@ -1317,12 +1317,12 @@
               },
               {
                 "slug": "note",
-                "label": "Пояснение мелко",
+                "label": "Пояснение",
                 "type": "string"
               },
               {
                 "slug": "price",
-                "label": "Цена текстом ({консультация} или «от 500 ₽»)",
+                "label": "Цена",
                 "type": "string"
               }
             ],
@@ -1331,17 +1331,17 @@
         },
         {
           "slug": "prodoctorov_url",
-          "label": "ПроДокторов: профиль клиники",
+          "label": "ПроДокторов: ссылка",
           "type": "url"
         },
         {
           "slug": "rating",
-          "label": "ПроДокторов: оценка (например 5,0)",
+          "label": "ПроДокторов: оценка",
           "type": "string"
         },
         {
           "slug": "reviews_count",
-          "label": "ПроДокторов: число отзывов",
+          "label": "ПроДокторов: отзывов",
           "type": "integer",
           "validation": {
             "min": 0
@@ -1349,12 +1349,12 @@
         },
         {
           "slug": "rating_date",
-          "label": "ПроДокторов: дата проверки",
+          "label": "ПроДокторов: дата",
           "type": "string"
         },
         {
           "slug": "main_site_url",
-          "label": "Ссылка «Все услуги клиники» в подвале",
+          "label": "Ссылка «Все услуги клиники»",
           "type": "url"
         },
         {
@@ -1379,12 +1379,12 @@
         },
         {
           "slug": "warning",
-          "label": "Предупреждение в подвале",
+          "label": "Предупреждение",
           "type": "string"
         },
         {
           "slug": "disclaimer",
-          "label": "Оговорка в подвале",
+          "label": "Оговорка",
           "type": "text",
           "options": {
             "rows": 2
@@ -1392,7 +1392,7 @@
         },
         {
           "slug": "metrika_id",
-          "label": "Яндекс Метрика: номер счётчика",
+          "label": "Метрика: номер счётчика",
           "type": "string",
           "validation": {
             "pattern": "^(?:$|[0-9]{4,12})$"
@@ -1400,22 +1400,22 @@
         },
         {
           "slug": "metrika_on",
-          "label": "Яндекс Метрика: включить (работает только на https-домене, не на localhost)",
+          "label": "Метрика: включить (только на боевом домене)",
           "type": "boolean"
         },
         {
           "slug": "noindex",
-          "label": "Скрыть сайт от поисковиков (noindex)",
+          "label": "Скрыть от поисковиков",
           "type": "boolean"
         },
         {
           "slug": "seo_title",
-          "label": "SEO главной: заголовок окна и поиска (токены работают)",
+          "label": "SEO: заголовок",
           "type": "string"
         },
         {
           "slug": "seo_description",
-          "label": "SEO главной: описание для поиска",
+          "label": "SEO: описание",
           "type": "text",
           "options": {
             "rows": 3
@@ -1423,12 +1423,12 @@
         },
         {
           "slug": "og_title",
-          "label": "SEO главной: заголовок при отправке ссылки в мессенджер",
+          "label": "Превью ссылки: заголовок",
           "type": "string"
         },
         {
           "slug": "og_description",
-          "label": "SEO главной: описание при отправке ссылки",
+          "label": "Превью ссылки: описание",
           "type": "text",
           "options": {
             "rows": 2
@@ -1457,13 +1457,13 @@
       "fields": [
         {
           "slug": "name",
-          "label": "Название системы",
+          "label": "Название",
           "type": "string",
           "required": true
         },
         {
           "slug": "country",
-          "label": "Страна (для флажка)",
+          "label": "Страна",
           "type": "select",
           "validation": {
             "options": [
@@ -1479,7 +1479,7 @@
         },
         {
           "slug": "implant_price",
-          "label": "Цена имплантата, ₽",
+          "label": "Имплантат, ₽",
           "type": "integer",
           "required": true,
           "validation": {
@@ -1506,22 +1506,22 @@
         },
         {
           "slug": "note",
-          "label": "Кому подходит (курсивом)",
+          "label": "Кому подходит",
           "type": "string"
         },
         {
           "slug": "featured",
-          "label": "Основной имплант: его цена — «зуб под ключ» в первом экране и {зуб}",
+          "label": "Основной (его цена — в первом экране)",
           "type": "boolean"
         },
         {
           "slug": "price_from",
-          "label": "Писать «от» перед ценой зуба под ключ",
+          "label": "«от» перед ценой под ключ",
           "type": "boolean"
         },
         {
           "slug": "sort_order",
-          "label": "Порядок показа",
+          "label": "Порядок",
           "type": "integer"
         }
       ]
@@ -1547,7 +1547,7 @@
       "fields": [
         {
           "slug": "name",
-          "label": "ФИО (фамилия — первым словом)",
+          "label": "ФИО",
           "type": "string",
           "required": true
         },
@@ -1567,17 +1567,17 @@
         },
         {
           "slug": "role",
-          "label": "Специальность (курсивом)",
+          "label": "Специальность",
           "type": "string"
         },
         {
           "slug": "experience",
-          "label": "Опыт (например «Опыт более 8 лет»)",
+          "label": "Опыт",
           "type": "string"
         },
         {
           "slug": "bio",
-          "label": "Описание (для техника и анестезиолога)",
+          "label": "Описание",
           "type": "text",
           "options": {
             "rows": 3
@@ -1595,7 +1595,7 @@
         },
         {
           "slug": "sort_order",
-          "label": "Порядок в группе",
+          "label": "Порядок",
           "type": "integer"
         }
       ]
@@ -1646,7 +1646,7 @@
         "slug": "main",
         "status": "published",
         "data": {
-          "title": "Основные настройки",
+          "title": "Контакты и цены",
           "clinic_name": "Стоматология «Премьер»",
           "phone_display": "+7 (8552) 52-90-90",
           "phone_tel": "+78552529090",

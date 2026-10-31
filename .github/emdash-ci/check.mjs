@@ -99,6 +99,7 @@ async function main() {
   check('нет неподставленных токенов', leftovers.length === 0, leftovers.join(' '));
   check('нет «заменим бесплатно»', !/заменим бесплатно/i.test(t));
   check('калькулятор получил цены', html.includes('data-calc-data'));
+  check('посетители не видят разметку правки', !html.includes('data-pe') && !html.includes('pe-bar'));
   check('noindex для черновика', /<meta[^>]+name="robots"[^>]+noindex|<meta[^>]+noindex[^>]+name="robots"/.test(html));
   check('секций на странице ≥ 14', (html.match(/<section\b/g) || []).length >= 14, (html.match(/<section\b/g) || []).length);
 
@@ -212,6 +213,78 @@ async function main() {
   const back = cli(['content', 'update', 'implants', 'osstem', '--rev', String(findKey(item2, '_rev')), '--data', JSON.stringify({ ...edited, implant_price: 18000 })]);
   const restored = text(await (await fetch(`${BASE}/`)).text());
   check('цена возвращена: 55 500 ₽', back.status === 0 && restored.includes('Зуб на импланте за 55 500 ₽'));
+
+  // Правка прямо на странице: вошедший редактор включает «Режим редактирования» (cookie emdash-edit-mode).
+  const editorCtx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1, locale: 'ru-RU' });
+  const ed = await editorCtx.newPage();
+  const edProblems = [];
+  ed.on('pageerror', err => edProblems.push(`pageerror: ${err.message}`));
+  ed.on('console', msg => { if (msg.type() === 'error') edProblems.push(`console: ${msg.text()}`); });
+  await ed.goto(`${BASE}/_emdash/api/auth/dev-bypass?redirect=/_emdash/admin`, { waitUntil: 'networkidle' });
+  await editorCtx.addCookies([{ name: 'emdash-edit-mode', value: 'true', url: BASE }]);
+  await ed.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+  const peCount = await ed.locator('[data-pe]').count();
+  check('режим правки: редактируемых мест на странице', peCount > 60, peCount);
+  check('режим правки: плашка-подсказка видна', await ed.locator('.pe-bar').isVisible());
+  const area = ed.locator('.pe-pop textarea');
+  const clickCentered = async locator => {
+    await locator.evaluate(el => el.scrollIntoView({ block: 'center' }));
+    await ed.waitForTimeout(250);
+    await locator.click();
+  };
+  const editText = async (locator, value) => {
+    await clickCentered(locator);
+    await area.waitFor({ timeout: 5000 });
+    await area.fill(value);
+    await area.press('Enter');
+    await ed.locator('.pe-toast.is-on').waitFor({ timeout: 20000 });
+    return (await ed.locator('.pe-toast').textContent()) || '';
+  };
+  const editAndReload = async (locator, value) => {
+    await clickCentered(locator);
+    await area.waitFor({ timeout: 5000 });
+    await area.fill(value);
+    await Promise.all([ed.waitForNavigation({ waitUntil: 'networkidle', timeout: 30000 }), area.press('Enter')]);
+  };
+  try {
+    const advTitle = ed.locator('.adv__item h3').first();
+    const original = (await advTitle.getAttribute('data-pe')) ? JSON.parse(await advTitle.getAttribute('data-pe')).r : '';
+    await clickCentered(advTitle);
+    await area.waitFor({ timeout: 5000 });
+    await ed.screenshot({ path: join(OUT, 'edit-mode-1440.png') });
+    await area.fill('С 1999 года — правка на странице');
+    await area.press('Enter');
+    await ed.locator('.pe-toast.is-on').waitFor({ timeout: 20000 });
+    const toastText = (await ed.locator('.pe-toast').textContent()) || '';
+    check('правка текста: сохранено и опубликовано', /Сохранено/.test(toastText), toastText);
+    check('правка текста: на странице новый текст', ((await advTitle.textContent()) || '').replace(/[\u00A0\u202F]/g, ' ').includes('правка на странице'));
+    const anon = text(await (await fetch(`${BASE}/`)).text());
+    check('правка текста видна посетителям', anon.includes('С 1999 года — правка на странице'));
+
+    await editAndReload(ed.locator('.sys dd[data-pe]').first(), '19000');
+    const anon2 = text(await (await fetch(`${BASE}/`)).text());
+    check('правка цены на странице пересчитала «зуб под ключ»', anon2.includes('Зуб на импланте за 56 500 ₽'));
+
+    await editAndReload(ed.locator('.contact__list dd span[data-pe]').nth(1), 'Пн–Пт 09:00–21:00');
+    const anon3 = text(await (await fetch(`${BASE}/`)).text());
+    check('правка строки часов работы', anon3.includes('Пн–Пт 09:00–21:00') && anon3.includes('Сб 08:00–14:00'));
+
+    const faq = await editText(ed.locator('.qa summary span[data-pe]').nth(1), 'Чем Osstem отличается от Dentium и Astra Tech? (правка)');
+    check('правка вопроса в FAQ', /Сохранено/.test(faq), faq);
+
+    // Возвращаем как было
+    await editText(ed.locator('.adv__item h3').first(), original || 'С 1999 года');
+    await editAndReload(ed.locator('.sys dd[data-pe]').first(), '18000');
+    await editAndReload(ed.locator('.contact__list dd span[data-pe]').nth(1), 'Пн–Пт 08:00–20:00');
+    await editText(ed.locator('.qa summary span[data-pe]').nth(1), 'Чем Osstem отличается от Dentium и Astra Tech?');
+    const back = text(await (await fetch(`${BASE}/`)).text());
+    check('после отката всё как было', back.includes('Зуб на импланте за 55 500 ₽') && back.includes('Пн–Пт 08:00–20:00') && !back.includes('правка на странице'));
+  } catch (error) {
+    check('правка на странице прошла без исключений', false, error?.message || error);
+    await ed.screenshot({ path: join(OUT, 'edit-mode-error.png') }).catch(() => {});
+  }
+  check('режим правки: без ошибок в консоли', edProblems.length === 0, edProblems.slice(0, 5).join(' | '));
+  await editorCtx.close();
 
   // Админка: вход через dev-bypass, скриншоты разделов.
   const admin = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1, locale: 'ru-RU' });

@@ -1,0 +1,438 @@
+---
+// Правка прямо на странице (только в «Режиме редактирования» EmDash у вошедшего редактора).
+// Клик по тексту или цене → поле правки поверх → Enter — сохранить и опубликовать, Esc — отмена.
+// Сохраняет через API EmDash той же сессией (заголовок X-EmDash-Request), затем публикует запись.
+import type { Site } from "../lib/site";
+import { jsonForScript } from "../lib/text";
+
+interface Props {
+	site: Site;
+}
+
+const { site } = Astro.props;
+const data = jsonForScript({ tokens: site.tokens });
+---
+
+<script is:inline type="application/json" id="pe-data" set:html={data}></script>
+<div class="pe-bar" role="note">
+	<b>Режим правки.</b> Кликните на текст или цену. Enter — сохранить и опубликовать, Esc — отменить.
+	<button type="button" class="pe-bar__close" aria-label="Скрыть подсказку">×</button>
+</div>
+
+<style is:global>
+	[data-pe],
+	[data-pe-info],
+	[data-pe-open] {
+		cursor: pointer;
+		outline: 1.5px dashed transparent;
+		outline-offset: 3px;
+		border-radius: 2px;
+		transition: outline-color 0.15s;
+	}
+	[data-pe]:hover {
+		outline-color: rgba(209, 32, 35, 0.8);
+	}
+	[data-pe-info]:hover,
+	[data-pe-open]:hover {
+		outline-color: rgba(40, 55, 115, 0.55);
+	}
+	[data-pe].pe-busy {
+		opacity: 0.45;
+	}
+	.pe-pop {
+		position: absolute;
+		z-index: 2147483000;
+		box-sizing: border-box;
+		padding: 8px;
+		background: #fff;
+		border: 2px solid #d12023;
+		border-radius: 6px;
+		box-shadow: 0 10px 30px rgba(20, 27, 60, 0.28);
+		font: 500 15px/1.4 Manrope, system-ui, sans-serif;
+		color: #1b2554;
+		text-align: left;
+	}
+	.pe-pop textarea {
+		display: block;
+		width: 100%;
+		min-height: 2.2em;
+		box-sizing: border-box;
+		margin: 0;
+		padding: 6px 8px;
+		border: 1px solid #c9cde0;
+		border-radius: 4px;
+		background: #fff;
+		color: #1b2554;
+		font: inherit;
+		font-size: 16px;
+		line-height: 1.4;
+		resize: none;
+		overflow: hidden;
+	}
+	.pe-pop textarea:focus {
+		outline: 2px solid rgba(209, 32, 35, 0.35);
+		outline-offset: 0;
+	}
+	.pe-pop__hint {
+		margin-top: 6px;
+		font-size: 12.5px;
+		line-height: 1.35;
+		color: #5b6280;
+	}
+	.pe-pop__hint b {
+		color: #1b2554;
+	}
+	.pe-bar {
+		position: fixed;
+		left: 12px;
+		top: 12px;
+		z-index: 2147483000;
+		max-width: min(560px, calc(100vw - 24px));
+		padding: 9px 36px 9px 12px;
+		background: #1b2554;
+		color: #fff;
+		border-radius: 6px;
+		box-shadow: 0 6px 20px rgba(20, 27, 60, 0.3);
+		font: 500 13.5px/1.4 Manrope, system-ui, sans-serif;
+	}
+	.pe-bar[hidden] {
+		display: none;
+	}
+	.pe-bar__close {
+		position: absolute;
+		right: 6px;
+		top: 4px;
+		border: 0;
+		background: none;
+		color: #fff;
+		font-size: 20px;
+		line-height: 1;
+		cursor: pointer;
+	}
+	.pe-toast {
+		position: fixed;
+		left: 50%;
+		bottom: 84px;
+		z-index: 2147483001;
+		max-width: min(520px, calc(100vw - 24px));
+		padding: 10px 14px;
+		transform: translateX(-50%);
+		background: #1b2554;
+		color: #fff;
+		border-radius: 6px;
+		box-shadow: 0 6px 20px rgba(20, 27, 60, 0.3);
+		font: 500 14px/1.4 Manrope, system-ui, sans-serif;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 0.2s;
+	}
+	.pe-toast.is-on {
+		opacity: 1;
+	}
+	.pe-toast.is-error {
+		background: #d12023;
+	}
+</style>
+
+<script>
+	import { rich, type Tokens } from "../lib/text";
+
+	type Kind = "line" | "text" | "int" | "num";
+	interface Meta {
+		c: string;
+		id: string;
+		p: Array<string | number>;
+		t: Kind;
+		r: string;
+		ln?: number;
+		x?: 1;
+	}
+
+	const HEADERS = { "X-EmDash-Request": "1" };
+	const tokens: Tokens = (() => {
+		try {
+			return JSON.parse(document.getElementById("pe-data")?.textContent || "{}").tokens || {};
+		} catch {
+			return {};
+		}
+	})();
+
+	/* ---------- подсказка-плашка и уведомления ---------- */
+	const bar = document.querySelector<HTMLElement>(".pe-bar");
+	try {
+		if (bar && sessionStorage.getItem("pe-bar-hidden") === "1") bar.hidden = true;
+	} catch {}
+	bar?.querySelector(".pe-bar__close")?.addEventListener("click", () => {
+		bar.hidden = true;
+		try {
+			sessionStorage.setItem("pe-bar-hidden", "1");
+		} catch {}
+	});
+
+	const toastEl = document.createElement("div");
+	toastEl.className = "pe-toast";
+	toastEl.setAttribute("role", "status");
+	document.body.append(toastEl);
+	let toastTimer = 0;
+	function toast(text: string, error = false, ms = 3200) {
+		toastEl.textContent = text;
+		toastEl.classList.toggle("is-error", error);
+		toastEl.classList.add("is-on");
+		clearTimeout(toastTimer);
+		toastTimer = window.setTimeout(() => toastEl.classList.remove("is-on"), ms);
+	}
+	try {
+		const done = sessionStorage.getItem("pe-done");
+		if (done) {
+			sessionStorage.removeItem("pe-done");
+			toast(done);
+		}
+	} catch {}
+
+	/* ---------- API EmDash ---------- */
+	async function api(path: string, init: RequestInit = {}) {
+		const res = await fetch(path, {
+			credentials: "same-origin",
+			...init,
+			headers: { ...HEADERS, ...(init.headers as Record<string, string> | undefined) },
+		});
+		const body = await res.json().catch(() => null);
+		if (!res.ok || body?.success === false) {
+			if (res.status === 401 || res.status === 403) throw new Error("нужно заново войти в админку");
+			throw new Error(body?.error?.message || `ошибка ${res.status}`);
+		}
+		return body?.data;
+	}
+
+	function replaceLine(text: unknown, ln: number, value: string) {
+		const all = String(text ?? "").split(/\r?\n/);
+		const filled = all.map((line, i) => (line.trim() ? i : -1)).filter((i) => i >= 0);
+		if (ln < filled.length) all[filled[ln]] = value;
+		else all.push(value);
+		return all.filter((line) => line.trim() !== "").join("\n");
+	}
+
+	function setAt(root: any, path: Array<string | number>, value: unknown, ln?: number) {
+		const put = (current: unknown) => (ln === undefined ? value : replaceLine(current, ln, String(value)));
+		if (path.length === 0) return put(root);
+		let node = root;
+		for (let i = 0; i < path.length; i++) {
+			let key: string | number = path[i];
+			if (typeof key === "string" && key.startsWith("#")) {
+				const blockKey = key.slice(1);
+				key = Array.isArray(node) ? node.findIndex((block: any) => block?._key === blockKey) : -1;
+				if (key < 0) throw new Error("блок не найден — обновите страницу");
+			}
+			if (i === path.length - 1) {
+				node[key] = put(node[key]);
+			} else {
+				if (node[key] == null || typeof node[key] !== "object") throw new Error("поле не найдено — обновите страницу");
+				node = node[key];
+			}
+		}
+		return root;
+	}
+
+	async function save(meta: Meta, value: string | number) {
+		const base = `/_emdash/api/content/${encodeURIComponent(meta.c)}/${encodeURIComponent(meta.id)}`;
+		const got = await api(base);
+		const item = got?.item;
+		if (!item) throw new Error("запись не найдена");
+		let data = item.data || {};
+		// Есть неопубликованный черновик (правили в админке) — правим поверх него
+		if (item.draftRevisionId) {
+			const compare = await api(`${base}/compare`).catch(() => null);
+			if (compare?.hasChanges && compare.draft) data = compare.draft;
+		}
+		const field = String(meta.p[0]);
+		const next = setAt(structuredClone(data[field] ?? (meta.p.length > 1 ? {} : "")), meta.p.slice(1), value, meta.ln);
+		await api(base, {
+			method: "PUT",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ data: { [field]: next }, ...(got._rev ? { _rev: got._rev } : {}) }),
+		});
+		await api(`${base}/publish`, { method: "POST" }).catch((error: Error) => {
+			// Коллекция без черновиков сохраняет сразу — тогда публиковать нечего
+			if (!/nothing|no draft|нечего/i.test(error.message)) throw error;
+		});
+	}
+
+	/* ---------- поле правки ---------- */
+	interface Editor {
+		el: Element;
+		meta: Meta;
+		pop: HTMLElement;
+		area: HTMLTextAreaElement;
+		done?: Promise<boolean>;
+	}
+	let open: Editor | null = null;
+
+	function readMeta(el: Element): Meta | null {
+		try {
+			return JSON.parse((el as HTMLElement).dataset.pe || "");
+		} catch {
+			return null;
+		}
+	}
+
+	function hintFor(meta: Meta) {
+		const parts = ["<b>Enter</b> — сохранить и опубликовать", "<b>Esc</b> — отмена"];
+		if (meta.t === "text") parts.push("<b>Shift+Enter</b> — новая строка");
+		if (meta.t === "int" || meta.t === "num") parts.push("только число");
+		else if (/[*{[]/.test(meta.r)) parts.push("<b>*слова*</b> — курсив, <b>{зуб}</b> — цена подставится сама");
+		return parts.join(" · ");
+	}
+
+	function grow(area: HTMLTextAreaElement) {
+		area.style.height = "auto";
+		area.style.height = `${area.scrollHeight + 2}px`;
+	}
+
+	function place(pop: HTMLElement, el: Element) {
+		const rect = el.getBoundingClientRect();
+		const viewport = document.documentElement.clientWidth;
+		const width = Math.min(Math.max(rect.width + 24, 300), viewport - 16);
+		const left = Math.max(8, Math.min(rect.left - 12, viewport - width - 8));
+		pop.style.width = `${width}px`;
+		pop.style.left = `${left + window.scrollX}px`;
+		pop.style.top = `${rect.top + window.scrollY - 10}px`;
+	}
+
+	function closeEditor(editor: Editor | null = open) {
+		if (!editor) return;
+		editor.pop.remove();
+		if (open === editor) open = null;
+	}
+
+	function start(el: Element) {
+		const meta = readMeta(el);
+		if (!meta) return;
+		closeEditor();
+		const pop = document.createElement("div");
+		pop.className = "pe-pop";
+		const area = document.createElement("textarea");
+		area.value = meta.r;
+		area.rows = 1;
+		area.spellcheck = true;
+		area.lang = "ru";
+		if (meta.t === "int" || meta.t === "num") area.inputMode = "decimal";
+		const hint = document.createElement("div");
+		hint.className = "pe-pop__hint";
+		hint.innerHTML = hintFor(meta);
+		pop.append(area, hint);
+		document.body.append(pop);
+		place(pop, el);
+		grow(area);
+		area.focus();
+		area.setSelectionRange(area.value.length, area.value.length);
+		const editor: Editor = { el, meta, pop, area };
+		open = editor;
+
+		area.addEventListener("input", () => grow(area));
+		area.addEventListener("keydown", (event) => {
+			if (event.key === "Escape") {
+				event.preventDefault();
+				closeEditor(editor);
+			} else if (event.key === "Enter" && !(event.shiftKey && meta.t === "text")) {
+				event.preventDefault();
+				void commit(editor);
+			}
+		});
+		area.addEventListener("blur", () => {
+			// Ушли из поля — сохраняем, как в конструкторах сайтов
+			window.setTimeout(() => {
+				if (open === editor && document.activeElement !== area) void commit(editor);
+			}, 150);
+		});
+	}
+
+	/** Сохраняет и публикует. true — готово или нечего сохранять, false — ошибка (поле остаётся открытым). */
+	function commit(editor: Editor): Promise<boolean> {
+		if (editor.done) return editor.done;
+		editor.done = (async () => {
+			const { el, meta, area } = editor;
+			const rawValue = area.value.replace(/[\u00A0\u202F]/g, " ");
+			const text = meta.t === "text" ? rawValue.replace(/[ \t]+\n/g, "\n").trim() : rawValue.replace(/\s+/g, " ").trim();
+			if (text === meta.r.trim()) {
+				closeEditor(editor);
+				return true;
+			}
+			let value: string | number = text;
+			if (meta.t === "int" || meta.t === "num") {
+				const number = Number(text.replace(/\s/g, "").replace(",", "."));
+				if (text === "" || !Number.isFinite(number) || number < 0 || (meta.t === "int" && !Number.isInteger(number))) {
+					toast(meta.t === "int" ? "Нужно целое число, например 18000" : "Нужно число, например 30,7", true);
+					editor.done = undefined;
+					area.focus();
+					return false;
+				}
+				value = number;
+			}
+			area.disabled = true;
+			el.classList.add("pe-busy");
+			try {
+				await save(meta, value);
+				closeEditor(editor);
+				if (meta.x || meta.ln !== undefined) {
+					try {
+						sessionStorage.setItem("pe-done", "Сохранено и опубликовано");
+					} catch {}
+					location.reload();
+					return true;
+				}
+				meta.r = String(value);
+				(el as HTMLElement).dataset.pe = JSON.stringify(meta);
+				el.innerHTML = rich(meta.r, tokens);
+				toast("Сохранено и опубликовано");
+				return true;
+			} catch (error) {
+				editor.done = undefined;
+				area.disabled = false;
+				if (open === editor) area.focus();
+				toast(`Не сохранилось: ${(error as Error).message}`, true, 6000);
+				return false;
+			} finally {
+				el.classList.remove("pe-busy");
+			}
+		})();
+		return editor.done;
+	}
+
+	/* ---------- клики по странице ---------- */
+	document.addEventListener(
+		"click",
+		(event) => {
+			const target = event.target as Element | null;
+			if (!target || target.closest(".pe-pop, .pe-bar, .pe-toast, #emdash-toolbar")) return;
+			const el = target.closest("[data-pe], [data-pe-info], [data-pe-open]");
+			if (!el) return;
+			// В режиме правки ссылки, кнопки и раскрывашки не срабатывают — клик открывает правку
+			event.preventDefault();
+			event.stopPropagation();
+			const info = (el as HTMLElement).dataset.peInfo;
+			const openPath = (el as HTMLElement).dataset.peOpen;
+			if (info) {
+				toast(info, false, 8000);
+				return;
+			}
+			if (openPath) {
+				window.open(openPath, "_blank", "noopener");
+				return;
+			}
+			if (open?.el === el) return;
+			const previous = open;
+			if (!previous) {
+				start(el);
+				return;
+			}
+			void commit(previous).then((ok) => {
+				if (ok && !open) start(el);
+			});
+		},
+		true,
+	);
+
+	window.addEventListener("resize", () => {
+		if (open) place(open.pop, open.el);
+	});
+</script>

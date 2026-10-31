@@ -1,17 +1,19 @@
 ---
 // 6. Смета: калькулятор зуба под ключ. Цены — из «Имплантов» и «Клиники», считает public/lp/lp.js.
 import SectionHead from "../SectionHead.astro";
+import { blockEditor, clinicEdit, implantEdit, infoEdit, TURNKEY_INFO } from "../../lib/edit";
 import { group, jsonForScript, money, plural, rich } from "../../lib/text";
 import { anchor, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
 const featured = site.featured;
 const maxTeeth = Math.min(10, Math.max(1, Number(value.max_teeth) || 3));
 const years = (n: number) => `${n}\u00A0${plural(n, "год", "года", "лет")}`;
-const extras = (Array.isArray(site.clinic.extras) ? site.clinic.extras : []).filter((row: any) => row?.label);
+const extras = Array.isArray(site.clinic.extras) ? site.clinic.extras : [];
 
 const calcData = {
 	implants: Object.fromEntries(
@@ -29,9 +31,9 @@ const calcData = {
 
 const rows = featured
 	? [
-			{ name: `Имплантат ${featured.name}`, sum: featured.implant },
-			{ name: "Абатмент и формирователь", sum: featured.parts },
-			{ name: "Коронка — своя лаборатория", sum: site.crown },
+			{ name: `Имплантат ${featured.name}`, sum: featured.implant, edit: implantEdit(site, featured, "implant_price", { t: "int", reload: true }) },
+			{ name: "Абатмент и формирователь", sum: featured.parts, edit: implantEdit(site, featured, "parts_price", { t: "int", reload: true }) },
+			{ name: "Коронка — своя лаборатория", sum: site.crown, edit: clinicEdit(site, ["crown_price"], { t: "int", reload: true }) },
 		]
 	: [];
 const total = featured?.turnkey ?? 0;
@@ -39,11 +41,12 @@ const monthly = Math.ceil(total / site.installmentMonths);
 const refund = Math.min(Math.round(total * 0.13), site.refundCap);
 const installment = typeof site.clinic.installment_text === "string" ? site.clinic.installment_text.trim() : "";
 const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
+const calcInfo = "Считается сама из цен имплантов, абатмента и коронки.";
 ---
 
 <section class="section section--blue" id={anchor(value)} aria-labelledby={tid}>
 	<div class="wrap">
-		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<SectionHead site={site} edit={e} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
 
 		{
 			featured && (
@@ -57,7 +60,7 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 								<output class="stepper__val" data-count aria-live="polite">1</output>
 								<button type="button" class="stepper__btn" data-step="1" aria-label="Больше зубов">+</button>
 							</div>
-							{value.teeth_hint && <p class="calc__hint" set:html={t(value.teeth_hint)} />}
+							{value.teeth_hint && <p class="calc__hint" {...e(["teeth_hint"])} set:html={t(value.teeth_hint)} />}
 						</fieldset>
 
 						<fieldset class="calc__group">
@@ -66,11 +69,11 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 								<label class="opt">
 									<input type="radio" name="implant" value={implant.key} checked={implant.key === featured.key} />
 									<span class="opt__body">
-										<span class="opt__name">{implant.name}</span>
+										<span class="opt__name" {...implantEdit(site, implant, "name", { reload: true })}>{implant.name}</span>
 										<span class="opt__meta">
 											{[implant.countryShort, implant.life ? `срок службы ${years(implant.life)}` : ""].filter(Boolean).join(" · ")}
 										</span>
-										<span class="opt__price">{money(implant.implant)}</span>
+										<span class="opt__price" {...implantEdit(site, implant, "implant_price", { t: "int", reload: true })}>{money(implant.implant)}</span>
 									</span>
 								</label>
 							))}
@@ -81,15 +84,15 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 							<label class="check">
 								<input type="checkbox" name="extraction" />
 								<span>
-									<Fragment set:html={t(value.extraction_label || "Зуб ещё на месте — удалим")} />{" "}
-									<small set:html={site.extraction > 0 ? t(`+${money(site.extraction)} за зуб`) : "бесплатно"} />
+									<span {...e(["extraction_label"])} set:html={t(value.extraction_label || "Зуб ещё на месте — удалим")} />{" "}
+									<small {...clinicEdit(site, ["extraction_price"], { t: "int", reload: true })} set:html={site.extraction > 0 ? t(`+${money(site.extraction)} за зуб`) : "бесплатно"} />
 								</span>
 							</label>
 							<label class="check">
 								<input type="checkbox" name="immediate" />
 								<span>
-									<Fragment set:html={t(value.immediate_label || "Поставить имплант сразу после удаления, за один визит")} />{" "}
-									<small set:html={t(`+${money(site.immediate)} за зуб`)} />
+									<span {...e(["immediate_label"])} set:html={t(value.immediate_label || "Поставить имплант сразу после удаления, за один визит")} />{" "}
+									<small {...clinicEdit(site, ["immediate_extra"], { t: "int", reload: true })} set:html={t(`+${money(site.immediate)} за зуб`)} />
 								</span>
 							</label>
 						</fieldset>
@@ -104,48 +107,50 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 								</thead>
 								<tbody data-spec-rows>
 									{rows.map((row, i) => (
-										<tr><td>{i + 1}</td><td>{row.name}</td><td>1</td><td>{group(row.sum)}</td></tr>
+										<tr><td>{i + 1}</td><td>{row.name}</td><td>1</td><td {...row.edit}>{group(row.sum)}</td></tr>
 									))}
 								</tbody>
 							</table>
 							<div class="spec__total">
 								<span class="spec__total-label">Итого под ключ</span>
-								<span class="spec__total-sum">
+								<span class="spec__total-sum" {...infoEdit(site, TURNKEY_INFO)}>
 									<output class="num" data-total aria-live="polite">{money(total)}</output>
 									<svg class="pencil" viewBox="0 0 200 70" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 41C1 20 48 5 104 5C156 5 197 17 195 36C193 56 152 65 101 65C49 65 7 55 9 35C10 25 24 15 44 10" /></svg>
 								</span>
 							</div>
 							<ul class="spec__extra">
 								<li>
-									<Fragment set:html={t(installment ? `В рассрочку ${installment}:` : "В рассрочку:")} />{" "}
-									<b data-monthly>{`от\u00A0${money(monthly)} в\u00A0месяц`}</b>
+									В&nbsp;рассрочку{installment && " "}{installment && <span {...clinicEdit(site, ["installment_text"], { reload: true })} set:html={t(installment)} />}:{" "}
+									<b data-monthly {...infoEdit(site, `${calcInfo} Срок рассрочки для расчёта — в админке: Клиника.`)}>{`от\u00A0${money(monthly)} в\u00A0месяц`}</b>
 								</li>
 								<li>
-									Налоговый вычет вернёт <b data-refund>{`до\u00A0${money(refund)}`}</b>
+									Налоговый вычет вернёт <b data-refund {...infoEdit(site, `${calcInfo} 13% от суммы, не больше максимума вычета из «Клиники».`)}>{`до\u00A0${money(refund)}`}</b>
 								</li>
 							</ul>
 							<div class="spec__actions">
 								{tel && <a class="btn btn--red" href={tel} data-messenger-wa hidden>Отправить расчёт в&nbsp;WhatsApp</a>}
 								{tel && <a class="btn btn--line" href={tel}>Позвонить: {site.phoneShort}</a>}
 							</div>
-							{value.fine_print && <p class="spec__fine" set:html={t(value.fine_print)} />}
+							{value.fine_print && <p class="spec__fine" {...e(["fine_print"], { t: "text" })} set:html={t(value.fine_print)} />}
 						</div>
 
 						{
 							extras.length > 0 && (
 								<div class="extras">
-									{value.extras_title && <p class="extras__title" set:html={t(value.extras_title)} />}
+									{value.extras_title && <p class="extras__title" {...e(["extras_title"])} set:html={t(value.extras_title)} />}
 									<dl class="extras__list">
-										{extras.map((row: any) => (
-											<div>
-												<dt>
-													<Fragment set:html={t(row.label)} />
-													{row.note && " "}
-													{row.note && <small set:html={t(row.note)} />}
-												</dt>
-												<dd set:html={t(row.price)} />
-											</div>
-										))}
+										{extras.map((row: any, i: number) =>
+											row?.label ? (
+												<div>
+													<dt>
+														<span {...clinicEdit(site, ["extras", i, "label"])} set:html={t(row.label)} />
+														{row.note && " "}
+														{row.note && <small {...clinicEdit(site, ["extras", i, "note"])} set:html={t(row.note)} />}
+													</dt>
+													<dd {...clinicEdit(site, ["extras", i, "price"])} set:html={t(row.price)} />
+												</div>
+											) : null,
+										)}
 									</dl>
 								</div>
 							)

@@ -1,38 +1,43 @@
 ---
 // 11. Документы и гарантия.
 import SectionHead from "../SectionHead.astro";
+import { blockEditor } from "../../lib/edit";
 import { lines, rich } from "../../lib/text";
 import { anchor, list, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
-const items = list<Record<string, any>>(value.items).filter((item) => item?.title);
+const items = list<Record<string, any>>(value.items);
 const terms = lines(value.terms);
 const ringText = "ПРЕМЬЕР · НАБЕРЕЖНЫЕ ЧЕЛНЫ · С 1999 ·";
 ---
 
 <section class="section" id={anchor(value)} aria-labelledby={tid}>
 	<div class="wrap">
-		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} />
+		<SectionHead site={site} edit={e} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} />
 		<ul class="papers">
 			{
 				items.map((item, i) => {
+					if (!item?.title) return null;
 					const ringId = `${tid}-ring-${i}`;
 					return (
 						<li class:list={["paper", { "paper--stamped": item.stamp }]}>
-							{item.label && <p class="paper__no" set:html={t(item.label)} />}
-							<h3 set:html={t(item.title)} />
-							{item.text && <p set:html={t(item.text)} />}
+							{item.label && <p class="paper__no" {...e(["items", i, "label"])} set:html={t(item.label)} />}
+							<h3 {...e(["items", i, "title"])} set:html={t(item.title)} />
+							{item.text && <p {...e(["items", i, "text"], { t: "text" })} set:html={t(item.text)} />}
 							{item.stamp && (value.terms_intro || terms.length > 0) && (
 								<details class="paper__more">
-									<summary set:html={t(value.terms_title || "Условия гарантии")} />
-									{value.terms_intro && <p set:html={t(value.terms_intro)} />}
+									<summary>
+										<span {...e(["terms_title"])} set:html={t(value.terms_title || "Условия гарантии")} />
+									</summary>
+									{value.terms_intro && <p {...e(["terms_intro"], { t: "text" })} set:html={t(value.terms_intro)} />}
 									{terms.length > 0 && (
 										<ul>
-											{terms.map((term) => (
-												<li set:html={t(term)} />
+											{terms.map((term, ln) => (
+												<li {...e(["terms"], { ln, raw: term })} set:html={t(term)} />
 											))}
 										</ul>
 									)}
@@ -48,8 +53,8 @@ const ringText = "ПРЕМЬЕР · НАБЕРЕЖНЫЕ ЧЕЛНЫ · С 1999 �
 									<text class="stamp__arc">
 										<textPath href={`#${ringId}`} textLength="262" lengthAdjust="spacing">{ringText}</textPath>
 									</text>
-									{value.stamp_title && <text class="stamp__mid" x="60" y="56">{value.stamp_title}</text>}
-									{value.stamp_value && <text class="stamp__big" x="60" y="75">{value.stamp_value}</text>}
+									{value.stamp_title && <text class="stamp__mid" x="60" y="56" {...e(["stamp_title"], { reload: true })}>{value.stamp_title}</text>}
+									{value.stamp_value && <text class="stamp__big" x="60" y="75" {...e(["stamp_value"], { reload: true })}>{value.stamp_value}</text>}
 								</svg>
 							)}
 						</li>

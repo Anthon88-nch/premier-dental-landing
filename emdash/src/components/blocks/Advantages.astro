@@ -1,28 +1,31 @@
 ---
 // 2. Преимущества: нумерованный список.
 import SectionHead from "../SectionHead.astro";
+import { blockEditor } from "../../lib/edit";
 import { rich } from "../../lib/text";
 import { anchor, linkProps, list, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
-const items = list<Record<string, any>>(value.items).filter((item) => item?.title);
+const items = list<Record<string, any>>(value.items);
 ---
 
 <section class="section section--tint" id={anchor(value)} aria-labelledby={tid}>
 	<div class="wrap adv">
-		<SectionHead site={site} titleId={tid} class="adv__head" eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<SectionHead site={site} edit={e} titleId={tid} class="adv__head" eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
 		<ol class="adv__list">
 			{
-				items.map((item) => {
+				items.map((item, i) => {
+					if (!item?.title) return null;
 					const link = item.link_label ? linkProps(item.link_url) : null;
 					return (
 						<li class="adv__item">
-							<h3 set:html={t(item.title)} />
-							{item.text && <p set:html={t(item.text)} />}
-							{link && <a {...link} set:html={t(item.link_label)} />}
+							<h3 {...e(["items", i, "title"])} set:html={t(item.title)} />
+							{item.text && <p {...e(["items", i, "text"], { t: "text" })} set:html={t(item.text)} />}
+							{link && <a {...link} {...e(["items", i, "link_label"])} set:html={t(item.link_label)} />}
 						</li>
 					);
 				})

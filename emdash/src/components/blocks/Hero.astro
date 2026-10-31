@@ -1,58 +1,69 @@
 ---
 // 1. Первый экран: оффер с ценой зуба под ключ и чертёж.
 import ToothDrawing from "../art/ToothDrawing.astro";
+import { blockEditor, infoEdit, TURNKEY_INFO } from "../../lib/edit";
 import { money, rich, safeHref } from "../../lib/text";
 import { linkProps, list, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const featured = site.featured;
-const proofs = list<Record<string, any>>(value.proofs).filter((p) => p?.title);
+const proofs = list<Record<string, any>>(value.proofs);
 const cta2 = safeHref(value.cta2_url);
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title">
 	<div class="hero__in wrap">
 		<div class="hero__copy">
-			{value.eyebrow && <p class="eyebrow" set:html={t(value.eyebrow)} />}
+			{value.eyebrow && <p class="eyebrow" {...e(["eyebrow"])} set:html={t(value.eyebrow)} />}
 			<h1 class="hero__title" id="hero-title">
-				<span class="hero__line" set:html={t(value.title_line)} />
+				<span class="hero__line" {...e(["title_line"])} set:html={t(value.title_line)} />
 				{
 					featured && (
 						<span class="hero__price">
-							{value.price_prefix && <span class="hero__za" set:html={t(value.price_prefix)} />}{" "}
-							<span class="num">{money(featured.turnkey)}</span>
+							{value.price_prefix && <span class="hero__za" {...e(["price_prefix"])} set:html={t(value.price_prefix)} />}{" "}
+							<span class="num" {...infoEdit(site, TURNKEY_INFO)}>{money(featured.turnkey)}</span>
 						</span>
 					)
 				}
 			</h1>
-			{value.lead && <p class="hero__lead" set:html={t(value.lead)} />}
+			{value.lead && <p class="hero__lead" {...e(["lead"], { t: "text" })} set:html={t(value.lead)} />}
 			<div class="hero__actions" data-hero-actions>
-				{value.cta_label && <button class="btn btn--red" type="button" data-book="Консультация по имплантации" set:html={t(value.cta_label)} />}
-				{value.cta2_label && cta2 && <a class="btn btn--line" href={cta2} set:html={t(value.cta2_label)} />}
+				{value.cta_label && <button class="btn btn--red" type="button" data-book="Консультация по имплантации" {...e(["cta_label"])} set:html={t(value.cta_label)} />}
+				{value.cta2_label && cta2 && <a class="btn btn--line" href={cta2} {...e(["cta2_label"])} set:html={t(value.cta2_label)} />}
 			</div>
 			{
 				proofs.length > 0 && (
 					<ul class="proof">
-						{proofs.map((proof) => {
+						{proofs.map((proof, i) => {
+							if (!proof?.title) return null;
 							const link = linkProps(proof.url, "");
-							const body = `<b>${t(proof.title)}</b>${proof.text ? ` ${t(proof.text)}` : ""}`;
-							return (
-								<li>
-									{link ? (
-										<a href={link.href} target={link.target} rel={link.rel} set:html={body} />
-									) : (
-										<Fragment set:html={body} />
-									)}
-								</li>
+							const body = (
+								<Fragment>
+									<b {...e(["proofs", i, "title"])} set:html={t(proof.title)} />
+									{proof.text && " "}
+									{proof.text && <span {...e(["proofs", i, "text"])} set:html={t(proof.text)} />}
+								</Fragment>
 							);
+							return <li>{link ? <a href={link.href} target={link.target} rel={link.rel}>{body}</a> : body}</li>;
 						})}
 					</ul>
 				)
 			}
 		</div>
 
-		{featured && <ToothDrawing implant={featured} crown={site.crown} note={value.drawing_crown_note} />}
+		{
+			featured && (
+				<ToothDrawing
+					site={site}
+					implant={featured}
+					crown={site.crown}
+					note={value.drawing_crown_note}
+					noteEdit={e(["drawing_crown_note"], { reload: true })}
+				/>
+			)
+		}
 	</div>
 </section>

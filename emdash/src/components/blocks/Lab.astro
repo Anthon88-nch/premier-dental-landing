@@ -1,30 +1,33 @@
 ---
 // 7. Своя цифровая лаборатория: цена коронки, фото, видео.
 import { Image } from "emdash/ui";
+import { adminLink, blockEditor, clinicEdit } from "../../lib/edit";
 import { money, rich, safeHref } from "../../lib/text";
 import { anchor, list, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
-const photos = list<Record<string, any>>(value.photos).filter((p) => p?.image);
+const photos = list<Record<string, any>>(value.photos);
 const video = safeHref(value.video_url);
 const poster = safeHref(value.video_poster_url);
+const pageAdmin = site.pageId ? `/_emdash/admin/content/pages/${site.pageId}` : "/_emdash/admin";
 ---
 
 <section class="section section--tint" id={anchor(value)} aria-labelledby={tid}>
 	<div class="wrap lab">
 		<div class="lab__head">
-			{value.eyebrow && <p class="eyebrow" set:html={t(value.eyebrow)} />}
-			{value.headline && <h2 id={tid} set:html={t(value.headline)} />}
-			{value.lead && <p class="section__lead" set:html={t(value.lead)} />}
+			{value.eyebrow && <p class="eyebrow" {...e(["eyebrow"])} set:html={t(value.eyebrow)} />}
+			{value.headline && <h2 id={tid} {...e(["headline"])} set:html={t(value.headline)} />}
+			{value.lead && <p class="section__lead" {...e(["lead"], { t: "text" })} set:html={t(value.lead)} />}
 			{
 				site.crown > 0 && (
 					<p class="lab__price">
-						{value.price_label && <span class="lab__price-label" set:html={t(value.price_label)} />}
+						{value.price_label && <span class="lab__price-label" {...e(["price_label"])} set:html={t(value.price_label)} />}
 						<span class="lab__price-sum">
-							<span class="num">{money(site.crown)}</span>
+							<span class="num" {...clinicEdit(site, ["crown_price"], { t: "int", reload: true })}>{money(site.crown)}</span>
 							<svg class="pencil" viewBox="0 0 200 70" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M6 41C1 20 48 5 104 5C156 5 197 17 195 36C193 56 152 65 101 65C49 65 7 55 9 35C10 25 24 15 44 10" /></svg>
 						</span>
 					</p>
@@ -33,16 +36,20 @@ const poster = safeHref(value.video_poster_url);
 		</div>
 		<div class="lab__media">
 			{
-				photos.length > 0 && (
+				photos.some((p) => p?.image) && (
 					<ul class="lab__shots">
-						{photos.map((photo) => (
-							<li>
-								<figure class:list={["lab__shot", { "lab__shot--tall": photo.tall }]}>
-									<Image image={photo.image} sizes="(min-width: 1024px) 320px, 50vw" />
-									{photo.caption && <figcaption set:html={t(photo.caption)} />}
-								</figure>
-							</li>
-						))}
+						{photos.map((photo, i) =>
+							photo?.image ? (
+								<li>
+									<figure class:list={["lab__shot", { "lab__shot--tall": photo.tall }]}>
+										<span {...adminLink(site, pageAdmin, "Фото меняется в админке: Страницы → Главная → Лаборатория")}>
+											<Image image={photo.image} sizes="(min-width: 1024px) 320px, 50vw" />
+										</span>
+										{photo.caption && <figcaption {...e(["photos", i, "caption"])} set:html={t(photo.caption)} />}
+									</figure>
+								</li>
+							) : null,
+						)}
 					</ul>
 				)
 			}
@@ -52,7 +59,7 @@ const poster = safeHref(value.video_poster_url);
 						<video controls preload="none" playsinline poster={poster} width="1280" height="720">
 							<source src={video} type="video/mp4" />
 						</video>
-						{value.video_caption && <figcaption set:html={t(value.video_caption)} />}
+						{value.video_caption && <figcaption {...e(["video_caption"])} set:html={t(value.video_caption)} />}
 					</figure>
 				)
 			}

@@ -4,6 +4,8 @@
 import { getMenuWithCacheHint } from "emdash";
 import { EmDashBodyEnd, EmDashBodyStart, EmDashHead } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
+import EditKit from "../components/EditKit.astro";
+import { adminLink, clinicEdit, infoEdit } from "../lib/edit";
 import type { Site } from "../lib/site";
 import { jsonForScript, plain, rich, safeHref } from "../lib/text";
 
@@ -41,19 +43,20 @@ const pageCtx = createPublicPageContext({
 	siteName: clinicName,
 });
 
+// Реквизиты в подвале: каждая часть правится на странице отдельно
 const legal = [
-	clinicName ? `<b>${rich(clinicName, tokens)}</b>` : "",
-	clinic.legal_name ? rich(clinic.legal_name, tokens) : "",
-	clinic.inn ? `ИНН ${rich(clinic.inn, tokens)}` : "",
-	clinic.ogrn ? `ОГРН ${rich(clinic.ogrn, tokens)}` : "",
-	clinic.license ? `Лицензия ${rich(clinic.license, tokens)}` : "",
-]
-	.filter(Boolean)
-	.join(" · ");
+	{ field: "clinic_name", label: "", strong: true },
+	{ field: "legal_name", label: "" },
+	{ field: "inn", label: "ИНН " },
+	{ field: "ogrn", label: "ОГРН " },
+	{ field: "license", label: "Лицензия " },
+].filter((part) => typeof clinic[part.field] === "string" && clinic[part.field].trim());
 const mainSite = safeHref(clinic.main_site_url);
 const bookingHours = site.hours.join(", ");
 const configScript = `window.PREMIER_CONFIG = Object.freeze(${jsonForScript(site.config)});`;
 const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
+const phoneEdit = clinicEdit(site, ["phone_display"], { reload: true });
+const menuAdmin = adminLink(site, "/_emdash/admin/menus", "Пункты меню правятся в админке: Меню");
 ---
 
 <!doctype html>
@@ -104,6 +107,7 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 									href={safeHref(item.url) ?? "#"}
 									target={item.target || undefined}
 									rel={item.target === "_blank" ? "noopener" : undefined}
+									{...menuAdmin}
 									set:html={rich(item.label, tokens)}
 								/>
 							))}
@@ -114,7 +118,7 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 					tel && (
 						<a class="head__phone" href={tel} aria-label={`Позвонить в клинику: ${site.phoneDisplay}`}>
 							<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4-2 1.3a12 12 0 0 0 6.6 6.6l1.3-2 4 1.4v2.6a2 2 0 0 1-2.2 2A16.6 16.6 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2Z" /></svg>
-							<span>{site.phoneDisplay}</span>
+							<span {...phoneEdit}>{site.phoneDisplay}</span>
 						</a>
 					)
 				}
@@ -125,10 +129,26 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 		<slot />
 
 		<footer class="foot">
-			{clinic.warning && <p class="foot__warn" set:html={rich(clinic.warning, tokens)} />}
+			{clinic.warning && <p class="foot__warn" {...clinicEdit(site, ["warning"])} set:html={rich(clinic.warning, tokens)} />}
 			<div class="wrap foot__in">
-				{legal && <p set:html={legal} />}
-				{clinic.disclaimer && <p set:html={rich(clinic.disclaimer, tokens)} />}
+				{
+					legal.length > 0 && (
+						<p>
+							{legal.map((part, i) => (
+								<Fragment>
+									{i > 0 && " · "}
+									{part.label}
+									{part.strong ? (
+										<b {...clinicEdit(site, [part.field], { reload: true })} set:html={rich(clinic[part.field], tokens)} />
+									) : (
+										<span {...clinicEdit(site, [part.field])} set:html={rich(clinic[part.field], tokens)} />
+									)}
+								</Fragment>
+							))}
+						</p>
+					)
+				}
+				{clinic.disclaimer && <p {...clinicEdit(site, ["disclaimer"], { t: "text" })} set:html={rich(clinic.disclaimer, tokens)} />}
 				{mainSite && <p><a href={mainSite}>Все услуги клиники</a></p>}
 			</div>
 		</footer>
@@ -143,15 +163,16 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 			<p class="eyebrow">Запись</p>
 			<h2 class="book__title" id="book-title" set:html={rich("Запись на консультацию", tokens)} />
 			<p class="book__context" data-book-context hidden></p>
-			{clinic.booking_text && <p set:html={rich(clinic.booking_text, tokens)} />}
+			{clinic.booking_text && <p {...clinicEdit(site, ["booking_text"], { t: "text" })} set:html={rich(clinic.booking_text, tokens)} />}
 			<div class="book__actions">
 				{tel && <a class="btn btn--red" href={tel}>Позвонить: {site.phoneDisplay}</a>}
 				<div class="msgr" data-messengers></div>
 			</div>
-			{bookingHours && <p class="book__hours" set:html={rich(bookingHours, tokens)} />}
+			{bookingHours && <p class="book__hours" {...infoEdit(site, "Часы берутся из блока «Контакты» — правьте их там.")} set:html={rich(bookingHours, tokens)} />}
 		</dialog>
 
 		<p class="toast" role="status" aria-live="polite" data-toast></p>
+		{site.editing && <EditKit site={site} />}
 		<EmDashBodyEnd page={pageCtx} />
 	</body>
 </html>

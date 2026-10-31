@@ -1,4 +1,5 @@
 ---
+import type { EditOptions, EditPath } from "../lib/edit";
 import type { Site } from "../lib/site";
 import { rich } from "../lib/text";
 
@@ -9,15 +10,18 @@ interface Props {
 	headline?: string;
 	lead?: string;
 	class?: string;
+	/** правка на странице: blockEditor(site, value) */
+	edit?: (path: EditPath, opts?: EditOptions) => Record<string, string>;
 }
 
-const { site, titleId, eyebrow, headline, lead, class: className } = Astro.props;
+const { site, titleId, eyebrow, headline, lead, class: className, edit } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = (path: EditPath, opts?: EditOptions) => (edit ? edit(path, opts) : {});
 ---
 
 <div class:list={["section__head", className]}>
-	{eyebrow && <p class="eyebrow" set:html={t(eyebrow)} />}
-	{headline && <h2 id={titleId} set:html={t(headline)} />}
-	{lead && <p class="section__lead" set:html={t(lead)} />}
+	{eyebrow && <p class="eyebrow" {...e(["eyebrow"])} set:html={t(eyebrow)} />}
+	{headline && <h2 id={titleId} {...e(["headline"])} set:html={t(headline)} />}
+	{lead && <p class="section__lead" {...e(["lead"], { t: "text" })} set:html={t(lead)} />}
 	<slot />
 </div>

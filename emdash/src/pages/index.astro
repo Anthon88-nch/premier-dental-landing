@@ -2,6 +2,7 @@
 import { getEmDashEntry } from "emdash";
 import Base from "../layouts/Base.astro";
 import PageView from "../components/PageView.astro";
+import { isEditMode } from "../lib/edit";
 import { pageSeo } from "../lib/seo";
 import { loadSite } from "../lib/site";
 
@@ -11,6 +12,9 @@ if (Astro.cache?.enabled) {
 	for (const hint of site.cacheHints) Astro.cache.set(hint as any);
 }
 const seo = pageSeo(page, site, true);
+// Правка на странице: только для вошедшего редактора с включённым «Режимом редактирования»
+site.editing = isEditMode(page);
+site.pageId = page?.data.id;
 ---
 
 <Base

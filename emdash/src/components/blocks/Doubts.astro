@@ -1,29 +1,32 @@
 ---
 // 4. Почему откладывают имплантацию: доли и ответы клиники.
 import SectionHead from "../SectionHead.astro";
+import { blockEditor } from "../../lib/edit";
 import { decimal, rich } from "../../lib/text";
 import { anchor, linkProps, list, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
-const items = list<Record<string, any>>(value.items).filter((item) => item?.title);
+const items = list<Record<string, any>>(value.items);
 const pct = (n: unknown) => Math.min(100, Math.max(0, Number(n) || 0));
 ---
 
 <section class="section section--blue" id={anchor(value)} aria-labelledby={tid}>
 	<div class="wrap">
-		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
+		<SectionHead site={site} edit={e} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead} />
 		<ol class="doubts">
 			{
-				items.map((item) => {
+				items.map((item, i) => {
+					if (!item?.title) return null;
 					const link = item.link_label ? linkProps(item.link_url) : null;
 					const hasPct = typeof item.percent === "number";
 					return (
 						<li class="doubt">
 							{hasPct && (
-								<p class="doubt__pct">
+								<p class="doubt__pct" {...e(["items", i, "percent"], { t: "num", reload: true })}>
 									<span class="num">{decimal(item.percent)}</span>%
 								</p>
 							)}
@@ -32,14 +35,14 @@ const pct = (n: unknown) => Math.min(100, Math.max(0, Number(n) || 0));
 									<span class="meter__fill" style={`width:${pct(item.percent)}%`} />
 								</div>
 							)}
-							<h3 class="doubt__title" set:html={t(item.title)} />
-							{item.answer && <p class="doubt__answer" set:html={t(item.answer)} />}
-							{link && <a {...link} set:html={t(item.link_label)} />}
+							<h3 class="doubt__title" {...e(["items", i, "title"])} set:html={t(item.title)} />
+							{item.answer && <p class="doubt__answer" {...e(["items", i, "answer"], { t: "text" })} set:html={t(item.answer)} />}
+							{link && <a {...link} {...e(["items", i, "link_label"])} set:html={t(item.link_label)} />}
 						</li>
 					);
 				})
 			}
 		</ol>
-		{value.source_note && <p class="doubts__source" set:html={t(value.source_note)} />}
+		{value.source_note && <p class="doubts__source" {...e(["source_note"])} set:html={t(value.source_note)} />}
 	</div>
 </section>

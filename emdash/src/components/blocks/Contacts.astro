@@ -1,24 +1,27 @@
 ---
 // 14. Контакты и запись. Адрес, часы и телефон — из «Клиники».
 import SectionHead from "../SectionHead.astro";
+import { blockEditor, clinicEdit } from "../../lib/edit";
 import { rich, safeHref } from "../../lib/text";
 import { anchor, titleId, type BlockProps } from "../../lib/ui";
 
 type Props = BlockProps;
 const { value, site, index } = Astro.props;
 const t = (text: unknown) => rich(text, site.tokens);
+const e = blockEditor(site, value);
 const tid = titleId(value, index);
 const clinic = site.clinic;
 const mapUrl = safeHref(clinic.map_url);
 const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
+const phoneEdit = clinicEdit(site, ["phone_display"], { reload: true });
 ---
 
 <section class="section section--blue contact" id={anchor(value)} aria-labelledby={tid} data-contacts>
 	<div class="wrap contact__in">
-		<SectionHead site={site} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead}>
+		<SectionHead site={site} edit={e} titleId={tid} eyebrow={value.eyebrow} headline={value.headline} lead={value.lead}>
 			<div class="contact__actions">
-				{value.button_label && <button class="btn btn--red" type="button" data-book="Консультация по имплантации" set:html={t(value.button_label)} />}
-				{tel && <a class="btn btn--paper" href={tel}>{site.phoneDisplay}</a>}
+				{value.button_label && <button class="btn btn--red" type="button" data-book="Консультация по имплантации" {...e(["button_label"])} set:html={t(value.button_label)} />}
+				{tel && <a class="btn btn--paper" href={tel} {...phoneEdit}>{site.phoneDisplay}</a>}
 			</div>
 		</SectionHead>
 		<dl class="contact__list">
@@ -27,7 +30,7 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 					<div>
 						<dt>Адрес</dt>
 						<dd>
-							<Fragment set:html={t(clinic.address)} />
+							<span {...clinicEdit(site, ["address"])} set:html={t(clinic.address)} />
 							{mapUrl && <br />}
 							{mapUrl && <a href={mapUrl} target="_blank" rel="noopener">Построить маршрут в&nbsp;Яндекс Картах</a>}
 						</dd>
@@ -38,7 +41,14 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 				site.hours.length > 0 && (
 					<div>
 						<dt>Часы работы</dt>
-						<dd set:html={site.hours.map((line) => t(line)).join("<br>")} />
+						<dd>
+							{site.hours.map((line, ln) => (
+								<Fragment>
+									{ln > 0 && <br />}
+									<span {...clinicEdit(site, ["hours"], { ln, raw: line, reload: true })} set:html={t(line)} />
+								</Fragment>
+							))}
+						</dd>
 					</div>
 				)
 			}
@@ -46,7 +56,7 @@ const tel = site.phoneTel ? `tel:${site.phoneTel}` : undefined;
 				tel && (
 					<div>
 						<dt>Телефон</dt>
-						<dd><a href={tel}>{site.phoneDisplay}</a></dd>
+						<dd><a href={tel} {...phoneEdit}>{site.phoneDisplay}</a></dd>
 					</div>
 				)
 			}

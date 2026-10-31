@@ -8,6 +8,10 @@ type Data = Record<string, any>;
 
 export interface Implant {
 	key: string;
+	/** ULID записи — для правки на странице */
+	id?: string;
+	/** поля записи как есть */
+	data: Data;
 	name: string;
 	country: string;
 	countryShort: string;
@@ -24,6 +28,8 @@ export interface Implant {
 
 export interface Doctor {
 	key: string;
+	id?: string;
+	data: Data;
 	name: string;
 	team: string;
 	role: string;
@@ -35,6 +41,11 @@ export interface Doctor {
 }
 
 export interface Site {
+	/** редактор включил «Режим редактирования» — показываем атрибуты для правки на странице */
+	editing: boolean;
+	/** ULID текущей страницы и записи «Клиника» — для правки на странице */
+	pageId?: string;
+	clinicId?: string;
 	clinic: Data;
 	implants: Implant[];
 	featured?: Implant;
@@ -81,6 +92,8 @@ function toImplant(entry: { id: string; data: Data }, crown: number): Implant {
 	const country = str(d.country);
 	return {
 		key: entry.id,
+		id: typeof d.id === "string" ? d.id : undefined,
+		data: d,
 		name: str(d.name) || entry.id,
 		country,
 		countryShort: country in SHORT_COUNTRY ? SHORT_COUNTRY[country] : country,
@@ -99,6 +112,8 @@ function toDoctor(entry: { id: string; data: Data }): Doctor {
 	const d = entry.data;
 	return {
 		key: entry.id,
+		id: typeof d.id === "string" ? d.id : undefined,
+		data: d,
 		name: str(d.name),
 		team: str(d.team_group),
 		role: str(d.role),
@@ -178,6 +193,8 @@ export async function loadSite(): Promise<Site> {
 	const metrikaId = Number(str(clinic.metrika_id));
 
 	return {
+		editing: false,
+		clinicId: typeof clinicEntry?.data?.id === "string" ? clinicEntry.data.id : undefined,
 		clinic,
 		implants,
 		featured,

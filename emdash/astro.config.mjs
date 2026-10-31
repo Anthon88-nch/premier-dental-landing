@@ -20,6 +20,13 @@ export default defineConfig({
 				directory: "./uploads",
 				baseUrl: "/_emdash/api/media/file",
 			}),
+			admin: {
+				siteName: "Премьер — лендинг",
+				// Админка только на русском (английский EmDash оставляет запасным)
+				locales: ["ru"],
+				// Лендингу не нужны: календарь публикаций, комментарии, редиректы, виджеты, разделы, подписи, импорт
+				hiddenNavItems: ["calendar", "comments", "redirects", "widgets", "sections", "bylines", "import"],
+			},
 		}),
 	],
 	devToolbar: { enabled: false },
