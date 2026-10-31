@@ -222,7 +222,12 @@ async function main() {
   ed.on('console', msg => { if (msg.type() === 'error') edProblems.push(`console: ${msg.text()}`); });
   await ed.goto(`${BASE}/_emdash/api/auth/dev-bypass?redirect=/_emdash/admin`, { waitUntil: 'networkidle' });
   await editorCtx.addCookies([{ name: 'emdash-edit-mode', value: 'true', url: BASE }]);
+  let popups = 0;
+  editorCtx.on('page', () => { popups += 1; });
   await ed.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+  writeFileSync(join(OUT, 'edit-mode.html'), await ed.content());
+  const refs = await ed.evaluate(() => [...document.querySelectorAll('[data-emdash-ref]')].map(el => `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''} ${el.getAttribute('data-emdash-ref')}`));
+  writeFileSync(join(OUT, 'edit-mode-refs.txt'), refs.join('\n'));
   const peCount = await ed.locator('[data-pe]').count();
   check('режим правки: редактируемых мест на странице', peCount > 60, peCount);
   check('режим правки: плашка-подсказка видна', await ed.locator('.pe-bar').isVisible());
@@ -295,6 +300,7 @@ async function main() {
   } catch (error) {
     check('режим правки на телефоне', false, error?.message || error);
   }
+  check('режим правки: клики не открывают лишних вкладок', popups === 0, `открыто ${popups}`);
   check('режим правки: без ошибок в консоли', edProblems.length === 0, edProblems.slice(0, 5).join(' | '));
   await editorCtx.close();
 

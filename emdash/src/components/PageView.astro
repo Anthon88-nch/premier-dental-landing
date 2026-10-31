@@ -1,5 +1,7 @@
 ---
 // Страница из коллекции «Страницы»: блоки или подсказка, если блоков нет.
+// На <main> — разметка всей записи (не поля): плашка EmDash показывает по ней статус и «Опубликовать»,
+// а клики по блокам не уводят в админку. Сами тексты правятся через EditKit (data-pe).
 import LandingBlocks from "./LandingBlocks.astro";
 import type { Site } from "../lib/site";
 
@@ -12,7 +14,7 @@ const { page, site } = Astro.props;
 const blocks = Array.isArray(page.data.content) ? page.data.content : [];
 ---
 
-<main id="main" {...(page.edit?.content ?? {})}>
+<main id="main" {...(page.edit ?? {})}>
 	{
 		blocks.length > 0 ? (
 			<LandingBlocks blocks={blocks} site={site} />
