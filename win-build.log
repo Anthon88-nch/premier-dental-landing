@@ -1,0 +1,32 @@
+
+> premier-emdash@0.1.0 build
+> astro build
+
+[2m11:02:44[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.4.0[22m
+   
+[2m11:02:45[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m11:02:47[22m [34m[types][39m Generated [2m3.24s[22m
+[2m11:02:47[22m [34m[build][39m output: [34m"server"[39m
+[2m11:02:47[22m [34m[build][39m mode: [34m"server"[39m
+[2m11:02:47[22m [34m[build][39m directory: [34mD:\a\premier-dental-landing\premier-dental-landing\emdash\dist\[39m
+[2m11:02:47[22m [34m[build][39m adapter: [32m@astrojs/node[39m
+[2m11:02:47[22m [34m[build][39m Collecting build info...
+[2m11:02:47[22m [34m[build][39m [32m✓ Completed in 3.51s.[39m
+[2m11:02:47[22m [34m[build][39m Building server entrypoints...
+[2m11:02:48[22m [34m[assets][39m Copying fonts (16 files)...
+[2m11:02:48[22m [34m[vite][39m [32m✓ built in 1.12s[39m
+[2m11:02:51[22m [34m[vite][39m [32m✓ built in 2.49s[39m
+[33m[1m11:02:55[22m [WARN] [vite][39m [33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[2m11:02:55[22m [34m[vite][39m [32m✓ built in 3.94s[39m
+[2m11:02:55[22m [34m[build][39m Rearranging server assets...
+[2m11:02:55[22m [34m[build][39m [32m✓ Completed in 7.69s.[39m
+[2m11:02:55[22m [34m[emdash][39m Build complete
+[2m11:02:55[22m [34m[build][39m Server built in [1m11.20s[22m
+[2m11:02:55[22m [34m[build][39m [1mComplete![22m

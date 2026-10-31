@@ -1,0 +1,55 @@
+
+> premier-emdash@0.1.0 dev
+> astro dev --port 4321
+
+[2m11:02:57[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.4.0[22m
+   
+[2m11:02:57[22m [34m[vite][39m connected.
+[2m11:02:57[22m [34m[types][39m Generated [2m1ms[22m
+[2m11:02:57[22m [34m[vite][39m connected.
+
+  [2m›[22m Admin UI    [36mhttp://localhost:4321/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://localhost:4321/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://localhost:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+[42m[1m astro [22m[49m [32mv7.4.4[39m [2mready in[22m 1683 [2mms[22m
+[2m┃[22m Local    [36mhttp://localhost:4321/[39m
+[2m┃[22m Network  [2muse --host to expose[22m
+[2m11:02:58[22m [32mwatching for file changes...[39m
+[2m11:02:59[22m [34m[vite][39m [optimizer] bundling dependencies...
+Auto-seeded default collections
+[2m11:03:07[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m5353ms[22m
+[2m11:03:07[22m [34m[emdash][39m Generated emdash-env.d.ts (4 collections)
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-sharifullin-ruslan.webp
+  ✅ Uploaded: doctor-sharifullin-ruslan.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-saleddinov-sarkhan.webp
+  ✅ Uploaded: doctor-saleddinov-sarkhan.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-fakhranurov-ildar.webp
+[2m11:03:07[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m4ms[22m
+  ✅ Uploaded: doctor-fakhranurov-ildar.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-dmitriev-andrey.webp
+  ✅ Uploaded: doctor-dmitriev-andrey.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-valiullin-rinat.webp
+  ✅ Uploaded: doctor-valiullin-rinat.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-novikov-pavel.webp
+  ✅ Uploaded: lab-novikov-pavel.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-tretyak-maxim.webp
+  ✅ Uploaded: doctor-tretyak-maxim.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-scanner-600.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-printing-600.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-preparation-600.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-milling-600.webp
+  ✅ Uploaded: lab-scanner-600.webp
+  ✅ Uploaded: lab-printing-600.webp
+  ✅ Uploaded: lab-preparation-600.webp
+  ✅ Uploaded: lab-milling-600.webp
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[setup-dev-bypass] Created dev admin user: dev@emdash.local
+[2m11:03:08[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m4692ms[22m
+[2m11:03:10[22m [34m[200][39m / [2m578ms[22m
+[2m11:03:10[22m [33m[302][39m /_emdash/admin [2m2ms[22m
+[2m11:03:10[22m [34m[200][39m /_image [2m83ms[22m
