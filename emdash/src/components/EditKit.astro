@@ -19,7 +19,7 @@ const data = jsonForScript({ tokens: site.tokens });
 	<button type="button" class="pe-bar__close" aria-label="Скрыть подсказку">×</button>
 </div>
 
-<style is:global>
+<style is:inline>
 	[data-pe],
 	[data-pe-info],
 	[data-pe-open] {
@@ -85,7 +85,7 @@ const data = jsonForScript({ tokens: site.tokens });
 	.pe-bar {
 		position: fixed;
 		left: 12px;
-		top: 12px;
+		top: calc(var(--head-h, 64px) + 10px);
 		z-index: 2147483000;
 		max-width: min(560px, calc(100vw - 24px));
 		padding: 9px 36px 9px 12px;

@@ -99,7 +99,7 @@ async function main() {
   check('нет неподставленных токенов', leftovers.length === 0, leftovers.join(' '));
   check('нет «заменим бесплатно»', !/заменим бесплатно/i.test(t));
   check('калькулятор получил цены', html.includes('data-calc-data'));
-  check('посетители не видят разметку правки', !html.includes('data-pe') && !html.includes('pe-bar'));
+  check('посетители не видят разметку правки', !/\sdata-pe(-info|-open)?=/.test(html) && !html.includes('class="pe-bar"') && !html.includes('.pe-pop'));
   check('noindex для черновика', /<meta[^>]+name="robots"[^>]+noindex|<meta[^>]+noindex[^>]+name="robots"/.test(html));
   check('секций на странице ≥ 14', (html.match(/<section\b/g) || []).length >= 14, (html.match(/<section\b/g) || []).length);
 
@@ -282,6 +282,18 @@ async function main() {
   } catch (error) {
     check('правка на странице прошла без исключений', false, error?.message || error);
     await ed.screenshot({ path: join(OUT, 'edit-mode-error.png') }).catch(() => {});
+  }
+  try {
+    await ed.setViewportSize({ width: 390, height: 844 });
+    await ed.goto(`${BASE}/`, { waitUntil: 'networkidle' });
+    await clickCentered(ed.locator('.var__title').first());
+    await area.waitFor({ timeout: 5000 });
+    await ed.screenshot({ path: join(OUT, 'edit-mode-390.png') });
+    await area.press('Escape');
+    const over = await ed.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    check('режим правки на телефоне: без горизонтальной прокрутки', over <= 0, `лишние ${over}px`);
+  } catch (error) {
+    check('режим правки на телефоне', false, error?.message || error);
   }
   check('режим правки: без ошибок в консоли', edProblems.length === 0, edProblems.slice(0, 5).join(' | '));
   await editorCtx.close();
