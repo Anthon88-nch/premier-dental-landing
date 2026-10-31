@@ -1,0 +1,250 @@
+
+> premier-emdash@0.1.0 dev
+> astro dev --host 127.0.0.1 --port 4321
+
+[2m11:02:34[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.4.0[22m
+   
+[2m11:02:34[22m [34m[vite][39m connected.
+[2m11:02:34[22m [34m[types][39m Generated [2m1ms[22m
+[2m11:02:34[22m [34m[vite][39m connected.
+
+  [2m›[22m Admin UI    [36mhttp://127.0.0.1:4321/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://127.0.0.1:4321/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://127.0.0.1:4321/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+[42m[1m astro [22m[49m [32mv7.4.4[39m [2mready in[22m 1860 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:4321/[39m
+[2m11:02:36[22m [32mwatching for file changes...[39m
+[2m11:02:37[22m [34m[vite][39m [optimizer] bundling dependencies...
+Auto-seeded default collections
+[2m11:02:42[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m4837ms[22m
+[2m11:02:42[22m [34m[emdash][39m Generated emdash-env.d.ts (4 collections)
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-sharifullin-ruslan.webp
+  ✅ Uploaded: doctor-sharifullin-ruslan.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-saleddinov-sarkhan.webp
+[2m11:02:42[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m3ms[22m
+  ✅ Uploaded: doctor-saleddinov-sarkhan.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-fakhranurov-ildar.webp
+  ✅ Uploaded: doctor-fakhranurov-ildar.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-dmitriev-andrey.webp
+  ✅ Uploaded: doctor-dmitriev-andrey.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-valiullin-rinat.webp
+  ✅ Uploaded: doctor-valiullin-rinat.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-novikov-pavel.webp
+  ✅ Uploaded: lab-novikov-pavel.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/doctor-tretyak-maxim.webp
+  ✅ Uploaded: doctor-tretyak-maxim.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-scanner-600.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-printing-600.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-preparation-600.webp
+  📥 Downloading: https://anthon88-nch.github.io/premier-dental-landing/assets/lab-milling-600.webp
+  ✅ Uploaded: lab-scanner-600.webp
+  ✅ Uploaded: lab-milling-600.webp
+  ✅ Uploaded: lab-printing-600.webp
+  ✅ Uploaded: lab-preparation-600.webp
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[setup-dev-bypass] Created dev admin user: dev@emdash.local
+[2m11:02:42[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m4193ms[22m
+[2m11:02:44[22m [34m[200][39m / [2m423ms[22m
+[2m11:02:44[22m [33m[301][39m /home [2m4ms[22m
+[33m[1m11:02:44[22m [WARN] [cache][39m `cache.set()` was called but caching is not enabled. Configure a cache provider in your Astro config under `cache` to enable caching.
+[2m11:02:44[22m [33m[404][39m [33m(rewrite) [39m/net-takoy-stranicy [2m59ms[22m
+[2m11:02:44[22m [34m[200][39m / [2m42ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m85ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m86ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m87ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m151ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m192ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m211ms[22m
+[2m11:02:47[22m [34m[200][39m /_image [2m118ms[22m
+[2m11:02:48[22m [34m[200][39m /_image [2m38ms[22m
+[2m11:02:48[22m [34m[200][39m /_image [2m170ms[22m
+[2m11:02:48[22m [34m[200][39m /_image [2m145ms[22m
+[2m11:02:48[22m [34m[200][39m /_image [2m203ms[22m
+[2m11:02:58[22m [34m[200][39m / [2m28ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m54ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m59ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m68ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m98ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m177ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m120ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m191ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m133ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m32ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m179ms[22m
+[2m11:03:01[22m [34m[200][39m /_image [2m211ms[22m
+[2m11:03:11[22m [34m[200][39m /_emdash/api/content/implants/osstem [2m5ms[22m
+[2m11:03:11[22m [34m[200][39m /_emdash/api/schema/collections/implants [2m3ms[22m
+[2m11:03:12[22m [34m[200][39m /_emdash/api/schema/collections/implants [2m2ms[22m
+[2m11:03:12[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/implants/osstem [2m30ms[22m
+[2m11:03:12[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B/publish [2m13ms[22m
+[2m11:03:12[22m [34m[200][39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B [2m2ms[22m
+[2m11:03:12[22m [34m[200][39m / [2m23ms[22m
+[2m11:03:13[22m [34m[200][39m /_emdash/api/content/implants/osstem [2m2ms[22m
+[2m11:03:13[22m [34m[200][39m /_emdash/api/schema/collections/implants [2m2ms[22m
+[2m11:03:14[22m [34m[200][39m /_emdash/api/schema/collections/implants [2m2ms[22m
+[2m11:03:14[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/implants/osstem [2m12ms[22m
+[2m11:03:14[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B/publish [2m12ms[22m
+[2m11:03:14[22m [34m[200][39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B [2m2ms[22m
+[2m11:03:14[22m [34m[200][39m / [2m24ms[22m
+[2m11:03:14[22m [34m[200][39m /_emdash/api/auth/dev-bypass [2m1ms[22m
+[2m11:03:14[22m [34m[200][39m /_emdash/admin [2m29ms[22m
+[2m11:03:18[22m [34m[200][39m / [2m44ms[22m
+[2m11:03:18[22m [34m[200][39m /_emdash/api/manifest [2m17ms[22m
+[2m11:03:19[22m [34m[200][39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m4ms[22m
+[2m11:03:19[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m36ms[22m
+[2m11:03:19[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K/publish [2m21ms[22m
+[2m11:03:19[22m [34m[200][39m / [2m31ms[22m
+[2m11:03:20[22m [34m[200][39m /_image [2m44ms[22m
+[2m11:03:20[22m [34m[200][39m /_image [2m43ms[22m
+[2m11:03:20[22m [34m[200][39m /_image [2m47ms[22m
+[2m11:03:20[22m [34m[200][39m /_image [2m94ms[22m
+[2m11:03:20[22m [34m[200][39m /_image [2m185ms[22m
+[2m11:03:21[22m [34m[200][39m /_image [2m231ms[22m
+[2m11:03:21[22m [34m[200][39m /_image [2m235ms[22m
+[2m11:03:21[22m [34m[200][39m /_image [2m266ms[22m
+[2m11:03:21[22m [34m[200][39m /_image [2m309ms[22m
+[2m11:03:21[22m [34m[200][39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B [2m4ms[22m
+[2m11:03:21[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B [2m15ms[22m
+[2m11:03:21[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B/publish [2m10ms[22m
+[2m11:03:21[22m [34m[200][39m / [2m42ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m10ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m10ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m11ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m14ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m16ms[22m
+[2m11:03:21[22m [34m[200][39m /_emdash/api/manifest [2m18ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m5ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m5ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:21[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:21[22m [34m[200][39m / [2m26ms[22m
+[2m11:03:22[22m [34m[200][39m /_image [2m25ms[22m
+[2m11:03:22[22m [34m[200][39m /_image [2m102ms[22m
+[2m11:03:23[22m [34m[200][39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y [2m3ms[22m
+[2m11:03:23[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y [2m15ms[22m
+[2m11:03:23[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y/publish [2m10ms[22m
+[2m11:03:23[22m [34m[200][39m / [2m45ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m4ms[22m
+[2m11:03:23[22m [34m[200][39m /_emdash/api/manifest [2m17ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m18ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m18ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m17ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m18ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m4ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m4ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m4ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:23[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:24[22m [34m[200][39m / [2m24ms[22m
+[2m11:03:25[22m [34m[200][39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m3ms[22m
+[2m11:03:25[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m29ms[22m
+[2m11:03:25[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K/publish [2m14ms[22m
+[2m11:03:27[22m [34m[200][39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m5ms[22m
+[2m11:03:27[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m31ms[22m
+[2m11:03:27[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K/publish [2m18ms[22m
+[2m11:03:28[22m [34m[200][39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B [2m2ms[22m
+[2m11:03:28[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B [2m12ms[22m
+[2m11:03:28[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/implants/01M68T0H80W1QAQRNEXNC7EQ8B/publish [2m18ms[22m
+[2m11:03:28[22m [34m[200][39m / [2m32ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m5ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:28[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m4ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:28[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:31[22m [34m[200][39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y [2m2ms[22m
+[2m11:03:31[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y [2m14ms[22m
+[2m11:03:31[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y/publish [2m10ms[22m
+[2m11:03:31[22m [34m[200][39m / [2m28ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m5ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:31[22m [34m[200][39m /_emdash/api/manifest [2m9ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m8ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m8ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:31[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:33[22m [34m[200][39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m3ms[22m
+[2m11:03:33[22m [34m[200][39m / [2m23ms[22m
+[2m11:03:33[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m25ms[22m
+[2m11:03:33[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K/publish [2m17ms[22m
+[2m11:03:33[22m [34m[200][39m / [2m37ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m5ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m7ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m6ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m7ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m7ms[22m
+[2m11:03:33[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m5ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m2ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:33[22m [33m[304][39m /_image [2m3ms[22m
+[2m11:03:35[22m [34m[200][39m /_emdash/api/auth/dev-bypass [2m4ms[22m
+[2m11:03:35[22m [34m[200][39m /_emdash/admin [2m20ms[22m
+[2m11:03:39[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m11:03:39[22m [34m[200][39m /_emdash/api/auth/me [2m2ms[22m
+[2m11:03:39[22m [34m[200][39m /_emdash/api/dashboard [2m6ms[22m
+[2m11:03:39[22m [34m[200][39m /_emdash/api/admin/core-update [2m3ms[22m
+[2m11:03:40[22m [34m[200][39m [34mPOST[39m /_emdash/api/auth/me [2m2ms[22m
+[2m11:03:41[22m [34m[200][39m /_emdash/api/content/pages [2m7ms[22m
+[2m11:03:42[22m [34m[200][39m /_emdash/api/content/pages/home [2m3ms[22m
+[2m11:03:43[22m [34m[200][39m /_emdash/api/content/clinic/main [2m2ms[22m
+[2m11:03:43[22m [34m[200][39m /_emdash/api/schema/collections/clinic [2m2ms[22m
+[2m11:03:43[22m [34m[200][39m /_emdash/admin/content/pages [2m16ms[22m
+[2m11:03:45[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m11:03:45[22m [34m[200][39m /_emdash/api/auth/me [2m2ms[22m
+[2m11:03:45[22m [34m[200][39m /_emdash/api/content/pages [2m3ms[22m
+[2m11:03:45[22m [34m[200][39m /_emdash/api/content/pages/authors [2m2ms[22m
+[2m11:03:45[22m [34m[200][39m /_emdash/api/content/pages/trash [2m3ms[22m
+[2m11:03:47[22m [34m[200][39m /_emdash/admin/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m16ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/manifest [2m6ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/auth/me [2m1ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K [2m3ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/taxonomies [2m6ms[22m
+[2m11:03:50[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K/lock [2m6ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/admin/users [2m5ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/admin/bylines [2m2ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/media/file/01M68T0HR1DZM7JJVEDZ069QNP.webp [2m6ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/media/file/01M68T0HRWG1841D0M0PV3CAE9.webp [2m6ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/media/file/01M68T0HS0X4FWTR6HYV6ZDTX2.webp [2m7ms[22m
+[2m11:03:50[22m [34m[200][39m /_emdash/api/media/file/01M68T0HRED4YF0RWTDWCAT2A7.webp [2m8ms[22m
+[2m11:03:51[22m [34m[200][39m /_emdash/admin/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y [2m18ms[22m
+[2m11:03:51[22m [34m[200][39m [34mDELETE[39m /_emdash/api/content/pages/01M68T0HSNXFRKC9ARCY5R727K/lock [2m8ms[22m
+[2m11:03:53[22m [34m[200][39m /_emdash/api/manifest [2m6ms[22m
+[2m11:03:53[22m [34m[200][39m /_emdash/api/auth/me [2m1ms[22m
+[2m11:03:53[22m [34m[200][39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y [2m2ms[22m
+[2m11:03:53[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y/lock [2m4ms[22m
+[2m11:03:53[22m [34m[200][39m /_emdash/api/taxonomies [2m3ms[22m
+[2m11:03:53[22m [34m[200][39m /_emdash/api/admin/users [2m3ms[22m
+[2m11:03:53[22m [34m[200][39m /_emdash/api/admin/bylines [2m1ms[22m
+[2m11:03:55[22m [34m[200][39m /_emdash/admin/content/implants [2m14ms[22m
+[2m11:03:55[22m [34m[200][39m [34mDELETE[39m /_emdash/api/content/clinic/01M68T0H7RT6GH70CJZG03FG5Y/lock [2m5ms[22m
+[2m11:03:56[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m11:03:56[22m [34m[200][39m /_emdash/api/auth/me [2m2ms[22m
+[2m11:03:56[22m [34m[200][39m /_emdash/api/content/implants/authors [2m2ms[22m
+[2m11:03:56[22m [34m[200][39m /_emdash/api/content/implants [2m4ms[22m
+[2m11:03:56[22m [34m[200][39m /_emdash/api/content/implants/trash [2m3ms[22m
+[2m11:03:58[22m [34m[200][39m /_emdash/admin/content/doctors [2m13ms[22m
+[2m11:03:59[22m [34m[200][39m /_emdash/api/manifest [2m4ms[22m
+[2m11:03:59[22m [34m[200][39m /_emdash/api/auth/me [2m2ms[22m
+[2m11:03:59[22m [34m[200][39m /_emdash/api/content/doctors/authors [2m2ms[22m
+[2m11:03:59[22m [34m[200][39m /_emdash/api/content/doctors [2m4ms[22m
+[2m11:03:59[22m [34m[200][39m /_emdash/api/content/doctors/trash [2m9ms[22m

@@ -1,0 +1,32 @@
+{
+  "id": "01M68T0H80W1QAQRNEXNC7EQ8B",
+  "type": "implants",
+  "slug": "osstem",
+  "status": "published",
+  "data": {
+    "name": "Osstem",
+    "country": "Южная Корея",
+    "implant_price": 19000,
+    "parts_price": 17500,
+    "service_life": 5,
+    "note": "Когда важна цена",
+    "featured": 1,
+    "price_from": 0,
+    "sort_order": 1
+  },
+  "authorId": null,
+  "primaryBylineId": null,
+  "createdAt": "2026-10-31T11:02:42.176Z",
+  "updatedAt": "2026-10-31T11:03:12.240Z",
+  "publishedAt": "2026-10-31T11:02:42.176Z",
+  "scheduledAt": null,
+  "liveRevisionId": "01M68T1EJAX883J80A0VG7X4C1",
+  "draftRevisionId": null,
+  "version": 4,
+  "locale": "en",
+  "translationGroup": "01M68T0H80W1QAQRNEXNC7EQ8B",
+  "bylines": [],
+  "byline": null,
+  "references": {},
+  "_rev": "NDoyMDI2LTEwLTMxVDExOjAzOjEyLjI0MFo="
+}

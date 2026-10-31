@@ -1,0 +1,80 @@
+[
+  {
+    "alt": "Стоматология «Премьер»",
+    "src": "http://127.0.0.1:4321/assets/logo.svg",
+    "natural": "327x52",
+    "box": "189x30"
+  },
+  {
+    "alt": "3D-сканер в лаборатории клиники",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HR1DZM7JJVEDZ069QNP.webp&w=600&h=400&f=webp&fit=cover&position=center",
+    "natural": "195x130",
+    "box": "174x131"
+  },
+  {
+    "alt": "Зубной техник у 3D-принтера",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HRWG1841D0M0PV3CAE9.webp&w=600&h=900&f=webp&fit=cover&position=center",
+    "natural": "195x292",
+    "box": "174x131"
+  },
+  {
+    "alt": "Заготовку для коронки ставят в станок",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HS0X4FWTR6HYV6ZDTX2.webp&w=600&h=400&f=webp&fit=cover&position=center",
+    "natural": "195x130",
+    "box": "174x131"
+  },
+  {
+    "alt": "Фрезерование коронки",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HRED4YF0RWTDWCAT2A7.webp&w=600&h=400&f=webp&fit=cover&position=center",
+    "natural": "195x130",
+    "box": "174x131"
+  },
+  {
+    "alt": "Шарифуллин Руслан Рушанович",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HBWVXTP82961QW77Q0E.webp&w=640&h=959&f=webp&fit=cover&position=center",
+    "natural": "249x374",
+    "box": "207x259"
+  },
+  {
+    "alt": "Саледдинов Сархан Гамлетович",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HDPDYR1G11M9Z4QJGM7.webp&w=640&h=960&f=webp&fit=cover&position=center",
+    "natural": "249x374",
+    "box": "207x259"
+  },
+  {
+    "alt": "Фахрануров Ильдар Индусович",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HFHPM45JD1ETP43F649.webp&w=640&h=959&f=webp&fit=cover&position=center",
+    "natural": "249x374",
+    "box": "207x259"
+  },
+  {
+    "alt": "Дмитриев Андрей Владиславович",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HHERBMHDNGQBPXWMB40.webp&w=640&h=959&f=webp&fit=cover&position=center",
+    "natural": "249x374",
+    "box": "207x259"
+  },
+  {
+    "alt": "Валиуллин Ринат Рашитович",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HK8FKGTWZEVAWTTFN0A.webp&w=640&h=959&f=webp&fit=cover&position=center",
+    "natural": "249x374",
+    "box": "207x259"
+  },
+  {
+    "alt": "Новиков Павел Сергеевич",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HMSAWG8BM908P9SG1AJ.webp&w=600&h=900&f=webp&fit=cover&position=center",
+    "natural": "140x210",
+    "box": "112x140"
+  },
+  {
+    "alt": "Третьяк Максим Юрьевич",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HP074S4XAPWTR3ARN7F.webp&w=300&h=300&f=webp&fit=cover&position=center",
+    "natural": "140x140",
+    "box": "112x140"
+  },
+  {
+    "alt": "Третьяк Максим Юрьевич",
+    "src": "http://127.0.0.1:4321/_image?href=http%3A%2F%2F127.0.0.1%3A4321%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M68T0HP074S4XAPWTR3ARN7F.webp&w=300&h=300&f=webp&fit=cover&position=center",
+    "natural": "120x120",
+    "box": "84x104"
+  }
+]

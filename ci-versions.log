@@ -1,0 +1,9 @@
+v24.22.1
+11.19.1
+premier-emdash@0.1.0 /home/runner/work/premier-dental-landing/premier-dental-landing/emdash
+├── @astrojs/node@11.1.9
+├── @astrojs/react@7.1.2
+├── astro@7.4.4
+├── emdash@1.4.0
+└── react@19.2.4
+
